@@ -6,9 +6,9 @@ use App\DocumentManagement\Domain\Client;
 use App\DocumentManagement\Domain\Entity\SoapRequest\Header\Security;
 use App\DocumentManagement\Domain\Entity\SoapRequest\Header\System;
 use App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument\ContextDTO;
-use App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument\Request;
-use App\DocumentManagement\Domain\Entity\SoapRequest\Header\RequestDTO as RequestHeader;
+use App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument\DetailDTO;
 use App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument\RequestDTO;
+use App\DocumentManagement\Domain\Entity\SoapRequest\Header\RequestDTO as RequestHeader;
 use SoapClient;
 
 readonly class ClientSoap implements Client
@@ -26,7 +26,7 @@ readonly class ClientSoap implements Client
         $client = new SoapClient($this->url_service."?wsdl");
         $body = new RequestDTO(
             new ContextDTO($this->user_service, $this->user_service_system, $this->password_service),
-            new Request($data['DocumentId'])
+            new DetailDTO($data['DocumentId'])
         );
 
         $header = new RequestHeader(
