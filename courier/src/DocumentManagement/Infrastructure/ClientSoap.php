@@ -48,6 +48,7 @@ readonly class ClientSoap implements Client
             $requestXML = $client->__getLastRequest();
             // Imprimir el XML de la solicitud
             var_dump(htmlentities($requestXML));
+            var_dump($e->getMessage());
             die();
         }
     }
