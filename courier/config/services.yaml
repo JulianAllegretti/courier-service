@@ -1,0 +1,71 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    app_user: "%env(APP_USER)%"
+    app_password: "%env(APP_PASSWORD)%"
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # Configure
+    _instanceof:
+        App\DocumentManagement\Domain\Server:
+            tags: [ 'courier.server' ]
+        App\Shared\Domain\CommandHandler:
+            tags: [ 'courier.command_handler' ]
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    App\DocumentManagement\Application\Controller\:
+        resource: '../src/DocumentManagement/Application/Controller'
+        tags: ['controller.service_arguments']
+
+    App\Shared\Application\:
+        resource: '../src/Shared/Application'
+        tags: [ 'controller.service_arguments' ]
+
+    App\DocumentManagement\Infrastructure\Repository\:
+        resource: '../src/DocumentManagement/Infrastructure/Repository'
+        tags: [ 'controller.service_arguments' ]
+
+    App\Shared\Infrastructure\Repository\:
+        resource: '../src/Shared/Infrastructure/Repository'
+        tags: [ 'controller.service_arguments' ]
+
+    App\DocumentManagement\Infrastructure\ServerSoap:
+        arguments:
+            - '%app_user%'
+            - '%app_password%'
+            - !tagged courier.server
+
+    App\Shared\Infrastructure\SymfonyCommandBus:
+        arguments: [ !tagged courier.command_handler ]
+
+    App\DocumentManagement\Application\Commands\CheckGuideNumber\CheckGuideNumberCommand:
+        $mail_sender: "%env(MAIL_FROM)%"
+        $mail_to_notify: "%env(MAIL_TO)%"
+
+    App\DocumentManagement\Infrastructure\ClientSoap:
+        $url_service: "%env(URL_SERVICE)%"
+        $user_service: "%env(USER_SERVICE)%"
+        $user_service_system: "%env(USER_SERVICE_SYSTEM)%"
+        $password_service: "%env(PASSWORD_SERVICE)%"
+        $application_id: "%env(APPLICATION_ID)%"
+        $transaction_id: "%env(TRANSACTION_ID)%"
+
+
+

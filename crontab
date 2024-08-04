@@ -1,0 +1,1 @@
+0 */12 * * * /usr/local/bin/php /var/www/symfony/bin/console app:check-guide-number >> /var/log/cron.log 2>&1

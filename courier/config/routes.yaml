@@ -1,0 +1,5 @@
+courier_service:
+    path: /courierService
+    controller: App\DocumentManagement\Application\Controller\SaveInformationController
+    defaults: { auth: false }
+    methods: [ GET, POST ]
