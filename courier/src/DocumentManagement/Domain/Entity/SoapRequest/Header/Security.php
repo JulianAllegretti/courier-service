@@ -7,8 +7,8 @@ use App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument\
 
 class Security
 {
-    public string $user;
-    public string $password;
+    public string $User;
+    public string $Password;
 
     /**
      * @param string $user
@@ -16,28 +16,28 @@ class Security
      */
     public function __construct(string $user, string $password)
     {
-        $this->user = $user;
-        $this->password = $password;
+        $this->User = $user;
+        $this->Password = $password;
     }
 
     public function getUser(): string
     {
-        return $this->user;
+        return $this->User;
     }
 
-    public function setUser(string $user): void
+    public function setUser(string $User): void
     {
-        $this->user = $user;
+        $this->User = $User;
     }
 
     public function getPassword(): string
     {
-        return $this->password;
+        return $this->Password;
     }
 
-    public function setPassword(string $password): void
+    public function setPassword(string $Password): void
     {
-        $this->password = $password;
+        $this->Password = $Password;
     }
 
 

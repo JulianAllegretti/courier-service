@@ -8,7 +8,7 @@ use App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument\
 class RequestDTO
 {
     public Security $Security;
-    public System $system;
+    public System $System;
 
     /**
      * @param Security $security
@@ -17,7 +17,7 @@ class RequestDTO
     public function __construct(Security $security, System $system)
     {
         $this->Security = $security;
-        $this->system = $system;
+        $this->System = $system;
     }
 
     public function getSecurity(): Security
@@ -32,12 +32,12 @@ class RequestDTO
 
     public function getSystem(): System
     {
-        return $this->system;
+        return $this->System;
     }
 
-    public function setSystem(System $system): void
+    public function setSystem(System $System): void
     {
-        $this->system = $system;
+        $this->System = $System;
     }
 
 

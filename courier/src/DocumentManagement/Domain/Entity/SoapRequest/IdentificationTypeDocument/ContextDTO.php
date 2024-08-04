@@ -4,9 +4,9 @@ namespace App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDoc
 
 class ContextDTO
 {
-    private string $nombreUsuarioNegocio;
-    private string $nombreUsuarioSistema;
-    private string $claveUsuarioSistema;
+    public string $NombreUsuarioNegocio;
+    public string $NombreUsuarioSistema;
+    public string $ClaveUsuarioSistema;
 
     /**
      * @param string $nombreUsuarioNegocio
@@ -15,38 +15,38 @@ class ContextDTO
      */
     public function __construct(string $nombreUsuarioNegocio, string $nombreUsuarioSistema, string $claveUsuarioSistema)
     {
-        $this->nombreUsuarioNegocio = $nombreUsuarioNegocio;
-        $this->nombreUsuarioSistema = $nombreUsuarioSistema;
-        $this->claveUsuarioSistema = $claveUsuarioSistema;
+        $this->NombreUsuarioNegocio = $nombreUsuarioNegocio;
+        $this->NombreUsuarioSistema = $nombreUsuarioSistema;
+        $this->ClaveUsuarioSistema = $claveUsuarioSistema;
     }
 
     public function getNombreUsuarioNegocio(): string
     {
-        return $this->nombreUsuarioNegocio;
+        return $this->NombreUsuarioNegocio;
     }
 
-    public function setNombreUsuarioNegocio(string $nombreUsuarioNegocio): void
+    public function setNombreUsuarioNegocio(string $NombreUsuarioNegocio): void
     {
-        $this->nombreUsuarioNegocio = $nombreUsuarioNegocio;
+        $this->NombreUsuarioNegocio = $NombreUsuarioNegocio;
     }
 
     public function getNombreUsuarioSistema(): string
     {
-        return $this->nombreUsuarioSistema;
+        return $this->NombreUsuarioSistema;
     }
 
-    public function setNombreUsuarioSistema(string $nombreUsuarioSistema): void
+    public function setNombreUsuarioSistema(string $NombreUsuarioSistema): void
     {
-        $this->nombreUsuarioSistema = $nombreUsuarioSistema;
+        $this->NombreUsuarioSistema = $NombreUsuarioSistema;
     }
 
     public function getClaveUsuarioSistema(): string
     {
-        return $this->claveUsuarioSistema;
+        return $this->ClaveUsuarioSistema;
     }
 
-    public function setClaveUsuarioSistema(string $claveUsuarioSistema): void
+    public function setClaveUsuarioSistema(string $ClaveUsuarioSistema): void
     {
-        $this->claveUsuarioSistema = $claveUsuarioSistema;
+        $this->ClaveUsuarioSistema = $ClaveUsuarioSistema;
     }
 }

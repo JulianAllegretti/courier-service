@@ -7,8 +7,8 @@ use App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument\
 
 class System
 {
-    private string $applicationID;
-    private string $transactionID;
+    private string $ApplicationID;
+    private string $TransactionID;
 
     /**
      * @param string $applicationID
@@ -16,27 +16,27 @@ class System
      */
     public function __construct(string $applicationID, string $transactionID)
     {
-        $this->applicationID = $applicationID;
-        $this->transactionID = $transactionID;
+        $this->ApplicationID = $applicationID;
+        $this->TransactionID = $transactionID;
     }
 
     public function getApplicationID(): string
     {
-        return $this->applicationID;
+        return $this->ApplicationID;
     }
 
-    public function setApplicationID(string $applicationID): void
+    public function setApplicationID(string $ApplicationID): void
     {
-        $this->applicationID = $applicationID;
+        $this->ApplicationID = $ApplicationID;
     }
 
     public function getTransactionID(): string
     {
-        return $this->transactionID;
+        return $this->TransactionID;
     }
 
-    public function setTransactionID(string $transactionID): void
+    public function setTransactionID(string $TransactionID): void
     {
-        $this->transactionID = $transactionID;
+        $this->TransactionID = $TransactionID;
     }
 }
