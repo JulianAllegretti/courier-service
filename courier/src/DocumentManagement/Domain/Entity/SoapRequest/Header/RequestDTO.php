@@ -7,8 +7,8 @@ use App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument\
 
 class RequestDTO
 {
-    private Security $security;
-    private System $system;
+    public Security $security;
+    public System $system;
 
     /**
      * @param Security $security
