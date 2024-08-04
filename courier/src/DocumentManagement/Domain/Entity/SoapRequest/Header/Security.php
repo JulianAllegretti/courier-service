@@ -7,8 +7,8 @@ use App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument\
 
 class Security
 {
-    private string $user;
-    private string $password;
+    public string $user;
+    public string $password;
 
     /**
      * @param string $user
