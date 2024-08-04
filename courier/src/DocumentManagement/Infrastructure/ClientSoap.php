@@ -36,6 +36,10 @@ readonly class ClientSoap implements Client
             );
 
             $params = ["tipoIdentificacionDocumentoDTO" => $body, 'Header' => $header];
+            $params = array(
+                'param1' => 'value1',
+                'param2' => 'value2'
+            );
             $response = $client->__soapCall("ObtenerDocumento", array($params));
 
             $requestXML = $client->__getLastRequest();
