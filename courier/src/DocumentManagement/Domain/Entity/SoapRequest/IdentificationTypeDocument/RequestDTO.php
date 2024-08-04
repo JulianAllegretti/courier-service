@@ -4,35 +4,35 @@ namespace App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDoc
 
 class RequestDTO
 {
-    private ContextDTO $Contexto;
-    private DetailDTO $Detalle;
+    private Contexto $Contexto;
+    private Detalle $Detalle;
 
     /**
-     * @param ContextDTO $contexto
-     * @param DetailDTO $detalle
+     * @param Contexto $contexto
+     * @param Detalle $detalle
      */
-    public function __construct(ContextDTO $contexto, DetailDTO $detalle)
+    public function __construct(Contexto $contexto, Detalle $detalle)
     {
         $this->Contexto = $contexto;
         $this->Detalle = $detalle;
     }
 
-    public function getContexto(): ContextDTO
+    public function getContexto(): Contexto
     {
         return $this->Contexto;
     }
 
-    public function setContexto(ContextDTO $Contexto): void
+    public function setContexto(Contexto $Contexto): void
     {
         $this->Contexto = $Contexto;
     }
 
-    public function getDetalle(): DetailDTO
+    public function getDetalle(): Detalle
     {
         return $this->Detalle;
     }
 
-    public function setDetalle(DetailDTO $Detalle): void
+    public function setDetalle(Detalle $Detalle): void
     {
         $this->Detalle = $Detalle;
     }

@@ -2,7 +2,7 @@
 
 namespace App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument;
 
-class DetailDTO
+class Detalle
 {
     private string $Id;
 

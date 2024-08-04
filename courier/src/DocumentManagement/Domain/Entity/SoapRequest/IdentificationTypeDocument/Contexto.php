@@ -2,7 +2,7 @@
 
 namespace App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument;
 
-class ContextDTO
+class Contexto
 {
     public string $NombreUsuarioNegocio;
     public string $NombreUsuarioSistema;
