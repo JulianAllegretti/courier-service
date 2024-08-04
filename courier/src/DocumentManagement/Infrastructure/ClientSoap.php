@@ -24,24 +24,31 @@ readonly class ClientSoap implements Client
     function get(array $data): void
     {
         $client = new SoapClient($this->url_service."?wsdl");
-        $body = new RequestDTO(
-            new ContextDTO($this->user_service, $this->user_service_system, $this->password_service),
-            new DetailDTO($data['DocumentId'])
-        );
+        try {
+            $body = new RequestDTO(
+                new ContextDTO($this->user_service, $this->user_service_system, $this->password_service),
+                new DetailDTO($data['DocumentId'])
+            );
 
-        $header = new RequestHeader(
-            new Security('',''),
-            new System($this->application_id, $this->transaction_id)
-        );
+            $header = new RequestHeader(
+                new Security('',''),
+                new System($this->application_id, $this->transaction_id)
+            );
 
-        $params = ["tipoIdentificacionDocumentoDTO" => $body, 'Header' => $header];
-        $response = $client->__soapCall("ObtenerDocumento", array($params));
+            $params = ["tipoIdentificacionDocumentoDTO" => $body, 'Header' => $header];
+            $response = $client->__soapCall("ObtenerDocumento", array($params));
 
-        $requestXML = $client->__getLastRequest();
-        // Imprimir el XML de la solicitud
-        echo "XML de la solicitud:\n" . htmlentities($requestXML) . "\n";
-        
-        var_dump($response);
-        die();
+            $requestXML = $client->__getLastRequest();
+            // Imprimir el XML de la solicitud
+            echo "XML de la solicitud:\n" . htmlentities($requestXML) . "\n";
+
+            var_dump($response);
+            die();
+        } catch (\Exception $e) {
+            $requestXML = $client->__getLastRequest();
+            // Imprimir el XML de la solicitud
+            var_dump(htmlentities($requestXML));
+            die();
+        }
     }
 }
