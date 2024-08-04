@@ -31,7 +31,7 @@ readonly class ClientSoap implements Client
             );
 
             $header = new RequestHeader(
-                new Security('',''),
+                new Security('BZG','2018_1401'),
                 new System($this->application_id, $this->transaction_id)
             );
 
