@@ -4,23 +4,23 @@ namespace App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDoc
 
 class Detalle
 {
-    private string $Id;
+    private string $id;
 
     /**
      * @param string $id
      */
     public function __construct(string $id)
     {
-        $this->Id = $id;
+        $this->id = $id;
     }
 
     public function getId(): string
     {
-        return $this->Id;
+        return $this->id;
     }
 
-    public function setId(string $Id): void
+    public function setId(string $id): void
     {
-        $this->Id = $Id;
+        $this->id = $id;
     }
 }
