@@ -4,8 +4,8 @@ namespace App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDoc
 
 class RequestDTO
 {
-    private Contexto $Contexto;
-    private Detalle $Detalle;
+    public Contexto $Contexto;
+    public Detalle $Detalle;
 
     /**
      * @param Contexto $contexto

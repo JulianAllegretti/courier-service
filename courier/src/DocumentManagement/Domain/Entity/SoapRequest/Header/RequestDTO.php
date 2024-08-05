@@ -2,9 +2,6 @@
 
 namespace App\DocumentManagement\Domain\Entity\SoapRequest\Header;
 
-use App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument\Contexto;
-use App\DocumentManagement\Domain\Entity\SoapRequest\IdentificationTypeDocument\Request;
-
 class RequestDTO
 {
     public Security $Security;
