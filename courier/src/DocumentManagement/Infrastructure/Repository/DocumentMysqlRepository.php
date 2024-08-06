@@ -27,7 +27,7 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
             ->select('d')
             ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
             ->where('d.id_gestor_documento = :documentId')
-            ->setParameter('documentId', $document->getIdDocumento())
+            ->setParameter('documentId', $document->getIdGestorDocumento())
             ->getQuery()
             ->getOneOrNullResult();
 
