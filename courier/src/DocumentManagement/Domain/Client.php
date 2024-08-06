@@ -4,5 +4,5 @@ namespace App\DocumentManagement\Domain;
 
 interface Client
 {
-    function get(array $data): void;
+    function get(string $url, string $method, array $body);
 }

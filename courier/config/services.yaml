@@ -59,7 +59,7 @@ services:
         $mail_sender: "%env(MAIL_FROM)%"
         $mail_to_notify: "%env(MAIL_TO)%"
 
-    App\DocumentManagement\Infrastructure\ClientSoap:
+    App\DocumentManagement\Application\Commands\GetDocumentFile\GetDocumentFileCommandHandler:
         $url_service: "%env(URL_SERVICE)%"
         $user_service: "%env(USER_SERVICE)%"
         $user_service_system: "%env(USER_SERVICE_SYSTEM)%"
