@@ -39,7 +39,7 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
 
         $params = ["tipoIdentificacionDocumentoDTO" => $body, 'Header' => $header];
 
-        $response = $this->client->get($this->url_service."?wsdl", "ObtenerDocumento", $params);
+        $response = $this->client->get($this->url_service."?wsdl", "ObtenerDocumento", [$params]);
         var_dump($response);
         die();
     }
