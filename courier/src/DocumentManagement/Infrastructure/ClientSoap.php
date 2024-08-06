@@ -18,6 +18,7 @@ readonly class ClientSoap implements Client
     function get(string $url, string $method, array $body)
     {
         $client = new SoapClient($url);
+        $client->__setLocation($url);
         $response = $client->__soapCall($method, $body);
         return $response;
     }
