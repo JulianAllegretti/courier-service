@@ -30,6 +30,16 @@ class GuideNumberHelper
 
     public function completeNumberOfGuide(string $letters, int $number): string
     {
-        return $letters . str_pad($number, 4, "0", STR_PAD_LEFT);
+        $start = '';
+        $end = '';
+        if (strlen($letters) > 1) {
+            $start = $letters[0] . $letters[1];
+        }
+
+        if (strlen($letters) > 3) {
+            $end = $letters[2] . $letters[3];
+        }
+
+        return $start . str_pad($number, 9, "0", STR_PAD_LEFT) . $end;
     }
 }
