@@ -64,5 +64,7 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
         }
 
         $exist->setRuta('files/'.$documentId.'.pdf');
+        $this->registry->getManager()->persist($exist);
+        $this->registry->getManager()->flush();
     }
 }
