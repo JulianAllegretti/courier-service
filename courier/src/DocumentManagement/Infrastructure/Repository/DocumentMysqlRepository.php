@@ -31,11 +31,11 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
             ->getQuery()
             ->getOneOrNullResult();
 
-        if (isset($exist) && $exist->getRuta() != '') {
+        if (isset($exist) && !empty($exist->getRuta())) {
             throw new ExistException('El Documento ya fue creado');
         }
 
-        if (isset($exist) && $exist->getRuta() == '') {
+        if (isset($exist) && empty($exist->getRuta())) {
             return $document;
         }
 

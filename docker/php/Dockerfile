@@ -16,8 +16,6 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 COPY courier/ /var/www/symfony
 WORKDIR /var/www/symfony/
-RUN mkdir public/files
-RUN chmod 777 public/files
 
 COPY crontab /etc/cron.d/check-cron
 RUN crontab /etc/cron.d/check-cron
