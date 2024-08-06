@@ -55,10 +55,11 @@ final class Version20240726011308 extends AbstractMigration
         $this->addSql('CREATE TABLE documento (
             id_documento INT NOT NULL AUTO_INCREMENT,
             fk_radicado INT NOT NULL,
-            id_gestor_documento VARCHAR(100) NOT NULL,
+            id_gestor_documento VARCHAR(100) NOT NULL UNIQUE,
             end_point_file_net VARCHAR(250) NOT NULL,
             orden_imp INT NOT NULL,
             num_paginas INT NOT NULL,
+            ruta TEXT DEFAULT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY(id_documento),

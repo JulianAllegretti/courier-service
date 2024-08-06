@@ -29,6 +29,9 @@ class Document
     #[ORM\Column]
     private int $num_paginas;
 
+    #[ORM\Column()]
+    private ?string $ruta;
+
     /**
      * @param int|null $id_documento
      * @param int $fk_radicado
@@ -36,8 +39,9 @@ class Document
      * @param string $end_point_file_net
      * @param int $orden_imp
      * @param int $num_paginas
+     * @param string|null $ruta
      */
-    public function __construct(?int $id_documento, int $fk_radicado, string $id_gestor_documento, string $end_point_file_net, int $orden_imp, int $num_paginas)
+    public function __construct(?int $id_documento, int $fk_radicado, string $id_gestor_documento, string $end_point_file_net, int $orden_imp, int $num_paginas, ?string $ruta)
     {
         $this->id_documento = $id_documento;
         $this->fk_radicado = $fk_radicado;
@@ -45,6 +49,7 @@ class Document
         $this->end_point_file_net = $end_point_file_net;
         $this->orden_imp = $orden_imp;
         $this->num_paginas = $num_paginas;
+        $this->ruta = $ruta;
     }
 
     public function getIdDocumento(): ?int
@@ -75,6 +80,16 @@ class Document
     public function getNumPaginas(): int
     {
         return $this->num_paginas;
+    }
+
+    public function getRuta(): ?string
+    {
+        return $this->ruta;
+    }
+
+    public function setRuta(?string $ruta): void
+    {
+        $this->ruta = $ruta;
     }
 
 

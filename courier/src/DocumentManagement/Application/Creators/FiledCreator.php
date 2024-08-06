@@ -111,7 +111,7 @@ readonly class FiledCreator
                 $documentDb = new Document(
                     null, $filed->getIdRadicado(), $document->getDocumentId()->getValue(),
                     $document->getEndPointFileNet()->getValue(), $document->getOrderImp()->getValue(),
-                    $document->getNumPages()->getValue()
+                    $document->getNumPages()->getValue(), null
                 );
                 $this->documentRepository->create($documentDb);
             }
