@@ -32,7 +32,7 @@ services:
             - ./courier/:/var/www/symfony/
             - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
         ports:
-            - 8001:80
+            - 80:80
         networks:
             - default
         depends_on:
