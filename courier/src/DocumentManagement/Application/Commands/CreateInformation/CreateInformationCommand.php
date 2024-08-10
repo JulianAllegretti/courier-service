@@ -20,7 +20,7 @@ class CreateInformationCommand implements Command
         private string          $codDane,
         private string          $address,
         private string          $printedGuide,
-        private array           $documents,
+        private Document        $document,
         private string          $fullName,
         private Priority        $priority,
         private Printed         $printed,
@@ -28,12 +28,83 @@ class CreateInformationCommand implements Command
         private ProcessType     $processType,
         private PortPayment     $portPayment,
         private ?string         $phone = '',
-        private ?string         $filedCaseFather = '',
+        private ?string         $process = '',
         private ?Identification $identification = null,
         private ?string         $cellphone = '',
-        private ?string         $applicant = ''
+        private ?string         $subProcess = '',
+        private ?string         $subject = '',
+        private ?int            $shippingType = -1,
+        private ?string         $serie = '',
+        private ?string         $subSerie = '',
+        private ?string         $inputSystem = '',
+        private ?string         $applicationID = '',
+        private ?string         $transactionID = '',
+        private ?string         $idCase = '',
+        private ?string         $eventTriggered = '',
+        private ?string         $processName = '',
+        private ?string         $trace = ''
     )
     {
+    }
+
+    public function getDocument(): Document
+    {
+        return $this->document;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    public function getShippingType(): ?int
+    {
+        return $this->shippingType;
+    }
+
+    public function getSerie(): ?string
+    {
+        return $this->serie;
+    }
+
+    public function getSubSerie(): ?string
+    {
+        return $this->subSerie;
+    }
+
+    public function getInputSystem(): ?string
+    {
+        return $this->inputSystem;
+    }
+
+    public function getApplicationID(): ?string
+    {
+        return $this->applicationID;
+    }
+
+    public function getTransactionID(): ?string
+    {
+        return $this->transactionID;
+    }
+
+    public function getIdCase(): ?string
+    {
+        return $this->idCase;
+    }
+
+    public function getEventTriggered(): ?string
+    {
+        return $this->eventTriggered;
+    }
+
+    public function getProcessName(): ?string
+    {
+        return $this->processName;
+    }
+
+    public function getTrace(): ?string
+    {
+        return $this->trace;
     }
 
     public function getFiledNumber(): string
@@ -62,11 +133,11 @@ class CreateInformationCommand implements Command
     }
 
     /**
-     * @return Document[]
+     * @return Document
      */
-    public function getDocuments(): array
+    public function getDocuments(): Document
     {
-        return $this->documents;
+        return $this->document;
     }
 
     public function getIdentification(): ?Identification
@@ -104,14 +175,14 @@ class CreateInformationCommand implements Command
         return $this->processType;
     }
 
-    public function getFiledCaseFather(): ?string
+    public function getProcess(): ?string
     {
-        return $this->filedCaseFather;
+        return $this->process;
     }
 
-    public function getApplicant(): ?string
+    public function getSubProcess(): ?string
     {
-        return $this->applicant;
+        return $this->subProcess;
     }
 
     public function getPortPayment(): PortPayment

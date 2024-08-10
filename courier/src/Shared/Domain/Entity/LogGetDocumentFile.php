@@ -14,7 +14,7 @@ class LogGetDocumentFile
     private ?int $id_log_get_document;
 
     #[ORM\Column(length: 50)]
-    private int $numero_radicado;
+    private string $numero_radicado;
 
     #[ORM\Column]
     private string $id_documento;
@@ -27,12 +27,12 @@ class LogGetDocumentFile
 
     /**
      * @param int|null $id_log_get_document
-     * @param int $numero_radicado
+     * @param string $numero_radicado
      * @param string $id_documento
      * @param string $request
      * @param string $error
      */
-    public function __construct(?int $id_log_get_document, int $numero_radicado, string $id_documento, string $request, string $error)
+    public function __construct(?int $id_log_get_document, string $numero_radicado, string $id_documento, string $request, string $error)
     {
         $this->id_log_get_document = $id_log_get_document;
         $this->numero_radicado = $numero_radicado;
@@ -46,7 +46,7 @@ class LogGetDocumentFile
         return $this->id_log_get_document;
     }
 
-    public function getNumeroRadicado(): int
+    public function getNumeroRadicado(): string
     {
         return $this->numero_radicado;
     }

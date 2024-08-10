@@ -4,14 +4,15 @@ namespace App\DocumentManagement\Domain\ValueObjects;
 
 use App\Shared\Domain\ValueObjects\AdapterStringValueObject;
 
-class PrintedGuideValueObject extends AdapterStringValueObject
+class ApplicationIdValueObject extends AdapterStringValueObject
 {
-    private const NAME = 'GuiaImpresa';
-    private const MAX_LENGTH = 50;
+    private const NAME = 'ApplicationID';
+    private const MAX_LENGTH = 250;
 
     public function __construct($value)
     {
         parent::__construct($value, self::NAME, self::MAX_LENGTH);
     }
+
 
 }

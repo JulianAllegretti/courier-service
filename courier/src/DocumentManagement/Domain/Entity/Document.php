@@ -14,41 +14,26 @@ class Document
     #[ORM\Column]
     private ?int $id_documento;
 
-    #[ORM\Column]
-    private int $fk_radicado;
-
     #[ORM\Column(length: 100)]
     private string $id_gestor_documento;
 
     #[ORM\Column(length: 255)]
-    private string $end_point_file_net;
-
-    #[ORM\Column]
-    private int $orden_imp;
-
-    #[ORM\Column]
-    private int $num_paginas;
+    private string $url_ver_documento;
 
     #[ORM\Column()]
     private ?string $ruta;
 
     /**
      * @param int|null $id_documento
-     * @param int $fk_radicado
      * @param string $id_gestor_documento
-     * @param string $end_point_file_net
-     * @param int $orden_imp
-     * @param int $num_paginas
+     * @param string $url_ver_documento
      * @param string|null $ruta
      */
-    public function __construct(?int $id_documento, int $fk_radicado, string $id_gestor_documento, string $end_point_file_net, int $orden_imp, int $num_paginas, ?string $ruta)
+    public function __construct(?int $id_documento, string $id_gestor_documento, string $url_ver_documento, ?string $ruta)
     {
         $this->id_documento = $id_documento;
-        $this->fk_radicado = $fk_radicado;
         $this->id_gestor_documento = $id_gestor_documento;
-        $this->end_point_file_net = $end_point_file_net;
-        $this->orden_imp = $orden_imp;
-        $this->num_paginas = $num_paginas;
+        $this->url_ver_documento = $url_ver_documento;
         $this->ruta = $ruta;
     }
 
@@ -57,40 +42,18 @@ class Document
         return $this->id_documento;
     }
 
-    public function getFkRadicado(): int
-    {
-        return $this->fk_radicado;
-    }
-
     public function getIdGestorDocumento(): string
     {
         return $this->id_gestor_documento;
     }
 
-    public function getEndPointFileNet(): string
+    public function getUrlVerDocumento(): string
     {
-        return $this->end_point_file_net;
-    }
-
-    public function getOrdenImp(): int
-    {
-        return $this->orden_imp;
-    }
-
-    public function getNumPaginas(): int
-    {
-        return $this->num_paginas;
+        return $this->url_ver_documento;
     }
 
     public function getRuta(): ?string
     {
         return $this->ruta;
     }
-
-    public function setRuta(?string $ruta): void
-    {
-        $this->ruta = $ruta;
-    }
-
-
 }

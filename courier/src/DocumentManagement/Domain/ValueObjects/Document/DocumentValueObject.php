@@ -5,22 +5,16 @@ namespace App\DocumentManagement\Domain\ValueObjects\Document;
 class DocumentValueObject
 {
     private DocumentIdValueObject $documentId;
-    private EndPointFileNetValueObject $endPointFileNet;
-    private OrderImpValueObject $orderImp;
-    private NumPagesValueObject $numPages;
+    private UrlSeeDocument $urlSeeDocument;
 
     /**
      * @param DocumentIdValueObject $documentId
-     * @param EndPointFileNetValueObject $endPointFileNet
-     * @param OrderImpValueObject $orderImp
-     * @param NumPagesValueObject $numPages
+     * @param UrlSeeDocument $endPointFileNet
      */
-    public function __construct(DocumentIdValueObject $documentId, EndPointFileNetValueObject $endPointFileNet, OrderImpValueObject $orderImp, NumPagesValueObject $numPages)
+    public function __construct(DocumentIdValueObject $documentId, UrlSeeDocument $endPointFileNet)
     {
         $this->documentId = $documentId;
-        $this->endPointFileNet = $endPointFileNet;
-        $this->orderImp = $orderImp;
-        $this->numPages = $numPages;
+        $this->urlSeeDocument = $endPointFileNet;
     }
 
     public function getDocumentId(): DocumentIdValueObject
@@ -28,21 +22,9 @@ class DocumentValueObject
         return $this->documentId;
     }
 
-    public function getEndPointFileNet(): EndPointFileNetValueObject
+    public function getUrlSeeDocument(): UrlSeeDocument
     {
-        return $this->endPointFileNet;
+        return $this->urlSeeDocument;
     }
-
-    public function getOrderImp(): OrderImpValueObject
-    {
-        return $this->orderImp;
-    }
-
-    public function getNumPages(): NumPagesValueObject
-    {
-        return $this->numPages;
-    }
-
-
 
 }

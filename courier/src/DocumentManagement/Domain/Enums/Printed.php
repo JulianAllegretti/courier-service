@@ -6,8 +6,8 @@ enum Printed : string implements EnumType
 {
     use General;
 
-    case Si = 'Si';
-    case No = 'No';
+    case Si = '1';
+    case No = '0';
 
     function getType(): string
     {

@@ -19,7 +19,7 @@ class IdentificationMysqlRepository extends ServiceEntityRepository implements I
     function createIfNoExist(Identification $identification): Identification
     {
         $exist = $this->findBy([
-            'documento' => $identification->getDocumento(), 'tipo_documento' => $identification->getTipoDocumento()
+            'numero_documento' => $identification->getNumeroDocumento(), 'tipo_documento' => $identification->getTipoDocumento()
         ]);
 
         if (count($exist) > 0) {

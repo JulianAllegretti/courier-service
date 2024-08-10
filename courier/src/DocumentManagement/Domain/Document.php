@@ -12,46 +12,26 @@ class Document
     /**
      * @var string
      */
-    public $endPointFileNet;
+    public $urlVerDocumento;
 
     /**
-     * @var int
+     * @param string $idDocumento
+     * @param string $urlVerDocumento
      */
-    public $ordenImp;
-
-    /**
-     * @var int
-     */
-    public $numPaginas;
-
-    public function __construct(?string $documentId, ?string $endPointFileNet, ?int $ordenImp, ?int $numPaginas)
+    public function __construct(string $idDocumento, string $urlVerDocumento)
     {
-        $this->idDocumento = $documentId;
-        $this->endPointFileNet = $endPointFileNet;
-        $this->ordenImp = $ordenImp;
-        $this->numPaginas = $numPaginas;
+        $this->idDocumento = $idDocumento;
+        $this->urlVerDocumento = $urlVerDocumento;
     }
 
-    public function getIdDocumento(): ?string
+    public function getIdDocumento(): string
     {
         return $this->idDocumento;
     }
 
-    public function getEndPointFileNet(): ?string
+    public function getUrlVerDocumento(): string
     {
-        return $this->endPointFileNet;
+        return $this->urlVerDocumento;
     }
-
-    public function getOrdenImp(): ?int
-    {
-        return $this->ordenImp;
-    }
-
-    public function getNumPaginas(): ?int
-    {
-        return $this->numPaginas;
-    }
-
-
 
 }

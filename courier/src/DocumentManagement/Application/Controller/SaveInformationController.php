@@ -33,30 +33,47 @@ final class SaveInformationController extends ApiController
         parent::__construct($this->commandBus);
     }
 
+
     /**
-     * @param string $numRadicado
      * @param string $codeDane
      * @param string $direccion
-     * @param string $guiaImpresa
-     * @param App\DocumentManagement\Domain\Document[] $documentos
+     * @param string $listaDocumentos
+     * @param string $urlVerDocumento
+     * @param string $identificacion
      * @param string $nombreCompleto
      * @param string $prioridad
-     * @param string $tipoProceso *
-     * @param string $impreso *
-     * @param string $tipoPortePago *
-     * @param string $portePago *
-     * @param string $celular
-     * @param string $telefono
-     * @param App\DocumentManagement\Domain\Identification | null $identificacion
-     * @param string $radicadoCasoPadre
-     * @param string $usuarioSolicitante
+     * @param bool $impreso
+     * @param bool $portePago
+     * @param int $tipoPortePago
+     * @param int $tipoProceso
+     * @param string $numeroDocumento
+     * @param string $tipoDocumento
+     * @param string $tramite
+     * @param string $subtramite
+     * @param string $asunto
+     * @param int $tipoEnvio
+     * @param string $serie
+     * @param string $subSerie
+     * @param string $inputSystem
+     * @param string $applicationID
+     * @param string $transactionID
+     * @param string $idCase
+     * @param string $numRadicado
+     * @param string $eventoInvocado
+     * @param string $nombreProceso
+     * @param string $trace
+     * @param string|null $guiaImpresa
+     * @param string|null $celular
+     * @param string|null $telefono
      * @return \App\DocumentManagement\Domain\Response
      */
-    public function RadicarTramite(string $numRadicado, string $codeDane, string $direccion, string $guiaImpresa,
-                                    mixed $documentos, string $nombreCompleto, string $prioridad, string $tipoProceso,
-                                    string $impreso, string $tipoPortePago, string $portePago,
-                                    string $celular = '', string $telefono = '', mixed $identificacion = null,
-                                    string $radicadoCasoPadre = '', string $usuarioSolicitante = ''
+    public function PeticionEnvioInfoCourier(string $codeDane, string $direccion, string $listaDocumentos, string $urlVerDocumento,
+                                             string $identificacion, string $nombreCompleto, string $prioridad, bool $impreso, bool $portePago, int $tipoPortePago, int $tipoProceso,
+                                             string $numeroDocumento = '', string $tipoDocumento = '', string $tramite = '', string $subtramite = '',
+                                             string $asunto = '', int $tipoEnvio = -1, string $serie = '', string $subSerie = '',
+                                             string $inputSystem = '', string $applicationID = '', string $transactionID = '', string $idCase = '',
+                                             string $numRadicado = '', string $eventoInvocado = '', string $nombreProceso = '', string $trace = '',
+                                             ?string $guiaImpresa = '', ?string $celular = '', ?string $telefono = ''
     ): \App\DocumentManagement\Domain\Response
     {
         $request = get_defined_vars();
@@ -64,42 +81,29 @@ final class SaveInformationController extends ApiController
 
         try {
             $identificationObj = null;
-            if (!empty($identificacion)
-                && ((!empty($identificacion->documento) && !empty($identificacion->tipoDocumento)))
+            if ((!empty($numeroDocumento) && !empty($tipoDocumento))
             ) {
-                $identificationObj = new Identification($identificacion->documento, $identificacion->tipoDocumento);
+                $identificationObj = new Identification($numeroDocumento, $tipoDocumento);
             }
 
-            if (!isset($documentos->item)) {
-                throw new NullException("La propiedad Documentos es requerida.");
+            if (empty($listaDocumentos) || empty($urlVerDocumento)) {
+                throw new NullException("La propiedad ListaDocumentos o UrlVerDocumento es requerida.");
             }
 
-            $documentArray = is_array($documentos->item) ? $documentos->item : [$documentos->item];
-            if (count($documentArray) == 0) {
-                throw new NullException("La propiedad documentos es requerida.");
-            }
+            $document = new Document($listaDocumentos, $urlVerDocumento);
 
-            $documentArrayObj = [];
-            foreach ($documentArray as $documentItem) {
-                if (empty($documentItem)) {
-                    throw new NullException("La propiedad documentos es requerida");
-                }
-                $documentArrayObj[] = new Document(
-                    $documentItem->idDocumento, $documentItem->endPointFileNet, $documentItem->ordenImp, $documentItem->numPaginas
-                );
-            }
-
-            $command = new CreateInformationCommand($numRadicado, $codeDane, $direccion, $guiaImpresa, $documentArrayObj, $nombreCompleto,
-                Priority::fromName($prioridad), Printed::fromName($impreso), TypePortPayment::fromName($tipoPortePago),
-                ProcessType::fromName($tipoProceso), PortPayment::fromName($portePago),
-                $telefono, $radicadoCasoPadre, $identificationObj, $celular, $usuarioSolicitante
+            $command = new CreateInformationCommand($numRadicado, $codeDane, $direccion, $guiaImpresa, $document, $nombreCompleto,
+                Priority::fromName($prioridad), Printed::fromValue($impreso ? '1' : '0'), TypePortPayment::fromValue($tipoPortePago),
+                ProcessType::fromValue($tipoProceso), PortPayment::fromValue($portePago ? '1' : '0'),
+                $telefono, $tramite, $identificationObj, $celular, $subtramite, $asunto, $tipoEnvio, $serie, $subSerie,
+                $inputSystem, $applicationID, $transactionID, $idCase, $eventoInvocado, $nombreProceso, $trace
             );
 
             $this->dispatch($command);
-            $this->getDocumentFile($documentArrayObj);
+            $this->getDocumentFile($document);
 
             $response->setCodGuia($command->getGuideNumber());
-        } catch (GetDocumentException $exception){
+        } catch (GetDocumentException $exception) {
             $response = $this->setResponse($exception, $response, $numRadicado);
             $commandLog = new CreateLogGetDocumentFileCommand($numRadicado, $exception->getDocumentId(), json_encode($request), json_encode($response));
             $this->dispatch($commandLog);
@@ -126,17 +130,15 @@ final class SaveInformationController extends ApiController
     }
 
     /**
-     * @param Document[] $documents
+     * @param Document $document
      * @throws GetDocumentException
      */
-    private function getDocumentFile(array $documents): void
+    private function getDocumentFile(Document $document): void
     {
         $command = null;
         try {
-            foreach ($documents as $document) {
-                $command = new GetDocumentFileCommand($document->getIdDocumento());
-                $this->dispatch($command);
-            }
+            $command = new GetDocumentFileCommand($document->getIdDocumento());
+            $this->dispatch($command);
         } catch (\Exception $exception) {
             $e = $this->getPrevious($exception);
             $e = new GetDocumentException($e->getMessage());
@@ -154,7 +156,8 @@ final class SaveInformationController extends ApiController
         return $exception;
     }
 
-    private function setResponse($exception, \App\DocumentManagement\Domain\Response $response, string $numRadicado) {
+    private function setResponse($exception, \App\DocumentManagement\Domain\Response $response, string $numRadicado)
+    {
         $response->setNumRadicado($numRadicado);
         $response->setErrorCode($exception->getCode());
         $response->setErrorMessage($exception->getMessage());

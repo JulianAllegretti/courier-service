@@ -15,46 +15,31 @@ class Identification
     private ?int $id_identificacion;
 
     #[ORM\Column(length: 255)]
-    private ?string $documento;
+    private ?string $numero_documento;
 
     #[ORM\Column(length: 255)]
     private ?string $tipo_documento;
 
     /**
      * @param int|null $id_identificacion
-     * @param string|null $documento
+     * @param string|null $numero_documento
      * @param string|null $tipo_documento
      */
-    public function __construct(?int $id_identificacion, ?string $documento, ?string $tipo_documento)
+    public function __construct(?int $id_identificacion, ?string $numero_documento, ?string $tipo_documento)
     {
         $this->id_identificacion = $id_identificacion;
-        $this->documento = $documento;
+        $this->numero_documento = $numero_documento;
         $this->tipo_documento = $tipo_documento;
     }
-
 
     public function getIdIdentificacion(): ?int
     {
         return $this->id_identificacion;
     }
 
-    public function setIdIdentificacion(int $id_identificacion): static
+    public function getNumeroDocumento(): ?string
     {
-        $this->id_identificacion = $id_identificacion;
-
-        return $this;
-    }
-
-    public function getDocumento(): ?string
-    {
-        return $this->documento;
-    }
-
-    public function setDocumento(string $documento): static
-    {
-        $this->documento = $documento;
-
-        return $this;
+        return $this->numero_documento;
     }
 
     public function getTipoDocumento(): ?string
@@ -62,10 +47,5 @@ class Identification
         return $this->tipo_documento;
     }
 
-    public function setTipoDocumento(string $tipo_documento): static
-    {
-        $this->tipo_documento = $tipo_documento;
 
-        return $this;
-    }
 }

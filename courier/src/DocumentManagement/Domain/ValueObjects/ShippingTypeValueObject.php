@@ -1,16 +1,17 @@
 <?php
 
-namespace App\DocumentManagement\Domain\ValueObjects\Document;
+namespace App\DocumentManagement\Domain\ValueObjects;
 
 use App\Shared\Domain\ValueObjects\AdapterNullValueObject;
 
-class OrderImpValueObject extends AdapterNullValueObject
+class ShippingTypeValueObject extends AdapterNullValueObject
 {
-    private const NAME = 'OrdenImp';
+    private const NAME = 'TipoEnvio';
 
     public function __construct($value)
     {
         parent::__construct($value, self::NAME);
     }
+
 
 }
