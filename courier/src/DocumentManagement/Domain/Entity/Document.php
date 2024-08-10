@@ -56,4 +56,11 @@ class Document
     {
         return $this->ruta;
     }
+
+    public function setRuta(?string $ruta): void
+    {
+        $this->ruta = $ruta;
+    }
+
+
 }
