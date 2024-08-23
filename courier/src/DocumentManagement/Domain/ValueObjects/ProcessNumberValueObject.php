@@ -4,9 +4,9 @@ namespace App\DocumentManagement\Domain\ValueObjects;
 
 use App\Shared\Domain\ValueObjects\AdapterStringValueObject;
 
-class PrintedGuideValueObject extends AdapterStringValueObject
+class ProcessNumberValueObject extends AdapterStringValueObject
 {
-    private const NAME = 'GuiaImpresa';
+    private const NAME = 'NumTramite';
     private const MAX_LENGTH = 50;
 
     public function __construct($value)

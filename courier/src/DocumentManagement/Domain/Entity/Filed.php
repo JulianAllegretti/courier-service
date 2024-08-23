@@ -23,6 +23,9 @@ class Filed
     #[ORM\Column(length: 50)]
     private ?string $celular;
 
+    #[ORM\Column(length: 50)]
+    private ?string $num_tramite;
+
     #[ORM\Column(length: 5)]
     private string $cod_dane;
 
@@ -67,6 +70,7 @@ class Filed
      * @param int|null $fk_identificacion
      * @param string $num_radicado
      * @param string|null $celular
+     * @param string|null $num_tramite
      * @param string $cod_dane
      * @param string $direccion
      * @param string $guia_impresa
@@ -81,7 +85,7 @@ class Filed
      * @param string|null $usuario_solicitante
      * @param string $codigo_guia
      */
-    public function __construct(?int $id_radicado, ?int $fk_identificacion, string $num_radicado, ?string $celular, string $cod_dane, string $direccion, string $guia_impresa, string $nombre_completo, ?string $telefono, string $prioridad, string $impreso, string $porte_pago, string $tipo_porte_pago, string $tipo_proceso, ?string $radicado_caso_padre, ?string $usuario_solicitante, string $codigo_guia)
+    public function __construct(?int $id_radicado, ?int $fk_identificacion, string $num_radicado, ?string $celular, ?string $num_tramite, string $cod_dane, string $direccion, string $guia_impresa, string $nombre_completo, ?string $telefono, string $prioridad, string $impreso, string $porte_pago, string $tipo_porte_pago, string $tipo_proceso, ?string $radicado_caso_padre, ?string $usuario_solicitante, string $codigo_guia)
     {
         $this->id_radicado = $id_radicado;
         $this->fk_identificacion = $fk_identificacion;
@@ -100,6 +104,7 @@ class Filed
         $this->radicado_caso_padre = $radicado_caso_padre;
         $this->usuario_solicitante = $usuario_solicitante;
         $this->codigo_guia = $codigo_guia;
+        $this->num_tramite = $num_tramite;
     }
 
     public function getIdRadicado(): ?int
@@ -187,5 +192,9 @@ class Filed
         return $this->codigo_guia;
     }
 
+    public function getNumTramite(): ?string
+    {
+        return $this->num_tramite;
+    }
 
 }

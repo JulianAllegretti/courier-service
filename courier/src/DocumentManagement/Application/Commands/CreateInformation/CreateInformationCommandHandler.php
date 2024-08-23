@@ -21,6 +21,7 @@ use App\DocumentManagement\Domain\ValueObjects\Identification\DocumentNumberValu
 use App\DocumentManagement\Domain\ValueObjects\Identification\IdentificationValueObject;
 use App\DocumentManagement\Domain\ValueObjects\PhoneValueObject;
 use App\DocumentManagement\Domain\ValueObjects\PrintedGuideValueObject;
+use App\DocumentManagement\Domain\ValueObjects\ProcessNumberValueObject;
 use App\Shared\Domain\CommandHandler;
 use App\Shared\Domain\Exceptions\MaxLengthException;
 use App\Shared\Domain\Exceptions\NullException;
@@ -39,12 +40,14 @@ class CreateInformationCommandHandler implements CommandHandler
      * @throws Exception
      * @throws NullException
      * @throws ORMException
+     * @throws \Exception
      */
     public function __invoke(CreateInformationCommand $command): void
     {
         $commandFiledNumber = new FiledNumberValueObject($command->getFiledNumber());
         $commandCodDane = new CodDaneValueObject($command->getCodDane());
         $commandCellphone = new CellphoneValueObject($command->getCellphone() != '' ? $command->getCellphone() : null);
+        $commandProcessNumber = new ProcessNumberValueObject($command->getProcessNumber() != '' ? $command->getProcessNumber() : null);
         $commandAddress = new AddressValueObject($command->getAddress());
         $commandPrintedGuide = new PrintedGuideValueObject($command->getPrintedGuide());
         $commandFullName = new FullNameValueObject($command->getFullName());
@@ -76,7 +79,7 @@ class CreateInformationCommandHandler implements CommandHandler
             $commandFiledNumber, $commandCodDane, $commandAddress, $commandPrintedGuide, $documents,
             $commandFullName, $command->getPriority(), $command->getPrinted(), $command->getTypePortPayment(),
             $command->getProcessType(), $command->getPortPayment(), $commandPhone,
-            $commandFiledCaseFather, $commandIdentification, $commandCellphone, $commandApplicant
+            $commandFiledCaseFather, $commandIdentification, $commandCellphone, $commandApplicant, $commandProcessNumber
         );
 
         $command->setGuideNumber($guideNumber);

@@ -33,6 +33,7 @@ final class Version20240726011308 extends AbstractMigration
             fk_identificacion INT DEFAULT NULL,
             num_radicado VARCHAR(20) NOT NULL UNIQUE,
             celular VARCHAR(50) DEFAULT NULL,
+            num_tramite VARCHAR(50) DEFAULT NULL,
             cod_dane VARCHAR(5) NOT NULL,
             direccion VARCHAR(100) NOT NULL,
             guia_impresa VARCHAR(50) NOT NULL,

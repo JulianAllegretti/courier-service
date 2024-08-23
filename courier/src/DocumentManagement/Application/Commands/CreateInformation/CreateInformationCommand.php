@@ -31,7 +31,8 @@ class CreateInformationCommand implements Command
         private ?string         $filedCaseFather = '',
         private ?Identification $identification = null,
         private ?string         $cellphone = '',
-        private ?string         $applicant = ''
+        private ?string         $applicant = '',
+        private ?string         $processNumber = ''
     )
     {
     }
@@ -127,6 +128,11 @@ class CreateInformationCommand implements Command
     public function getGuideNumber(): string
     {
         return $this->guideNumber;
+    }
+
+    public function getProcessNumber(): ?string
+    {
+        return $this->processNumber;
     }
 
 }

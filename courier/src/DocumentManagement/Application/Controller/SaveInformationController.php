@@ -5,6 +5,7 @@ namespace App\DocumentManagement\Application\Controller;
 use App\DocumentManagement\Application\Commands\CreateInformation\CreateInformationCommand;
 use App\DocumentManagement\Application\Commands\GetDocumentFile\GetDocumentFileCommand;
 use App\DocumentManagement\Domain\Document;
+use App\DocumentManagement\Domain\Comunication;
 use App\DocumentManagement\Domain\Enums\PortPayment;
 use App\DocumentManagement\Domain\Enums\Printed;
 use App\DocumentManagement\Domain\Enums\Priority;
@@ -18,6 +19,7 @@ use App\Shared\Application\Commands\CreateLogInsertInformation\CreateLogInsertIn
 use App\Shared\Domain\CommandBus;
 use App\Shared\Domain\Exceptions\GetDocumentException;
 use App\Shared\Domain\Exceptions\NullException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -27,54 +29,40 @@ final class SaveInformationController extends ApiController
 {
     private Server $server;
 
-    public function __construct(Server $server, private readonly CommandBus $commandBus)
+    public function __construct(Server $server, private readonly CommandBus $commandBus, private LoggerInterface $logger)
     {
         $this->server = $server;
         parent::__construct($this->commandBus);
     }
 
     /**
-     * @param string $numRadicado
-     * @param string $codeDane
-     * @param string $direccion
-     * @param string $guiaImpresa
-     * @param App\DocumentManagement\Domain\Document[] $documentos
-     * @param string $nombreCompleto
-     * @param string $prioridad
-     * @param string $tipoProceso *
-     * @param string $impreso *
-     * @param string $tipoPortePago *
-     * @param string $portePago *
-     * @param string $celular
-     * @param string $telefono
-     * @param App\DocumentManagement\Domain\Identification | null $identificacion
-     * @param string $radicadoCasoPadre
-     * @param string $usuarioSolicitante
+     * @param App\DocumentManagement\Domain\Comunication $comunicacionVo
      * @return \App\DocumentManagement\Domain\Response
+     * @throws NullException
      */
-    public function RadicarTramite(string $numRadicado, string $codeDane, string $direccion, string $guiaImpresa,
-                                    mixed $documentos, string $nombreCompleto, string $prioridad, string $tipoProceso,
-                                    string $impreso, string $tipoPortePago, string $portePago,
-                                    string $celular = '', string $telefono = '', mixed $identificacion = null,
-                                    string $radicadoCasoPadre = '', string $usuarioSolicitante = ''
-    ): \App\DocumentManagement\Domain\Response
+    public function RadicarTramite(mixed $comunicacionVo): \App\DocumentManagement\Domain\Response
     {
         $request = get_defined_vars();
         $response = new \App\DocumentManagement\Domain\Response();
 
+        if (empty($comunicacionVo)) {
+            throw new NullException("La propiedad ComunicacionVo es requerida.");
+        }
+
+        /** @var Comunication $comunicacionVo */
         try {
             $identificationObj = null;
-            if (!empty($identificacion)
-                && ((!empty($identificacion->documento) && !empty($identificacion->tipoDocumento)))
+            if (!empty($comunicacionVo->IdentificacionVo)
+                && ((!empty($comunicacionVo->IdentificacionVo->Documento) && !empty($comunicacionVo->IdentificacionVo->TipoDocumento)))
             ) {
-                $identificationObj = new Identification($identificacion->documento, $identificacion->tipoDocumento);
+                $identificationObj = new Identification($comunicacionVo->IdentificacionVo->Documento, $comunicacionVo->IdentificacionVo->TipoDocumento);
             }
 
-            if (!isset($documentos->item)) {
+            if (!isset($comunicacionVo->Documentos->DocumentoVo)) {
                 throw new NullException("La propiedad Documentos es requerida.");
             }
 
-            $documentArray = is_array($documentos->item) ? $documentos->item : [$documentos->item];
+            $documentArray = is_array($comunicacionVo->Documentos->DocumentoVo) ? $comunicacionVo->Documentos->DocumentoVo : [$comunicacionVo->Documentos->DocumentoVo];
             if (count($documentArray) == 0) {
                 throw new NullException("La propiedad documentos es requerida.");
             }
@@ -85,14 +73,18 @@ final class SaveInformationController extends ApiController
                     throw new NullException("La propiedad documentos es requerida");
                 }
                 $documentArrayObj[] = new Document(
-                    $documentItem->idDocumento, $documentItem->endPointFileNet, $documentItem->ordenImp, $documentItem->numPaginas
+                    $documentItem->IdDocumento, $documentItem->EndPointFilenet, $documentItem->OrdenImp, $documentItem->NumPaginas
                 );
             }
 
-            $command = new CreateInformationCommand($numRadicado, $codeDane, $direccion, $guiaImpresa, $documentArrayObj, $nombreCompleto,
-                Priority::fromName($prioridad), Printed::fromName($impreso), TypePortPayment::fromName($tipoPortePago),
-                ProcessType::fromName($tipoProceso), PortPayment::fromName($portePago),
-                $telefono, $radicadoCasoPadre, $identificationObj, $celular, $usuarioSolicitante
+
+            $command = new CreateInformationCommand($comunicacionVo->NumRadicado, $comunicacionVo->CodDane, $comunicacionVo->Direccion,
+                $comunicacionVo->GuiaImpresa, $documentArrayObj, $comunicacionVo->NombreCompleto,
+                Priority::fromName($comunicacionVo->Prioridad), Printed::fromName($comunicacionVo->Impreso),
+                TypePortPayment::fromName($comunicacionVo->TipoPortePago),
+                ProcessType::fromName($comunicacionVo->TipoProceso), PortPayment::fromName($comunicacionVo->PortePago),
+                $comunicacionVo->Telefono, $comunicacionVo->RadicadoCasoPadre,
+                $identificationObj, $comunicacionVo->Celular, $comunicacionVo->UsuarioSolicitante
             );
 
             $this->dispatch($command);
@@ -100,13 +92,13 @@ final class SaveInformationController extends ApiController
 
             $response->setCodGuia($command->getGuideNumber());
         } catch (GetDocumentException $exception){
-            $response = $this->setResponse($exception, $response, $numRadicado);
-            $commandLog = new CreateLogGetDocumentFileCommand($numRadicado, $exception->getDocumentId(), json_encode($request), json_encode($response));
+            $response = $this->setResponse($exception, $response, $comunicacionVo->NumRadicado);
+            $commandLog = new CreateLogGetDocumentFileCommand($comunicacionVo->NumRadicado, $exception->getDocumentId(), json_encode($request), json_encode($response));
             $this->dispatch($commandLog);
         } catch (\Exception $exception) {
-            $response = $this->setResponse($this->getPrevious($exception), $response, $numRadicado);
+            $response = $this->setResponse($this->getPrevious($exception), $response, $comunicacionVo->NumRadicado);
 
-            $commandLog = new CreateLogInsertInformationCommand($numRadicado, json_encode($request), json_encode($response));
+            $commandLog = new CreateLogInsertInformationCommand($comunicacionVo->NumRadicado, json_encode($request), json_encode($response));
             $this->dispatch($commandLog);
         }
 
@@ -116,6 +108,13 @@ final class SaveInformationController extends ApiController
 
     public function __invoke(Request $request): Response
     {
+        $this->logger->notice('Request Received', [
+            'username' => $_SERVER['PHP_AUTH_USER'] ?? '',
+            'password' => $_SERVER['PHP_AUTH_PW'] ?? '',
+            'body' => $request->getContent(),
+            'headers' => $request->headers->all()
+        ]);
+
         return $this->server->render([
             'wsdl' => isset($_GET['wsdl']),
             'uri' => $request->getUri(),

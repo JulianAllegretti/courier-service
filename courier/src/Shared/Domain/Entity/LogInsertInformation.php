@@ -14,7 +14,7 @@ class LogInsertInformation
     private ?int $id_log_insert_information;
 
     #[ORM\Column(length: 50)]
-    private int $numero_radicado;
+    private string $numero_radicado;
 
     #[ORM\Column]
     private string $request;
@@ -24,11 +24,11 @@ class LogInsertInformation
 
     /**
      * @param int|null $id_log_insert_information
-     * @param int $numero_radicado
+     * @param string $numero_radicado
      * @param string $request
      * @param string $error
      */
-    public function __construct(?int $id_log_insert_information, int $numero_radicado, string $request, string $error)
+    public function __construct(?int $id_log_insert_information, string $numero_radicado, string $request, string $error)
     {
         $this->id_log_insert_information = $id_log_insert_information;
         $this->numero_radicado = $numero_radicado;
@@ -41,7 +41,7 @@ class LogInsertInformation
         return $this->id_log_insert_information;
     }
 
-    public function getNumeroRadicado(): int
+    public function getNumeroRadicado(): string
     {
         return $this->numero_radicado;
     }

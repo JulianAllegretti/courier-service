@@ -26,9 +26,10 @@ use App\DocumentManagement\Domain\ValueObjects\GuideNumberValueObject;
 use App\DocumentManagement\Domain\ValueObjects\Identification\IdentificationValueObject;
 use App\DocumentManagement\Domain\ValueObjects\PhoneValueObject;
 use App\DocumentManagement\Domain\ValueObjects\PrintedGuideValueObject;
-use Doctrine\DBAL\Exception;
+use App\DocumentManagement\Domain\ValueObjects\ProcessNumberValueObject;
+use App\Shared\Domain\Exceptions\MaxLengthException;
+use App\Shared\Domain\Exceptions\NullException;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 readonly class FiledCreator
@@ -56,14 +57,15 @@ readonly class FiledCreator
      * @param TypePortPayment $typePortPayment
      * @param ProcessType $processType
      * @param PortPayment $portPayment
-     * @param GuideNumberValueObject $guideNumber
      * @param PhoneValueObject|null $phone
      * @param FiledCaseFatherValueObject|null $filedCaseFather
      * @param IdentificationValueObject|null $identification
      * @param CellphoneValueObject|null $cellphone
      * @param ApplicantValueObject|null $applicant
-     * @return void
-     * @throws \Exception
+     * @param ProcessNumberValueObject|null $processNumber
+     * @return string
+     * @throws MaxLengthException
+     * @throws NullException
      */
     public function __invoke(
         FiledNumberValueObject      $filedNumber,
@@ -81,7 +83,8 @@ readonly class FiledCreator
         ?FiledCaseFatherValueObject $filedCaseFather,
         ?IdentificationValueObject  $identification,
         ?CellphoneValueObject       $cellphone,
-        ?ApplicantValueObject       $applicant
+        ?ApplicantValueObject       $applicant,
+        ?ProcessNumberValueObject   $processNumber
     ): string
     {
         $this->entityManager->beginTransaction();
@@ -99,7 +102,7 @@ readonly class FiledCreator
 
             $filed = new Filed(
                 null, $identificationDb?->getIdIdentificacion(), $filedNumber->getValue(),
-                $cellphone->getValue(), $codDane->getValue(), $address->getValue(), $printedGuide->getValue(),
+                $cellphone->getValue(), $processNumber->getValue(), $codDane->getValue(), $address->getValue(), $printedGuide->getValue(),
                 $fullName->getValue(), $phone->getValue(), $priority->value, $printed->value, $portPayment->value,
                 $typePortPayment->value, $processType->value, $filedCaseFather->getValue(), $applicant->getValue(),
                 $guideNumber->getValue()

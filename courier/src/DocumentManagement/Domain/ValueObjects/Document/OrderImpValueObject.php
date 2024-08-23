@@ -2,9 +2,9 @@
 
 namespace App\DocumentManagement\Domain\ValueObjects\Document;
 
-use App\Shared\Domain\ValueObjects\AdapterNullValueObject;
+use App\Shared\Domain\ValueObjects\AdapterNullIntValueObject;
 
-class OrderImpValueObject extends AdapterNullValueObject
+class OrderImpValueObject extends AdapterNullIntValueObject
 {
     private const NAME = 'OrdenImp';
 
