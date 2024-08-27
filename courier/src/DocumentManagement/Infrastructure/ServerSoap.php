@@ -41,7 +41,7 @@ class ServerSoap implements Server
     public function handleSOAP($uri, $class, $user, $password): Response
     {
         if (!$this->authenticate($user, $password)) {
-            return new Response("Access Denied", 403);
+            return new Response("Access Denied", Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Basic realm="SoapServiceCourier"']);
         }
 
         $soap = new SoapServer(null, ['location' => $uri, 'uri' => $uri]);
