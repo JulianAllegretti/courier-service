@@ -102,6 +102,8 @@ final class SaveInformationController extends ApiController
             $this->dispatch($commandLog);
         }
 
+        $this->logger->notice('Response ' . $comunicacionVo->NumRadicado, [$response]);
+
         return $response;
     }
 
