@@ -3,8 +3,11 @@
 namespace App\DocumentManagement\Infrastructure;
 
 use App\DocumentManagement\Domain\Server;
+use DOMDocument;
+use DOMXPath;
 use Laminas\Soap\AutoDiscover;
 use Laminas\Soap\Wsdl\ComplexTypeStrategy\ArrayOfTypeSequence;
+use SimpleXMLElement;
 use SoapServer;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +37,23 @@ class ServerSoap implements Server
         ob_start();
 
         $autoDiscover->handle();
-        $response->setContent(ob_get_clean());
+        $wsdl = ob_get_clean();
+
+        $dom = new \DOMDocument();
+        $dom->loadXML($wsdl);
+
+        $xpath = new \DOMXPath($dom);
+        $xpath->registerNamespace('wsdl', 'http://schemas.xmlsoap.org/wsdl/');
+
+        $parts = $xpath->query('//wsdl:message[@name="RadicarTramiteOut"]/wsdl:part');
+
+        foreach ($parts as $part) {
+            if ($part->getAttribute('name') === 'return') {
+                $part->setAttribute('name', 'RadicarTramiteResult'); // Cambia 'customReturn' al nombre que desees
+            }
+        }
+
+        $response->setContent($dom->saveXML());
         return $response;
     }
 
@@ -45,7 +64,7 @@ class ServerSoap implements Server
             return new Response("Access Denied", Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Basic realm="SoapServiceCourier"']);
         }*/
 
-        $soap = new SoapServer(null, ['location' => $uri, 'uri' => $uri]);
+        $soap = new SoapServer('http://nginx/wscolpensionesQA/ServiceColpensiones?wsdl');
         $soap->setObject($class);
 
         $response = new Response();
