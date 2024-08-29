@@ -58,11 +58,11 @@ final class SaveInformationController extends ApiController
                 $identificationObj = new Identification($comunicacionVo->IdentificacionVo->Documento, $comunicacionVo->IdentificacionVo->TipoDocumento);
             }
 
-            if (!isset($comunicacionVo->Documentos->DocumentoVo)) {
+            if (!isset($comunicacionVo->Documentos)) {
                 throw new NullException("La propiedad Documentos es requerida.");
             }
 
-            $documentArray = is_array($comunicacionVo->Documentos->DocumentoVo) ? $comunicacionVo->Documentos->DocumentoVo : [$comunicacionVo->Documentos->DocumentoVo];
+            $documentArray = is_array($comunicacionVo->Documentos) ? $comunicacionVo->Documentos : [$comunicacionVo->Documentos];
             if (count($documentArray) == 0) {
                 throw new NullException("La propiedad documentos es requerida.");
             }
