@@ -5,26 +5,24 @@ namespace App\DocumentManagement\Domain;
 class Response
 {
     /**
-     * @var string
+     * @var integer
      */
-    public $CodGuia;
+    public $CountResult;
+
     /**
      * @var string
      */
     public $ErrorCode;
+
     /**
      * @var string
      */
     public $ErrorMessage;
+
     /**
      * @var string
      */
-    public $NumRadicado;
-
-    /**
-     * @var integer
-     */
-    public $NumPaginas;
+    public $CodGuia;
 
     /**
      * @var integer
@@ -34,7 +32,12 @@ class Response
     /**
      * @var integer
      */
-    public $CountResult;
+    public $NumPaginas;
+
+    /**
+     * @var string
+     */
+    public $NumRadicado;
 
     public function __construct($CodGuia = null, $ErrorCode = null, $ErrorMessage = null, $NumRadicado = null)
     {
