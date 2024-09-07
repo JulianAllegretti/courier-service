@@ -70,9 +70,18 @@ class ServerSoap implements Server
         $response = new Response();
         $response->headers->set('Content-Type', 'text/xml; charset=ISO-8859-1');
 
-        ob_start();
+        ob_start(NULL, 1<<20);
         $soap->handle();
-        $response->setContent(ob_get_clean());
+        $soapXml = ob_get_contents();
+        ob_end_clean();
+
+        $soapXml = str_replace(['SOAP-ENV', 'ns1'], ['soapenv', 'soap'], $soapXml);
+        $soapXml = str_replace('<soapenv:Body>', '<soapenv:Header/><soapenv:Body>', $soapXml);
+
+        header('Content-Length: '.strlen($soapXml));
+
+        $response->setContent($soapXml);
+
         return $response;
     }
 

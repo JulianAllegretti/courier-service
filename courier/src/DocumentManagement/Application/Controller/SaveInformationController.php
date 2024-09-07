@@ -84,7 +84,7 @@ final class SaveInformationController extends ApiController
                 TypePortPayment::fromName($comunicacionVo->TipoPortePago),
                 ProcessType::fromName($comunicacionVo->TipoProceso), PortPayment::fromName($comunicacionVo->PortePago),
                 $comunicacionVo->Telefono, $comunicacionVo->RadicadoCasoPadre,
-                $identificationObj, $comunicacionVo->Celular, $comunicacionVo->UsuarioSolicitante
+                $identificationObj, $comunicacionVo->Celular, $comunicacionVo->UsuarioSolicitante, $comunicacionVo->NumTramite
             );
 
             $this->dispatch($command);
@@ -102,6 +102,7 @@ final class SaveInformationController extends ApiController
             $this->dispatch($commandLog);
         }
 
+        $response->setNumTramite($comunicacionVo->NumTramite);
         $this->logger->notice('Response ' . $comunicacionVo->NumRadicado, [$response]);
 
         return $response;

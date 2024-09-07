@@ -39,7 +39,13 @@ class Response
      */
     public $NumRadicado;
 
-    public function __construct($CodGuia = null, $ErrorCode = null, $ErrorMessage = null, $NumRadicado = null)
+    /**
+     * @var string
+     */
+    public $NumTramite;
+
+
+    public function __construct($CodGuia = null, $ErrorCode = null, $ErrorMessage = null, $NumRadicado = null, $NumTramite = null)
     {
         $this->CodGuia = $CodGuia;
         $this->ErrorCode = $ErrorCode;
@@ -48,6 +54,7 @@ class Response
         $this->NumPaginas = 0;
         $this->NumDocumentos = 0;
         $this->CountResult = 0;
+        $this->NumTramite = $NumTramite;
     }
 
     public function getCodGuia(): ?string
@@ -118,6 +125,16 @@ class Response
     public function getCountResult(): int
     {
         return $this->CountResult;
+    }
+
+    public function getNumTramite(): mixed
+    {
+        return $this->NumTramite;
+    }
+
+    public function setNumTramite(mixed $NumTramite): void
+    {
+        $this->NumTramite = $NumTramite;
     }
 
 
