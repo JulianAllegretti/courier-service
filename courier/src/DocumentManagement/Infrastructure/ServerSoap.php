@@ -76,13 +76,6 @@ class ServerSoap implements Server
         ob_end_clean();
 
         $soapXml = str_replace(['SOAP-ENV', 'ns1'], ['soapenv', 'soap'], $soapXml);
-        $soapXml = str_replace(['xsi:type="xsd:int"', 'xsi:type="xsd:string"', 'xsi:type="soap:Response"', 'xsi:nil="true"', ' >'], ['', '', '', '', '>'], $soapXml);
-        $soapXml = str_replace(
-            ['<ErrorCode />', '<ErrorMessage />', '<NumRadicado />', '<CodGuia />'],
-            ['<ErrorCode></ErrorCode>', '<ErrorMessage></ErrorMessage>', '<NumRadicado></NumRadicado>', '<CodGuia></CodGuia>'],
-            $soapXml
-        );
-        $soapXml = str_replace('<soapenv:Body>', '<soapenv:Header/><soapenv:Body>', $soapXml);
         $soapXml = str_replace(
             'xmlns:soap="http://nginx/wscolpensionesQA/ServiceColpensiones?wsdl="',
             'xmlns:soap="http://soap.canal.ws/"',
@@ -93,6 +86,14 @@ class ServerSoap implements Server
             '',
             $soapXml
         );
+        $soapXml = str_replace(['xsi:type="xsd:int"', 'xsi:type="xsd:string"', 'xsi:type="soap:Response"', 'xsi:nil="true"', ' >'], ['', '', '', '', '>'], $soapXml);
+        $soapXml = str_replace(
+            ['<ErrorCode />', '<ErrorMessage />', '<NumRadicado />', '<CodGuia />'],
+            ['<ErrorCode></ErrorCode>', '<ErrorMessage></ErrorMessage>', '<NumRadicado></NumRadicado>', '<CodGuia></CodGuia>'],
+            $soapXml
+        );
+        $soapXml = str_replace('<soapenv:Body>', '<soapenv:Header/><soapenv:Body>', $soapXml);
+
 
         header('Content-Length: '.strlen($soapXml));
 
