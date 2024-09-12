@@ -58,6 +58,10 @@ services:
     App\DocumentManagement\Application\Commands\CheckGuideNumber\CheckGuideNumberCommand:
         $mail_sender: "%env(MAIL_FROM)%"
         $mail_to_notify: "%env(MAIL_TO)%"
+    App\DocumentManagement\Application\Commands\GenerateReport\GenerateReportCommand:
+        $time_start: "%env(TIME_START_REPORT)%"
+        $time_end: "%env(TIME_END_REPORT)%"
+        $difference_days: "%env(DIFFERENCE_DAYS)%"
 
     App\DocumentManagement\Application\Commands\GetDocumentFile\GetDocumentFileCommandHandler:
         $url_service: "%env(URL_SERVICE)%"

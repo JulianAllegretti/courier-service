@@ -10,4 +10,5 @@
 /var/
 /vendor/
 /public/files
+/public/planos
 ###< symfony/framework-bundle ###

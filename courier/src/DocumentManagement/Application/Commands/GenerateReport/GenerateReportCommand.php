@@ -1,0 +1,78 @@
+<?php
+
+namespace App\DocumentManagement\Application\Commands\GenerateReport;
+
+use App\DocumentManagement\Domain\Repository\FiledRepository;
+use DateTime;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+#[AsCommand(name: 'app:generate-report')]
+class GenerateReportCommand extends Command
+{
+    public function __construct(private readonly FiledRepository $repository, private string $time_start, private string $time_end, private string $difference_days)
+    {
+        parent::__construct('app:generate-report');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $delimiter = ';';
+        try {
+            $output->writeln('-- Inicio job para generar el plano con las guias recibidas --');
+            $filed = $this->repository->getDocuments($this->time_start, $this->time_end, $this->difference_days);
+            $headers = [
+                'NumRadicado', 'CodGuia', 'RutaArchivo', 'TipoDocumento', 'Documento', 'Celular', 'NumTramite',
+                'CodDane', 'Direccion', 'NombreCompleto', 'Telefono', 'Prioridad', 'Impreso', 'PortePago', 'TipoPortePago',
+                'TipoProceso', 'RadicadoCasoPadre', 'UsuarioSolicitante'
+            ];
+            $content = implode($delimiter, $headers).PHP_EOL;
+            foreach ($filed as $item) {
+                $documents = $item['documents'];
+
+                if (count($documents) == 0) {
+                    $content .= $this->createTxtForFile($item, $delimiter, 'Error en descarga'.$delimiter);
+                    continue;
+                }
+
+                foreach ($documents as $document) {
+                    $content .= $this->createTxtForFile($item, $delimiter, $document['id_gestor_documento'].'.pdf'.$delimiter);
+                }
+            }
+
+            $date = new DateTime();
+            $fp = fopen("public/planos/radicados-".$date->format('Y-m-d').'.txt',"w");
+            fwrite($fp,$content);
+            fclose($fp);
+            $output->writeln('-- Fin job para generar el plano con las guias recibidas --');
+            return Command::SUCCESS;
+        } catch (\Exception $e) {
+            $output->writeln($e->getMessage());
+            $output->writeln('-- Fin con error del job para generar el plano con las guias recibidas --');
+            return Command::FAILURE;
+        }
+    }
+
+    private function createTxtForFile(array $item, string $delimiter, string $routeDocument): string {
+        $content = $item['num_radicado'].$delimiter;
+        $content .= $item['codigo_guia'].$delimiter;
+        $content .= "public/files/".$routeDocument;
+        if (isset($item['identification']) && count($item['identification']) > 0) {
+            $content .= $item['identification']['tipo_documento'].$delimiter;
+            $content .= $item['identification']['documento'].$delimiter;
+        } else {
+            $content .= $delimiter;
+            $content .= $delimiter;
+        }
+
+        unset(
+            $item['id_radicado'], $item['fk_identificacion'], $item['num_radicado'], $item['identification'],
+            $item['documents'], $item['codigo_guia'], $item['created_at'], $item['guia_impresa']
+        );
+        $content .= implode($delimiter, $item).PHP_EOL;
+
+        return $content;
+    }
+}

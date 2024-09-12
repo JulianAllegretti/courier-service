@@ -3,7 +3,9 @@
 namespace App\DocumentManagement\Domain\Entity;
 
 use App\DocumentManagement\Domain\Repository\FiledRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Comment\Doc;
 
 #[ORM\Entity(repositoryClass: FiledRepository::class)]
 #[ORM\Table('radicado')]
@@ -64,6 +66,16 @@ class Filed
 
     #[ORM\Column(length: 50)]
     private string $codigo_guia;
+
+    #[ORM\Column(length: 50)]
+    private ?string $created_at;
+
+    #[ORM\ManyToOne(targetEntity: Identification::class, inversedBy: 'filed')]
+    #[ORM\JoinColumn(name:"fk_identificacion", referencedColumnName:"id_identificacion")]
+    private Identification $identification;
+
+    #[ORM\OneToMany(targetEntity: Document::class, mappedBy: 'filed')]
+    private Collection $documents;
 
     /**
      * @param int|null $id_radicado
@@ -195,6 +207,16 @@ class Filed
     public function getNumTramite(): ?string
     {
         return $this->num_tramite;
+    }
+
+    public function getCreatedAt(): ?string
+    {
+        return $this->created_at;
+    }
+
+    public function getIdentification(): Identification
+    {
+        return $this->identification;
     }
 
 }

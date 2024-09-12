@@ -32,6 +32,10 @@ class Document
     #[ORM\Column()]
     private ?string $ruta;
 
+    #[ORM\ManyToOne(targetEntity: Filed::class, inversedBy: 'documents')]
+    #[ORM\JoinColumn(name:"fk_radicado", referencedColumnName:"id_radicado")]
+    private Filed $filed;
+
     /**
      * @param int|null $id_documento
      * @param int $fk_radicado

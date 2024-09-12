@@ -26,6 +26,7 @@ class CheckGuideNumberCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
+            $output->writeln('-- Inicio job para verificar cantidad de guias --');
             $guideNumber = $this->repository->getGuideNumber();
             $currentNumber = $this->helper->extractNumbersFromGuide($guideNumber->getCurrentNumber());
             $limitNumber = $this->helper->extractNumbersFromGuide($guideNumber->getEndNumber());
@@ -44,6 +45,7 @@ class CheckGuideNumberCommand extends Command
             $this->mailer->send($email);
 
             $output->writeln('Notificación de correo enviada.');
+            $output->writeln('-- Fin job para verificar cantidad de guias --');
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
