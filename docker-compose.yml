@@ -17,8 +17,8 @@ services:
         build:
             context: .
             dockerfile: docker/php/Dockerfile
-        environment:
-            APP_ENV: ${APP_ENV}
+            args:
+                - APP_ENV=$APP_ENV
         volumes:
             - ./courier/:/var/www/symfony/
         networks:

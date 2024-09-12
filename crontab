@@ -1,2 +1,3 @@
-0 0 * * * /usr/local/bin/php /var/www/symfony/bin/console app:check-guide-number >> /var/log/cron.log 2>&1
-0 18 * * * /usr/local/bin/php /var/www/symfony/bin/console app:generate-report >> /var/log/cron.log 2>&1
+#!/bin/bash -l
+0 0 * * * /usr/local/bin/php /var/www/symfony/bin/console app:check-guide-number --env=$APP_ENV >> /var/log/cron.log 2>&1
+0 6 * * * /usr/local/bin/php /var/www/symfony/bin/console app:generate-report --env=$APP_ENV >> /var/log/cron.log 2>&1

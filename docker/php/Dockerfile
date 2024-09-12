@@ -1,5 +1,8 @@
 FROM php:8.2-fpm
+
+ARG APP_ENV
 ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV APP_ENV=$APP_ENV
 
 RUN apt-get update && apt-get install -y \
         git \
@@ -24,3 +27,4 @@ WORKDIR /var/www/symfony/
 COPY crontab /etc/cron.d/check-cron
 RUN crontab /etc/cron.d/check-cron
 RUN touch /var/log/cron.log
+RUN env >> /etc/environment

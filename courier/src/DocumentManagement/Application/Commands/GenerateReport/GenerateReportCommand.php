@@ -26,7 +26,7 @@ class GenerateReportCommand extends Command
             $headers = [
                 'NumRadicado', 'CodGuia', 'RutaArchivo', 'TipoDocumento', 'Documento', 'Celular', 'NumTramite',
                 'CodDane', 'Direccion', 'NombreCompleto', 'Telefono', 'Prioridad', 'Impreso', 'PortePago', 'TipoPortePago',
-                'TipoProceso', 'RadicadoCasoPadre', 'UsuarioSolicitante'
+                'TipoProceso', 'RadicadoCasoPadre', 'UsuarioSolicitante', 'FechaDeCreacion'
             ];
             $content = implode($delimiter, $headers).PHP_EOL;
             foreach ($filed as $item) {
@@ -69,7 +69,7 @@ class GenerateReportCommand extends Command
 
         unset(
             $item['id_radicado'], $item['fk_identificacion'], $item['num_radicado'], $item['identification'],
-            $item['documents'], $item['codigo_guia'], $item['created_at'], $item['guia_impresa']
+            $item['documents'], $item['codigo_guia'], $item['guia_impresa']
         );
         $content .= implode($delimiter, $item).PHP_EOL;
 
