@@ -117,6 +117,7 @@ class Filed
         $this->usuario_solicitante = $usuario_solicitante;
         $this->codigo_guia = $codigo_guia;
         $this->num_tramite = $num_tramite;
+        $this->created_at = date('Y-m-d H:i:s');
     }
 
     public function getIdRadicado(): ?int

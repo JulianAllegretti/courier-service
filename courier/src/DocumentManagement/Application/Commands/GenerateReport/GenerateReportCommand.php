@@ -6,6 +6,7 @@ use App\DocumentManagement\Domain\Repository\FiledRepository;
 use DateTime;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -21,6 +22,10 @@ class GenerateReportCommand extends Command
     {
         $delimiter = ';';
         try {
+            $this->time_start = $input->getArgument('time_start') ? $input->getArgument('time_start') : $this->time_start;
+            $this->time_end = $input->getArgument('time_end') ? $input->getArgument('time_end') : $this->time_end;
+            $this->difference_days = $input->getArgument('difference_days') !== null ? $input->getArgument('difference_days') : $this->difference_days;
+
             $output->writeln('-- Inicio job para generar el plano con las guias recibidas --');
             $filed = $this->repository->getDocuments($this->time_start, $this->time_end, $this->difference_days);
             $headers = [
@@ -74,5 +79,14 @@ class GenerateReportCommand extends Command
         $content .= implode($delimiter, $item).PHP_EOL;
 
         return $content;
+    }
+
+    protected function configure()
+    {
+        $this
+            ->addArgument('time_start', InputArgument::OPTIONAL, 'What time to start?')
+            ->addArgument('time_end', InputArgument::OPTIONAL, 'What time end?')
+            ->addArgument('difference_days', InputArgument::OPTIONAL, 'How many days ago?')
+        ;
     }
 }
