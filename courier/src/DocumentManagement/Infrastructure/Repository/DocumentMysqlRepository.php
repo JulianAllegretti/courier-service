@@ -3,6 +3,7 @@
 namespace App\DocumentManagement\Infrastructure\Repository;
 
 use App\DocumentManagement\Domain\Entity\Document;
+use App\DocumentManagement\Domain\Entity\Filed;
 use App\DocumentManagement\Domain\Repository\DocumentRepository;
 use App\Shared\Domain\Exceptions\DocumentNotExistException;
 use App\Shared\Domain\Exceptions\ExistException;
@@ -20,7 +21,7 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
     /**
      * @throws ExistException
      */
-    function create(Document $document): Document
+    function create(Document $document, Filed $filed): Document
     {
         $exist = $this->getEntityManager()
             ->createQueryBuilder()
@@ -39,6 +40,7 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
             return $document;
         }
 
+        $document->setFiled($filed);
         $this->registry->getManager()->persist($document);
         $this->registry->getManager()->flush();
 

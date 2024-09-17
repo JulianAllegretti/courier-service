@@ -3,7 +3,7 @@
 namespace App\DocumentManagement\Infrastructure\Repository;
 
 use App\DocumentManagement\Domain\Entity\Filed;
-use App\DocumentManagement\Domain\Identification;
+use App\DocumentManagement\Domain\Entity\Identification;
 use App\DocumentManagement\Domain\Repository\FiledRepository;
 use App\Shared\Domain\Exceptions\ExistException;
 use DateTime;
@@ -21,7 +21,7 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
     /**
      * @throws ExistException
      */
-    function create(Filed $filed): Filed
+    function create(Filed $filed, Identification $identification): Filed
     {
         $exist = $this->getEntityManager()
             ->createQueryBuilder()
@@ -38,6 +38,7 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             throw new ExistException('El numero de radicado o el codigo de guia ya existen');
         }
 
+        $filed->setIdentification($identification);
         $this->registry->getManager()->persist($filed);
         $this->registry->getManager()->flush();
 

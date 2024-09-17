@@ -108,7 +108,7 @@ readonly class FiledCreator
                 $guideNumber->getValue()
             );
 
-            $filed = $this->filedRepository->create($filed);
+            $filed = $this->filedRepository->create($filed, $identificationDb);
 
             foreach ($documents as $document) {
                 $documentDb = new Document(
@@ -116,7 +116,7 @@ readonly class FiledCreator
                     $document->getEndPointFileNet()->getValue(), $document->getOrderImp()->getValue(),
                     $document->getNumPages()->getValue(), null
                 );
-                $this->documentRepository->create($documentDb);
+                $this->documentRepository->create($documentDb, $filed);
             }
 
             $this->entityManager->flush();

@@ -219,4 +219,9 @@ class Filed
         return $this->identification;
     }
 
+    public function setIdentification(Identification $identification): void
+    {
+        $this->identification = $identification;
+    }
+
 }

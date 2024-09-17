@@ -96,5 +96,8 @@ class Document
         $this->ruta = $ruta;
     }
 
-
+    public function setFiled(Filed $filed): void
+    {
+        $this->filed = $filed;
+    }
 }
