@@ -38,11 +38,14 @@ class GenerateReportCommand extends Command
                 $documents = $item['documents'];
 
                 if (count($documents) == 0) {
-                    $content .= $this->createTxtForFile($item, $delimiter, 'Error en descarga'.$delimiter);
+                    //$content .= $this->createTxtForFile($item, $delimiter, 'Error en descarga'.$delimiter);
                     continue;
                 }
 
                 foreach ($documents as $document) {
+                    if (!isset($document['ruta']) || $document['ruta'] == '') {
+                        continue;
+                    }
                     $content .= $this->createTxtForFile($item, $delimiter, $document['id_gestor_documento'].'.pdf'.$delimiter);
                 }
             }
