@@ -12,7 +12,8 @@ services:
         volumes:
             - ./db:/var/lib/mysql
         networks:
-            - default
+            courier:
+                ipv4_address: 172.16.0.15
     php:
         build:
             context: .
@@ -22,7 +23,8 @@ services:
         volumes:
             - ./courier/:/var/www/symfony/
         networks:
-            - default
+            courier:
+                ipv4_address: 172.16.0.10
         depends_on:
             - db
         entrypoint: >
@@ -35,9 +37,14 @@ services:
         ports:
             - 8080:80
         networks:
-            - default
+            courier:
+                ipv4_address: 172.16.0.6
         depends_on:
             - php
 networks:
-    default:
-        name: courier
+    courier:
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.16.0.0/16
+                  gateway: 172.16.0.1
