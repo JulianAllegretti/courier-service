@@ -50,28 +50,33 @@ when@staging:
 when@prod:
     monolog:
         handlers:
+            # Este handler usa "fingers_crossed", es decir, que se activa cuando se detectan errores a partir de un nivel "warning"
             main:
                 type: fingers_crossed
-                action_level: error
+                action_level: warning  # Cambié a "warning" para que se registren más mensajes de error
                 handler: nested
                 excluded_http_codes: [404, 405]
-                buffer_size: 50 # How many messages should be saved? Prevent memory leaks
+                buffer_size: 50  # Limita la cantidad de mensajes en memoria
+            # Este handler es el que captura los logs de los mensajes cuando se alcanzan los niveles de error
             nested:
                 type: rotating_file
-                path: php://stderr
-                level: debug
-                formatter: monolog.formatter.json
+                path: '%kernel.logs_dir%/prod-nested.log'  # Guarda los logs en un archivo físico
+                level: debug  # Mantenemos el nivel "debug" aquí para registrar todos los mensajes
+                formatter: monolog.formatter.json  # Formato JSON para una mejor estructura
+            # Este handler es para mostrar los mensajes de la consola, excluyendo eventos de doctrine y otros
             console:
                 type: console
                 process_psr_3_messages: false
                 channels: ["!event", "!doctrine"]
+            # Este handler es para los logs de deprecación, en formato JSON y enviado a stderr
             deprecation:
                 type: stream
                 channels: [deprecation]
                 path: php://stderr
                 formatter: monolog.formatter.json
+            # Este handler captura logs de nivel "notice" para solicitudes HTTP
             notice:
                 type: rotating_file
                 path: "%kernel.logs_dir%/%kernel.environment%-request.log"
                 level: notice
-                channels: [ "!event" ]
+                channels: ["!event"]
