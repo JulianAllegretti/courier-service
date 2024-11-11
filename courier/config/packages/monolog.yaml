@@ -69,11 +69,11 @@ when@prod:
                 process_psr_3_messages: false
                 channels: ["!event", "!doctrine"]
             # Este handler es para los logs de deprecación, en formato JSON y enviado a stderr
-            deprecation:
-                type: stream
-                channels: [deprecation]
-                path: php://stderr
-                formatter: monolog.formatter.json
+            # deprecation:
+                # type: stream
+                # channels: [deprecation]
+                # path: php://stderr
+                # formatter: monolog.formatter.json
             # Este handler captura logs de nivel "notice" para solicitudes HTTP
             notice:
                 type: rotating_file
