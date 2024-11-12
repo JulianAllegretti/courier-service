@@ -34,10 +34,10 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
     public function __invoke(GetDocumentFileCommand $command): void
     {
         try {
-            $folder = 'public/files/';
-            $id = $command->getDocumentId();
+            $folder = '/var/www/symfony/public/files/';
+            $id = $command->getDocumentId().'pdf';
             $url = $this->url_service."/".$command->getDocumentId();
-            $shCommand = "bash download.sh '$url' '$folder' '$id'";
+            $shCommand = "bash /var/www/symfony/download.sh '$url' '$folder' '$id'";
             exec($shCommand, $output, $statusCode);
 
             if ($statusCode !== 0) {
