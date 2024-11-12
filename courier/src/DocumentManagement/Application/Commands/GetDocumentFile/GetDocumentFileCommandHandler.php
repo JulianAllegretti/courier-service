@@ -36,10 +36,11 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
         try {
             $folder = 'public/files/';
             $url = $this->url_service."/".$command->getDocumentId();
-            exec("wget -q -O {$folder}{$command->getDocumentId()}.pdf \"$url\"", $output, $statusCode);
+            $command = "bash download.sh '$url' '$folder' '$command->getDocumentId()'";
+            exec($command, $output, $statusCode);
 
             if ($statusCode !== 0) {
-                throw new DocumentInvalidException('Error al descargar el archivo. Código de estado: ' . $statusCode);
+                throw new DocumentInvalidException('Error al descargar el archivo. Código de estado: ' . $statusCode . " Comando: " .$command. " Error: ".json_encode($output));
             }
 
             if (file_exists($command->getDocumentId())) {
