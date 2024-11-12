@@ -35,12 +35,13 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
     {
         try {
             $folder = 'public/files/';
+            $id = $command->getDocumentId();
             $url = $this->url_service."/".$command->getDocumentId();
-            $command = "bash download.sh '$url' '$folder' '$command->getDocumentId()'";
-            exec($command, $output, $statusCode);
+            $shCommand = "bash download.sh '$url' '$folder' '$id'";
+            exec($shCommand, $output, $statusCode);
 
             if ($statusCode !== 0) {
-                throw new DocumentInvalidException('Error al descargar el archivo. Código de estado: ' . $statusCode . " Comando: " .$command. " Error: ".json_encode($output));
+                throw new DocumentInvalidException('Error al descargar el archivo. Código de estado: ' . $statusCode . " Comando: " .$shCommand. " Error: ".json_encode($output));
             }
 
             if (file_exists($command->getDocumentId())) {
