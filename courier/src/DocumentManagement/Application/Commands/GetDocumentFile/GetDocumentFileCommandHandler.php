@@ -34,11 +34,26 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
     public function __invoke(GetDocumentFileCommand $command): void
     {
         try {
-            $body = new RequestDTO(
+            $folder = 'public/files/';
+            $url = $this->url_service."/".$command->getDocumentId();
+            exec("wget -q -O {$folder}{$command->getDocumentId()}.pdf \"$url\"", $output, $statusCode);
+
+            if ($statusCode !== 0) {
+                throw new DocumentInvalidException('Error al descargar el archivo. Código de estado: ' . $statusCode);
+            }
+
+            if (file_exists($command->getDocumentId())) {
+                unlink($command->getDocumentId());
+            }
+
+            $this->repository->updatePathFile($command->getDocumentId());
+            return;
+
+
+            /*$body = new RequestDTO(
                 new Contexto($this->user_service, $this->user_service_system, $this->password_service),
                 new Detalle($command->getDocumentId())
             );
-
             $header = new RequestHeader(
                 new Security('',''),
                 new System($this->application_id, $this->transaction_id)
@@ -54,8 +69,7 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
             $pdf = fopen('files/'.$command->getDocumentId().'.pdf','w');
             fwrite ($pdf, $pdf_decoded);
             fclose ($pdf);
-
-            $this->repository->updatePathFile($command->getDocumentId());
+            */
         } catch (DocumentInvalidException $e){
             throw $e;
         } catch (\Exception $e) {
