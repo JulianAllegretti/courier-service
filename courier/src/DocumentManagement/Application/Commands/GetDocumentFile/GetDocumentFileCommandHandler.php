@@ -35,7 +35,7 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
     {
         try {
             $folder = '/var/www/symfony/public/files/';
-            $id = $command->getDocumentId().'pdf';
+            $id = $command->getDocumentId().'.pdf';
             $url = $this->url_service."/".$command->getDocumentId();
             $shCommand = "bash /var/www/symfony/download.sh '$url' '$folder' '$id'";
             exec($shCommand, $output, $statusCode);
