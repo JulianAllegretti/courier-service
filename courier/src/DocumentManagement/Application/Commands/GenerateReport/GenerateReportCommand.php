@@ -20,7 +20,7 @@ class GenerateReportCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $delimiter = ';';
+        $delimiter = '|&';
         try {
             $this->time_start = $input->getArgument('time_start') ? $input->getArgument('time_start') : $this->time_start;
             $this->time_end = $input->getArgument('time_end') ? $input->getArgument('time_end') : $this->time_end;

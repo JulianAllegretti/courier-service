@@ -22,6 +22,9 @@ class LogInsertInformation
     #[ORM\Column]
     private string $error;
 
+    #[ORM\Column(length: 50)]
+    private ?string $created_at;
+
     /**
      * @param int|null $id_log_insert_information
      * @param string $numero_radicado
@@ -34,6 +37,7 @@ class LogInsertInformation
         $this->numero_radicado = $numero_radicado;
         $this->request = $request;
         $this->error = $error;
+        $this->created_at = date('Y-m-d H:i:s');
     }
 
     public function getIdLogInsertInformation(): ?int
@@ -56,5 +60,9 @@ class LogInsertInformation
         return $this->error;
     }
 
+    public function getCreatedAt(): ?string
+    {
+        return $this->created_at;
+    }
 
 }

@@ -225,4 +225,9 @@ class Filed
         $this->identification = $identification;
     }
 
+    public function setCodigoGuia(string $codigo_guia): void
+    {
+        $this->codigo_guia = $codigo_guia;
+    }
+
 }

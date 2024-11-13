@@ -1,3 +1,5 @@
 #!/bin/bash -l
-0 0 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:check-guide-number --env=$APP_ENV && chown -R www-data:www-data var/log >> /var/log/cron.log 2>&1
+#0 0 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:check-guide-number --env=$APP_ENV && chown -R www-data:www-data var/log >> /var/log/cron.log 2>&1
 0 6 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:generate-report --env=$APP_ENV && chown -R www-data:www-data var/log >> /var/log/cron.log 2>&1
+30 6 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:generate-report-get-document --env=$APP_ENV && chown -R www-data:www-data var/log >> /var/log/cron.log 2>&1
+45 6 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:generate-report-insert --env=$APP_ENV && chown -R www-data:www-data var/log >> /var/log/cron.log 2>&1

@@ -29,6 +29,7 @@ use App\DocumentManagement\Domain\ValueObjects\PrintedGuideValueObject;
 use App\DocumentManagement\Domain\ValueObjects\ProcessNumberValueObject;
 use App\Shared\Domain\Exceptions\MaxLengthException;
 use App\Shared\Domain\Exceptions\NullException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -66,6 +67,7 @@ readonly class FiledCreator
      * @return string
      * @throws MaxLengthException
      * @throws NullException
+     * @throws \Exception
      */
     public function __invoke(
         FiledNumberValueObject      $filedNumber,
@@ -87,46 +89,54 @@ readonly class FiledCreator
         ?ProcessNumberValueObject   $processNumber
     ): string
     {
-        $this->entityManager->beginTransaction();
+        $retries = 3;
+        while($retries > 0) {
+            try {
+                $this->entityManager->beginTransaction();
+                $identificationDb = null;
+                if ($identification) {
+                    $identificationDb = new IdentificationEntity(
+                        null, $identification->getDocument()->getValue(), $identification->getDocumentType()->value
+                    );
+                    $identificationDb = $this->repository->createIfNoExist($identificationDb);
+                }
 
-        try {
-            $identificationDb = null;
-            if ($identification) {
-                $identificationDb = new IdentificationEntity(
-                    null, $identification->getDocument()->getValue(), $identification->getDocumentType()->value
+                $guideNumber = new GuideNumberValueObject($this->guideNumberRepository->updateCurrentNumber());
+
+                $filed = new Filed(
+                    null, $identificationDb?->getIdIdentificacion(), $filedNumber->getValue(),
+                    $cellphone->getValue(), $processNumber->getValue(), $codDane->getValue(), $address->getValue(), $printedGuide->getValue(),
+                    $fullName->getValue(), $phone->getValue(), $priority->value, $printed->value, $portPayment->value,
+                    $typePortPayment->value, $processType->value, $filedCaseFather->getValue(), $applicant->getValue(),
+                    $guideNumber->getValue()
                 );
-                $identificationDb = $this->repository->createIfNoExist($identificationDb);
+
+                $filed = $this->filedRepository->create($filed, $identificationDb);
+
+                foreach ($documents as $document) {
+                    $documentDb = new Document(
+                        null, $filed->getIdRadicado(), $document->getDocumentId()->getValue(),
+                        $document->getEndPointFileNet()->getValue(), $document->getOrderImp()->getValue(),
+                        $document->getNumPages()->getValue(), null
+                    );
+                    $this->documentRepository->create($documentDb, $filed);
+                }
+
+                $this->entityManager->flush();
+                $this->entityManager->commit();
+
+                return $guideNumber->getValue();
+            } catch (UniqueConstraintViolationException $e) {
+                $retries--;
+                $this->entityManager->rollback();
+                $this->managerRegistry->resetManager();
+            } catch (\Exception $e) {
+                $this->entityManager->rollback();
+                $this->managerRegistry->resetManager();
+                throw $e;
             }
-
-            $guideNumber = new GuideNumberValueObject($this->guideNumberRepository->updateCurrentNumber());
-
-            $filed = new Filed(
-                null, $identificationDb?->getIdIdentificacion(), $filedNumber->getValue(),
-                $cellphone->getValue(), $processNumber->getValue(), $codDane->getValue(), $address->getValue(), $printedGuide->getValue(),
-                $fullName->getValue(), $phone->getValue(), $priority->value, $printed->value, $portPayment->value,
-                $typePortPayment->value, $processType->value, $filedCaseFather->getValue(), $applicant->getValue(),
-                $guideNumber->getValue()
-            );
-
-            $filed = $this->filedRepository->create($filed, $identificationDb);
-
-            foreach ($documents as $document) {
-                $documentDb = new Document(
-                    null, $filed->getIdRadicado(), $document->getDocumentId()->getValue(),
-                    $document->getEndPointFileNet()->getValue(), $document->getOrderImp()->getValue(),
-                    $document->getNumPages()->getValue(), null
-                );
-                $this->documentRepository->create($documentDb, $filed);
-            }
-
-            $this->entityManager->flush();
-            $this->entityManager->commit();
-
-            return $guideNumber->getValue();
-        } catch (\Exception $e) {
-            $this->entityManager->rollback();
-            $this->managerRegistry->resetManager();
-            throw $e;
         }
+
+        throw new \Exception('No se pudo crear el archivo después de varios intentos.');
     }
 }

@@ -11,4 +11,5 @@
 /vendor/
 /public/files
 /public/planos
+/public/error
 ###< symfony/framework-bundle ###

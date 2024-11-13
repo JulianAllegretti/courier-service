@@ -25,6 +25,9 @@ class LogGetDocumentFile
     #[ORM\Column]
     private string $error;
 
+    #[ORM\Column(length: 50)]
+    private ?string $created_at;
+
     /**
      * @param int|null $id_log_get_document
      * @param string $numero_radicado
@@ -39,6 +42,7 @@ class LogGetDocumentFile
         $this->id_documento = $id_documento;
         $this->request = $request;
         $this->error = $error;
+        $this->created_at = date('Y-m-d H:i:s');
     }
 
     public function getIdLogGetDocument(): ?int
@@ -66,5 +70,9 @@ class LogGetDocumentFile
         return $this->error;
     }
 
+    public function getCreatedAt(): ?string
+    {
+        return $this->created_at;
+    }
 
 }
