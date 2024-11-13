@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
         libzip-dev \
         cron \
         tzdata \
+        wget \
     && docker-php-ext-install \
         zip \
         intl \

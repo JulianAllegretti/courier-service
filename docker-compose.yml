@@ -22,6 +22,9 @@ services:
                 - APP_ENV=$APP_ENV
         volumes:
             - ./courier/:/var/www/symfony/
+            - ./courier/public/files/:/var/www/symfony/public/files/
+            - ./courier/public/error/:/var/www/symfony/public/error/
+            - ./courier/public/planos/:/var/www/symfony/public/planos/
         networks:
             courier:
                 ipv4_address: 172.16.0.10
