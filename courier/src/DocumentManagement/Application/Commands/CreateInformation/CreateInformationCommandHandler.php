@@ -3,6 +3,7 @@
 namespace App\DocumentManagement\Application\Commands\CreateInformation;
 
 use App\DocumentManagement\Application\Creators\FiledCreator;
+use App\DocumentManagement\Application\Services\GetFiledService;
 use App\DocumentManagement\Domain\Repository\GuideNumberRepository;
 use App\DocumentManagement\Domain\ValueObjects\AddressValueObject;
 use App\DocumentManagement\Domain\ValueObjects\ApplicantValueObject;
@@ -31,7 +32,7 @@ use Doctrine\ORM\Exception\ORMException;
 class CreateInformationCommandHandler implements CommandHandler
 {
 
-    public function __construct(private FiledCreator $creator)
+    public function __construct(private FiledCreator $creator, private GetFiledService $getFiledService)
     {
     }
 
@@ -45,6 +46,14 @@ class CreateInformationCommandHandler implements CommandHandler
     public function __invoke(CreateInformationCommand $command): void
     {
         $commandFiledNumber = new FiledNumberValueObject($command->getFiledNumber());
+        $existFiled = $this->getFiledService->__invoke($commandFiledNumber);
+        if ($existFiled) {
+            $command->setAlreadyExist(true);
+            $command->setGuideNumber($existFiled->getCodigoGuia());
+            return;
+        }
+
+
         $commandCodDane = new CodDaneValueObject($command->getCodDane());
         $commandCellphone = new CellphoneValueObject($command->getCellphone() != '' ? $command->getCellphone() : null);
         $commandProcessNumber = new ProcessNumberValueObject($command->getProcessNumber() != '' ? $command->getProcessNumber() : null);

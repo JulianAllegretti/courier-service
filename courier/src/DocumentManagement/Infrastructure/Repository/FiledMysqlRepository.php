@@ -5,6 +5,7 @@ namespace App\DocumentManagement\Infrastructure\Repository;
 use App\DocumentManagement\Domain\Entity\Filed;
 use App\DocumentManagement\Domain\Entity\Identification;
 use App\DocumentManagement\Domain\Repository\FiledRepository;
+use App\DocumentManagement\Domain\ValueObjects\FiledNumberValueObject;
 use App\Shared\Domain\Exceptions\ExistException;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -74,5 +75,17 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->leftJoin('f.documents', 'd')
             ->getQuery()
             ->getArrayResult();
+    }
+
+    function getFiled(FiledNumberValueObject $filedNumberValueObject): Filed|null
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('r')
+            ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
+            ->where('r.num_radicado = :filedNumber')
+            ->setParameter('filedNumber', $filedNumberValueObject->getValue())
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

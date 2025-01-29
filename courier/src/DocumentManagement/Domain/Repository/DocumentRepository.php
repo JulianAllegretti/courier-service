@@ -8,5 +8,5 @@ use App\DocumentManagement\Domain\Entity\Filed;
 interface DocumentRepository
 {
     function create(Document $document, Filed $filed): Document;
-    function updatePathFile(string $documentId): void;
+    function updatePathFile(string $documentId, string $guideNumber): void;
 }

@@ -14,6 +14,7 @@ use App\Shared\Domain\Command;
 class CreateInformationCommand implements Command
 {
     private string $guideNumber;
+    private bool $alreadyExist;
 
     public function __construct(
         private string          $filedNumber,
@@ -35,6 +36,7 @@ class CreateInformationCommand implements Command
         private ?string         $processNumber = ''
     )
     {
+        $this->alreadyExist = false;
     }
 
     public function getFiledNumber(): string
@@ -133,6 +135,16 @@ class CreateInformationCommand implements Command
     public function getProcessNumber(): ?string
     {
         return $this->processNumber;
+    }
+
+    public function isAlreadyExist(): bool
+    {
+        return $this->alreadyExist;
+    }
+
+    public function setAlreadyExist(bool $alreadyExist): void
+    {
+        $this->alreadyExist = $alreadyExist;
     }
 
 }
