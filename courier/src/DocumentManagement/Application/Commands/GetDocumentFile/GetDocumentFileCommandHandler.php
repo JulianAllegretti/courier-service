@@ -36,6 +36,12 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
         try {
             $folder = '/var/www/symfony/public/files/';
             $id = $command->getDocumentId().'.pdf';
+
+            if (file_exists($folder.$id)) {
+                $this->repository->updatePathFile($command->getDocumentId(), $command->getGuideNumber());
+                return;
+            }
+
             $url = $this->url_service."/".$command->getDocumentId();
             $shCommand = "bash /var/www/symfony/download.sh '$url' '$folder' '$id'";
             exec($shCommand, $output, $statusCode);
@@ -48,7 +54,7 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
                 unlink($command->getDocumentId());
             }
 
-            $this->repository->updatePathFile($command->getDocumentId());
+            $this->repository->updatePathFile($command->getDocumentId(), $command->getGuideNumber());
             return;
 
 

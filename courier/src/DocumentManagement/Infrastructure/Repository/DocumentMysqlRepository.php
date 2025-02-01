@@ -23,23 +23,6 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
      */
     function create(Document $document, Filed $filed): Document
     {
-        $exist = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('d')
-            ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
-            ->where('d.id_gestor_documento = :documentId')
-            ->setParameter('documentId', $document->getIdGestorDocumento())
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        if (isset($exist) && !empty($exist->getRuta())) {
-            throw new ExistException('El Documento ya fue creado');
-        }
-
-        if (isset($exist) && empty($exist->getRuta())) {
-            return $document;
-        }
-
         $document->setFiled($filed);
         $this->registry->getManager()->persist($document);
         $this->registry->getManager()->flush();
@@ -50,14 +33,29 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
     /**
      * @throws DocumentNotExistException
      */
-    function updatePathFile(string $documentId): void
+    function updatePathFile(string $documentId, string $guideNumber): void
     {
+        $filed = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('f')
+            ->from('App\DocumentManagement\Domain\Entity\Filed', 'f')
+            ->where('f.codigo_guia = :guideNumber')
+            ->setParameter('guideNumber', $guideNumber)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!isset($filed)) {
+            throw new DocumentNotExistException('El radicado de este documento no existe.');
+        }
+
         $exist = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('d')
             ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
             ->where('d.id_gestor_documento = :documentId')
+            ->andWhere('d.fk_radicado = :filedId')
             ->setParameter('documentId', $documentId)
+            ->setParameter('filedId', $filed->getIdRadicado())
             ->getQuery()
             ->getOneOrNullResult();
 

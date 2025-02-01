@@ -88,7 +88,9 @@ final class SaveInformationController extends ApiController
             );
 
             $this->dispatch($command);
-            $this->getDocumentFile($documentArrayObj);
+            if (!$command->isAlreadyExist()) {
+                $this->getDocumentFile($documentArrayObj, $command->getGuideNumber());
+            }
 
             $response->setCodGuia($command->getGuideNumber());
         } catch (GetDocumentException $exception){
@@ -131,12 +133,12 @@ final class SaveInformationController extends ApiController
      * @param Document[] $documents
      * @throws GetDocumentException
      */
-    private function getDocumentFile(array $documents): void
+    private function getDocumentFile(array $documents, string $guideNumber): void
     {
         $command = null;
         try {
             foreach ($documents as $document) {
-                $command = new GetDocumentFileCommand($document->getIdDocumento());
+                $command = new GetDocumentFileCommand($document->getIdDocumento(), $guideNumber);
                 $this->dispatch($command);
             }
         } catch (\Exception $exception) {
