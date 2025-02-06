@@ -41,6 +41,7 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
             ->from('App\DocumentManagement\Domain\Entity\Filed', 'f')
             ->where('f.codigo_guia = :guideNumber')
             ->setParameter('guideNumber', $guideNumber)
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
 
@@ -56,6 +57,7 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
             ->andWhere('d.fk_radicado = :filedId')
             ->setParameter('documentId', $documentId)
             ->setParameter('filedId', $filed->getIdRadicado())
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
 
