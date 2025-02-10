@@ -34,7 +34,7 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
     public function __invoke(GetDocumentFileCommand $command): void
     {
         try {
-            $folder = '/var/www/symfony/public/files/';
+            /*$folder = '/var/www/symfony/public/files/';
             $id = $command->getDocumentId().'.pdf';
 
             if (file_exists($folder.$id)) {
@@ -55,10 +55,10 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
             }
 
             $this->repository->updatePathFile($command->getDocumentId(), $command->getGuideNumber());
-            return;
+            return;*/
 
 
-            /*$body = new RequestDTO(
+            $body = new RequestDTO(
                 new Contexto($this->user_service, $this->user_service_system, $this->password_service),
                 new Detalle($command->getDocumentId())
             );
@@ -77,7 +77,7 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
             $pdf = fopen('files/'.$command->getDocumentId().'.pdf','w');
             fwrite ($pdf, $pdf_decoded);
             fclose ($pdf);
-            */
+            $this->repository->updatePathFile($command->getDocumentId(), $command->getGuideNumber());
         } catch (DocumentInvalidException $e){
             throw $e;
         } catch (\Exception $e) {
