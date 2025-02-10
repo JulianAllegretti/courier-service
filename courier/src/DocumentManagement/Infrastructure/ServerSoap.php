@@ -64,7 +64,7 @@ class ServerSoap implements Server
             return new Response("Access Denied", Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Basic realm="SoapServiceCourier"']);
         }*/
 
-        $soap = new SoapServer('http://nginx/wscolpensionesPROD/ServiceColpensiones?wsdl');
+        $soap = new SoapServer('http://nginx/wscolpensionesQA/ServiceColpensiones?wsdl');
         $soap->setObject($class);
 
         $response = new Response();
@@ -77,7 +77,7 @@ class ServerSoap implements Server
 
         $soapXml = str_replace(['SOAP-ENV', 'ns1'], ['soapenv', 'soap'], $soapXml);
         $soapXml = str_replace(
-            'xmlns:soap="http://nginx/wscolpensionesPROD/ServiceColpensiones?wsdl="',
+            'xmlns:soap="http://nginx/wscolpensionesQA/ServiceColpensiones?wsdl="',
             'xmlns:soap="http://soap.canal.ws/"',
             $soapXml
         );
