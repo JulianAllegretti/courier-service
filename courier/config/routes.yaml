@@ -8,3 +8,15 @@ courier_service_472:
     controller: App\DocumentManagement\Application\Controller\SaveInformationController472
     defaults: { auth: false, app_url: '%app_url%' }
     methods: [ GET, POST ]
+
+
+# Routes Front
+login:
+    path: /login
+    controller: App\FrontApp\Application\Controller\LoginController::index
+admin:
+    path: /admin
+    controller: App\FrontApp\Application\Controller\LoginController::admin
+home:
+    path: /
+    controller: App\FrontApp\Application\Controller\HomeController::index
