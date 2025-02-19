@@ -1,0 +1,28 @@
+@import url("../fonts/urbanistic/Urbanist-Thin.ttf");
+@import url("../fonts/urbanistic/Urbanist-ExtraLight.ttf");
+@import url("../fonts/urbanistic/Urbanist-Light.ttf");
+@import url("../fonts/urbanistic/Urbanist-Regular.ttf");
+@import url("../fonts/urbanistic/Urbanist-Medium.ttf");
+@import url("../fonts/urbanistic/Urbanist-SemiBold.ttf");
+@import url("../fonts/urbanistic/Urbanist-Bold.ttf");
+@import url("../fonts/urbanistic/Urbanist-ExtraBold.ttf");
+@import url("../fonts/urbanistic/Urbanist-Black.ttf");
+@import url("../fonts/urbanistic/Urbanist-ThinItalic.ttf");
+@import url("../fonts/urbanistic/Urbanist-ExtraLightItalic.ttf");
+@import url("../fonts/urbanistic/Urbanist-LightItalic.ttf");
+@import url("../fonts/urbanistic/Urbanist-Italic.ttf");
+@import url("../fonts/urbanistic/Urbanist-MediumItalic.ttf");
+@import url("../fonts/urbanistic/Urbanist-SemiBoldItalic.ttf");
+@import url("../fonts/urbanistic/Urbanist-BoldItalic.ttf");
+@import url("../fonts/urbanistic/Urbanist-ExtraBoldItalic.ttf");
+@import url("../fonts/urbanistic/Urbanist-BlackItalic.ttf");
+
+* {
+   font-family: "Urbanist", serif;
+}
+
+.alert {
+   position: fixed;
+   width: 100vw;
+   top: 0;
+}

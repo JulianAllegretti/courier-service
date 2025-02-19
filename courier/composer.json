@@ -22,6 +22,9 @@
         "symfony/messenger": "7.1.*",
         "symfony/monolog-bundle": "^3.10",
         "symfony/runtime": "7.1.*",
+        "symfony/security-bundle": "7.1.*",
+        "symfony/twig-bundle": "7.1.*",
+        "symfony/validator": "7.1.*",
         "symfony/yaml": "7.1.*"
     },
     "config": {
