@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AdminController extends AbstractController
 {
-    #[Route('/admin', name: 'front_app_admin')]
+    #[Route('/admin', name: 'app_admin')]
     public function admin(): JsonResponse
     {
         return $this->json([
