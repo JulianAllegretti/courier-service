@@ -8,10 +8,10 @@ courier_service:
 # Routes Front
 login:
     path: /login
-    controller: App\FrontApp\Application\Controller\LoginController::index
+    controller: App\FrontApp\Application\Controller\LoginController::login
 admin:
     path: /admin
-    controller: App\FrontApp\Application\Controller\LoginController::admin
+    controller: App\FrontApp\Application\Controller\AdminController::admin
 home:
     path: /
     controller: App\FrontApp\Application\Controller\HomeController::index

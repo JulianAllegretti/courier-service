@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'front_app_main')]
+    #[Route('/', name: 'app_main')]
     public function index(): RedirectResponse
     {
         if ($this->getUser()) {

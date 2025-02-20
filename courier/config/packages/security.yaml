@@ -7,7 +7,7 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Shared\Domain\Entity
+                class: App\Shared\Domain\Entity\User
                 property: email
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
@@ -17,20 +17,27 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            pattern: ^/admin
             security: true
             form_login:
                 login_path: login
-                check_path: login_check
+                check_path: login
+                enable_csrf: true
             logout:
-                path: logout
+                path: /logout
+                target: login
+            custom_authenticator: App\Shared\Security\UserAuthenticator
+            entry_point: form_login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                path: /
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/.*, roles: IS_AUTHENTICATED_FULLY }
+        #- { path: ^/admin, roles: ROLE_ADMIN }
 
 when@test:
     security:

@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="/css/login.css"/>
 {% endblock %}
 {% block content %}
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
     <div class="container-wrap">
         <div class="login-form">
             <div class="row header">
@@ -17,12 +20,14 @@
                 <form class="col" method="post">
                     <div class="div-control">
                         <label for="emailInput" class="form-label">Email</label>
-                        <input required type="email" class="form-control" id="emailInput" name="email">
+                        <input required type="email" value="{{ last_username }}" class="form-control" id="emailInput" name="email">
                     </div>
                     <div class="div-control">
                         <label for="inputPassword" class="form-label">Password</label>
                         <input required type="password" class="form-control" id="inputPassword" name="password">
                     </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                     <button type="submit" class="btn btn-primary">Login</button>
                 </form>
             </div>
