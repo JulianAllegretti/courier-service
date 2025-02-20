@@ -10,11 +10,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class AdminController extends AbstractController
 {
     #[Route('/admin', name: 'app_admin')]
-    public function admin(): JsonResponse
+    public function admin(): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your admin controller!',
-            'path' => 'src/Controller/App/FrontApp/Application/Controller/LoginController.php',
-        ]);
+        return $this->render('admin.html.twig');
     }
 }

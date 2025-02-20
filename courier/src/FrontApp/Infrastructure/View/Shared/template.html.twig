@@ -18,7 +18,60 @@
                     </div>
                 {% endfor %}
             {% endfor %}
-            {% block content %}{% endblock %}
+            {% if app.user %}
+                <div class="side-header">
+                    <div class="logo">
+                        <img src="/images/logo-menu.png" alt="">
+                    </div>
+                    <p class="username icon-container">
+                        <img class="icon-menu" src="/images/person-circle.svg" alt="">
+                        {{ app.user.email }}
+
+                    </p>
+                    <ul class="menu">
+                        <li>
+                            <a class="{{ app.request.pathinfo == '/radicados' ? 'active' : '' }}" href="/radicados">
+                                Radicados
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ app.request.pathinfo == '/documentos' ? 'active' : '' }}" href="/documentos">
+                                Documentos
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ app.request.pathinfo == '/logs' ? 'active' : '' }}" href="/logs">
+                                Logs inserción de radicados
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="{{ app.request.pathinfo == '/logs-documents' ? 'active' : '' }}"
+                                href="/logs-documents"
+                            >
+                                Logs descarga de documentos
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ app.request.pathinfo == '/admin' ? 'active' : '' }}" href="/admin">
+                                Administración
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="logout">
+                        <a href="/logout" class="link-reference">
+                            <div class="icon-container">
+                                <img class="icon-menu" src="/images/box-arrow-right.svg" alt="">
+                                Cerrar sesión
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="main__content">
+                {% block content %}{% endblock %}
+            </div>
         </div>
     </body>
 </html>

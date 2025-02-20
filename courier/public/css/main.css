@@ -16,6 +16,7 @@
 @import url("../fonts/urbanistic/Urbanist-BoldItalic.ttf");
 @import url("../fonts/urbanistic/Urbanist-ExtraBoldItalic.ttf");
 @import url("../fonts/urbanistic/Urbanist-BlackItalic.ttf");
+@import "colors.css";
 
 * {
    font-family: "Urbanist", serif;
@@ -25,4 +26,137 @@
    position: fixed;
    width: 100vw;
    top: 0;
+}
+
+.main {
+   display: flex;
+}
+
+.side-header {
+   width: 300px;
+   background-color: var(--main-blue-color);
+   height: 100vh;
+   display: flex;
+   flex-direction: column;
+}
+
+.logo {
+   width: 100%;
+   text-align: center;
+   padding: 20px 0;
+}
+
+.logo img{
+   width: 80%;
+}
+
+.username {
+   font-size: 16px;
+   color: white;
+   text-align: center;
+}
+
+.menu {
+   list-style: none;
+   padding: 0;
+   margin-top: 20px;
+}
+.menu .active {
+   background: var(--secondary-blue-color);
+}
+.menu li{
+   color: white;
+   font-size: 18px;
+   border-bottom: 1px solid var(--secondary-blue-color);
+}
+.menu li a {
+   color: white;
+   padding: 15px 10px;
+   display: block;
+   text-decoration: none;
+   position: relative;
+   transition: all 0.3s ease-in-out;
+}
+.menu li a:hover {
+   z-index: 1;
+}
+.menu li a:hover::before {
+   width: 100%;
+}
+.menu li a::before {
+   content: "";
+   position: absolute;
+   background: var(--secondary-blue-color);
+   width: 0;
+   height: 100%;
+   left: 0;
+   top: 0;
+   z-index: -1;
+   transition: width 0.3s ease-in-out;
+}
+
+.logout {
+   margin-top: auto;
+   color: white;
+   font-size: 16px;
+   padding-bottom: 20px;
+}
+.logout .link-reference {
+   color: white;
+   cursor: pointer;
+   display: block;
+   width: 150px;
+   margin: 0 auto;
+}
+.main__content {
+   flex: 1;
+}
+.icon-menu {
+   width: 30px;
+   margin-right: 20px;
+}
+.icon-container {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+
+
+
+
+.link-81 {
+   color: #ffffff;
+   font-size: 20px;
+   text-decoration: none;
+   padding: 10px 20px;
+   margin: 0 5px;
+   position: relative;
+   display: inline-block;
+   transition: all 0.3s ease-in-out;
+   border: solid 1px #ffffff;
+}
+
+.link-81::before {
+   content: "";
+   position: absolute;
+   background: #ffffff;
+   width: 0;
+   height: 100%;
+   left: 0;
+   top: 0;
+   z-index: -1;
+   transition: width 0.3s ease-in-out;
+}
+
+.link-81:hover {
+   color: #1D3557;
+}
+
+.link-81:hover::before {
+   width: 100%;
+}
+
+.link-81:hover {
+   z-index: 1;
 }
