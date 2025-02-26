@@ -28,6 +28,9 @@ class ServerSoap implements Server
     public function handleWSDL($uri, $class): Response
     {
         $autoDiscover = new AutoDiscover(new ArrayOfTypeSequence());
+        $autoDiscover->setBindingStyle(['style' => 'document', 'transport' => 'http://schemas.xmlsoap.org/soap/http']);
+
+        $autoDiscover->setOperationBodyStyle(['use' => 'literal', 'namespace' => $uri]);
         $autoDiscover->setClass($class);
         $autoDiscover->setUri($uri);
 
