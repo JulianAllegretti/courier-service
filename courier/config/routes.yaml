@@ -1,5 +1,5 @@
 courier_service:
-    path: /wscolpensionesPROD/ServiceColpensiones
+    path: /{app_url}/ServiceColpensiones
     controller: App\DocumentManagement\Application\Controller\SaveInformationController
-    defaults: { auth: false }
+    defaults: { auth: false, app_url: '%app_url%' }
     methods: [ GET, POST ]
