@@ -25,7 +25,8 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
         private string $user_service_system,
         private string $password_service,
         private string $application_id,
-        private string $transaction_id
+        private string $transaction_id,
+        private string $app_env,
     )
     {
     }
@@ -36,7 +37,7 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
     public function __invoke(GetDocumentFileCommand $command): void
     {
         try {
-            switch (env('APP_ENV')){
+            switch ($this->app_env){
                 case 'dev':
                     $this->repository->updatePathFile($command->getDocumentId(), $command->getGuideNumber());
                     break;
