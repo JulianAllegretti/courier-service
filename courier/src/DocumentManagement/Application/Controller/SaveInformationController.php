@@ -49,11 +49,11 @@ final class SaveInformationController extends ApiController
             throw new NullException("La propiedad ComunicacionVo es requerida.");
         }
 
-        if (empty($ComunicacionVo->comunicacionVo)) {
+        if (empty($ComunicacionVo->ComunicacionVo)) {
             throw new NullException("La propiedad ComunicacionVo es requerida.");
         }
 
-        $comunicacionVo = $ComunicacionVo->comunicacionVo;
+        $comunicacionVo = $ComunicacionVo->ComunicacionVo;
 
         /** @var Comunication $comunicacionVo */
         try {
