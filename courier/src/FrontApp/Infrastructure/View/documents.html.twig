@@ -1,0 +1,28 @@
+{% extends "Shared/template.html.twig" %}
+
+{% block title %}Radicados{% endblock %}
+{% block content %}
+    <div class="render_wrap">
+        <h3>Documentos</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">Id Documento</th>
+                    <th scope="col">Ruta</th>
+                    <th scope="col">Fecha de creación</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for document in documents  %}
+                    <tr>
+                        <th scope="row">{{ document.id_gestor_documento }}</th>
+                        <td>{{ document.ruta }}</td>
+                        <td>{{ document.created_at }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

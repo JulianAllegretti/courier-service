@@ -47,4 +47,16 @@ class LogGetDocumentFileMysqlRepository extends ServiceEntityRepository implemen
             ->getQuery()
             ->getArrayResult();
     }
+
+
+    function getAllLogs(): array
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('l')
+            ->from('App\Shared\Domain\Entity\LogGetDocumentFile', 'l')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

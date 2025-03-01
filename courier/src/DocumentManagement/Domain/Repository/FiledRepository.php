@@ -13,4 +13,6 @@ interface FiledRepository
     function getFiled(FiledNumberValueObject $filedNumberValueObject): Filed|null;
 
     function getDocuments(string $time_start, string $time_end, string $difference_days) : array;
+
+    function getAllFiled() : array;
 }

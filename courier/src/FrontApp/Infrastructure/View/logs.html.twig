@@ -1,0 +1,36 @@
+{% extends "Shared/template.html.twig" %}
+
+{% block title %}Radicados{% endblock %}
+{% block content %}
+    <div class="render_wrap">
+        <h3>Log de inserción de radicados</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">Id Radicado</th>
+                    {% if type == 'documents' %}
+                        <th scope="col">Id Documento</th>
+                    {% endif %}
+                    <th scope="col">Error</th>
+                    <th scope="col">Codigo</th>
+                    <th scope="col">Fecha de creación</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for log in logs  %}
+                    <tr>
+                        <th scope="row">{{ log.numero_radicado }}</th>
+                        {% if type == 'documents' %}
+                            <td>{{ log.id_documento }}</td>
+                        {% endif %}
+                        <td>{{ log.error_message }}</td>
+                        <td>{{ log.error_code }}</td>
+                        <td>{{ log.created_at }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

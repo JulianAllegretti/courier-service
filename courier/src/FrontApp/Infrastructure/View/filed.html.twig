@@ -1,0 +1,34 @@
+{% extends "Shared/template.html.twig" %}
+
+{% block title %}Radicados{% endblock %}
+{% block content %}
+    <div class="render_wrap">
+        <h3>Radicados</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">Nº Radicado</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Teléfono</th>
+                    <th scope="col">Radicado Padre</th>
+                    <th scope="col">Codigo de guia</th>
+                    <th scope="col">Fecha de creación</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for file in filed  %}
+                    <tr>
+                        <th scope="row">{{ file.num_radicado }}</th>
+                        <td>{{ file.nombre_completo }}</td>
+                        <td>{{ file.telefono }}</td>
+                        <td>{{ file.radicado_caso_padre }}</td>
+                        <td>{{ file.codigo_guia }}</td>
+                        <td>{{ file.created_at }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

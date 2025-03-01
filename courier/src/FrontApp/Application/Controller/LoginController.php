@@ -19,7 +19,7 @@ class LoginController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('admin');
+            return $this->redirectToRoute('filed');
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -30,18 +30,6 @@ class LoginController extends AbstractController
             'error' => $error,
         ]);
     }
-
-    private function validateRequest(Request $request): ConstraintViolationListInterface {
-        $constraint = new Collection([
-            'email' => [new NotBlank(), new Email()],
-            'password' => [new NotBlank()]
-        ]);
-
-        $input = $request->request->all();
-
-        return Validation::createValidator()->validate($input, $constraint);
-    }
-
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {

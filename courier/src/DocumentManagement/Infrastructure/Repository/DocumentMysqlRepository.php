@@ -69,4 +69,15 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
         $this->registry->getManager()->persist($exist);
         $this->registry->getManager()->flush();
     }
+
+    public function getAllDocuments(): array
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('d')
+            ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

@@ -88,4 +88,15 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    function getAllFiled(): array
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('r')
+            ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
