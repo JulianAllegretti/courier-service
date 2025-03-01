@@ -1,26 +1,4 @@
-@import url("../fonts/urbanistic/Urbanist-Thin.ttf");
-@import url("../fonts/urbanistic/Urbanist-ExtraLight.ttf");
-@import url("../fonts/urbanistic/Urbanist-Light.ttf");
-@import url("../fonts/urbanistic/Urbanist-Regular.ttf");
-@import url("../fonts/urbanistic/Urbanist-Medium.ttf");
-@import url("../fonts/urbanistic/Urbanist-SemiBold.ttf");
-@import url("../fonts/urbanistic/Urbanist-Bold.ttf");
-@import url("../fonts/urbanistic/Urbanist-ExtraBold.ttf");
-@import url("../fonts/urbanistic/Urbanist-Black.ttf");
-@import url("../fonts/urbanistic/Urbanist-ThinItalic.ttf");
-@import url("../fonts/urbanistic/Urbanist-ExtraLightItalic.ttf");
-@import url("../fonts/urbanistic/Urbanist-LightItalic.ttf");
-@import url("../fonts/urbanistic/Urbanist-Italic.ttf");
-@import url("../fonts/urbanistic/Urbanist-MediumItalic.ttf");
-@import url("../fonts/urbanistic/Urbanist-SemiBoldItalic.ttf");
-@import url("../fonts/urbanistic/Urbanist-BoldItalic.ttf");
-@import url("../fonts/urbanistic/Urbanist-ExtraBoldItalic.ttf");
-@import url("../fonts/urbanistic/Urbanist-BlackItalic.ttf");
 @import "colors.css";
-
-* {
-   font-family: "Urbanist", serif;
-}
 
 .alert {
    position: fixed;
@@ -67,15 +45,24 @@
 .menu li{
    color: white;
    font-size: 18px;
-   border-bottom: 1px solid var(--secondary-blue-color);
 }
 .menu li a {
    color: white;
-   padding: 15px 10px;
-   display: block;
+   padding-left: 20px;
+   padding-top: 15px;
+   padding-bottom: 15px;
    text-decoration: none;
    position: relative;
    transition: all 0.3s ease-in-out;
+   display: flex;
+   align-items: center;
+}
+.menu img {
+   margin-right: 10px;
+   width: 20px;
+}
+.menu a span{
+   font-size: 16px;
 }
 .menu li a:hover {
    z-index: 1;
@@ -108,9 +95,6 @@
    width: 150px;
    margin: 0 auto;
 }
-.main__content {
-   flex: 1;
-}
 .icon-menu {
    width: 30px;
    margin-right: 20px;
@@ -120,43 +104,14 @@
    align-items: center;
    justify-content: center;
 }
-
-
-
-
-
-.link-81 {
-   color: #ffffff;
-   font-size: 20px;
-   text-decoration: none;
-   padding: 10px 20px;
-   margin: 0 5px;
-   position: relative;
-   display: inline-block;
-   transition: all 0.3s ease-in-out;
-   border: solid 1px #ffffff;
+.main__content {
+   flex: 1;
+   padding: 16px;
+   height: 100vh;
+   overflow: scroll;
 }
 
-.link-81::before {
-   content: "";
-   position: absolute;
-   background: #ffffff;
-   width: 0;
-   height: 100%;
-   left: 0;
-   top: 0;
-   z-index: -1;
-   transition: width 0.3s ease-in-out;
-}
-
-.link-81:hover {
-   color: #1D3557;
-}
-
-.link-81:hover::before {
+.main__content table {
    width: 100%;
-}
-
-.link-81:hover {
-   z-index: 1;
+   overflow: scroll;
 }

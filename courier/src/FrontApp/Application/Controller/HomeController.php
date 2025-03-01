@@ -13,7 +13,7 @@ class HomeController extends AbstractController
     public function index(): RedirectResponse
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('admin');
+            return $this->redirectToRoute('filed');
         }
 
         return $this->redirectToRoute('login');

@@ -44,7 +44,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        return new RedirectResponse('/admin');
+        return new RedirectResponse('/filed');
     }
 
     protected function getLoginUrl(Request $request): string

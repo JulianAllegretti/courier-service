@@ -36,6 +36,9 @@ class Document
     #[ORM\JoinColumn(name:"fk_radicado", referencedColumnName:"id_radicado")]
     private Filed $filed;
 
+    #[ORM\Column(length: 50)]
+    private ?string $created_at;
+
     /**
      * @param int|null $id_documento
      * @param int $fk_radicado
@@ -54,6 +57,7 @@ class Document
         $this->orden_imp = $orden_imp;
         $this->num_paginas = $num_paginas;
         $this->ruta = $ruta;
+        $this->created_at = date('Y-m-d H:i:s');
     }
 
     public function getIdDocumento(): ?int
@@ -100,4 +104,15 @@ class Document
     {
         $this->filed = $filed;
     }
+
+    public function getCreatedAt(): ?string
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(?string $created_at): void
+    {
+        $this->created_at = $created_at;
+    }
+
 }

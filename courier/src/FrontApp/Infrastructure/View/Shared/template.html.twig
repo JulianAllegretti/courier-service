@@ -26,22 +26,21 @@
                     <p class="username icon-container">
                         <img class="icon-menu" src="/images/person-circle.svg" alt="">
                         {{ app.user.email }}
-
                     </p>
                     <ul class="menu">
                         <li>
-                            <a class="{{ app.request.pathinfo == '/radicados' ? 'active' : '' }}" href="/radicados">
-                                Radicados
+                            <a class="{{ app.request.pathinfo == '/filed' ? 'active' : '' }}" href="/filed">
+                                <img src="/images/filed.svg" alt=""> <span>Radicados</span>
                             </a>
                         </li>
                         <li>
-                            <a class="{{ app.request.pathinfo == '/documentos' ? 'active' : '' }}" href="/documentos">
-                                Documentos
+                            <a class="{{ app.request.pathinfo == '/documents' ? 'active' : '' }}" href="/documents">
+                                <img src="/images/printer.svg" alt=""> <span>Documentos</span>
                             </a>
                         </li>
                         <li>
                             <a class="{{ app.request.pathinfo == '/logs' ? 'active' : '' }}" href="/logs">
-                                Logs inserción de radicados
+                                <img src="/images/log-insert-error.svg" alt=""> <span>Logs inserción de radicados</span>
                             </a>
                         </li>
                         <li>
@@ -49,19 +48,19 @@
                                 class="{{ app.request.pathinfo == '/logs-documents' ? 'active' : '' }}"
                                 href="/logs-documents"
                             >
-                                Logs descarga de documentos
+                                <img src="/images/log-get-document.svg" alt=""> <span>Logs descarga de documentos</span>
                             </a>
                         </li>
                         <li>
                             <a class="{{ app.request.pathinfo == '/admin' ? 'active' : '' }}" href="/admin">
-                                Administración
+                                <img src="/images/gear.svg" alt=""> <span>Administración</span>
                             </a>
                         </li>
                     </ul>
                     <div class="logout">
                         <a href="/logout" class="link-reference">
                             <div class="icon-container">
-                                <img class="icon-menu" src="/images/box-arrow-right.svg" alt="">
+                                <img class="icon-menu" src="/images/logout.svg" alt="">
                                 Cerrar sesión
                             </div>
                         </a>

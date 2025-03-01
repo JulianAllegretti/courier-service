@@ -47,4 +47,16 @@ class LogInsertInformationMysqlRepository extends ServiceEntityRepository implem
             ->getQuery()
             ->getArrayResult();
     }
+
+
+    function getAllLogs(): array
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('l')
+            ->from('App\Shared\Domain\Entity\LogInsertInformation', 'l')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

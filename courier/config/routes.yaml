@@ -20,3 +20,15 @@ admin:
 home:
     path: /
     controller: App\FrontApp\Application\Controller\HomeController::index
+filed:
+    path: /filed
+    controller: App\FrontApp\Application\Controller\FiledController::index
+documents:
+    path: /documents
+    controller: App\FrontApp\Application\Controller\DocumentController::index
+logs:
+    path: /logs
+    controller: App\FrontApp\Application\Controller\LogController::index
+logs-documents:
+    path: /logs-documents
+    controller: App\FrontApp\Application\Controller\LogDocumentController::index
