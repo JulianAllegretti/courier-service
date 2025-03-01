@@ -34,27 +34,40 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
     public function __invoke(GetDocumentFileCommand $command): void
     {
         try {
-            $folder = '/var/www/symfony/public/files/';
-            $id = $command->getDocumentId().'.pdf';
+            $attempts = 0;
+            $shCommand = '';
+            $output = '';
+            $statusCode = 0;
+            while ($attempts<20) {
+                $folder = '/var/www/symfony/public/files/';
+                $id = $command->getDocumentId().'.pdf';
 
-            if (file_exists($folder.$id)) {
+                if (file_exists($folder.$id)) {
+                    $this->repository->updatePathFile($command->getDocumentId(), $command->getGuideNumber());
+                    break;
+                }
+
+                $url = $this->url_service."/".$command->getDocumentId();
+                $shCommand = "bash /var/www/symfony/download.sh '$url' '$folder' '$id'";
+                exec($shCommand, $output, $statusCode);
+
+                if ($statusCode !== 0) {
+                    $attempts++;
+                    continue;
+                }
+
+                if (file_exists($command->getDocumentId())) {
+                    unlink($command->getDocumentId());
+                }
+
                 $this->repository->updatePathFile($command->getDocumentId(), $command->getGuideNumber());
-                return;
+                break;
             }
 
-            $url = $this->url_service."/".$command->getDocumentId();
-            $shCommand = "bash /var/www/symfony/download.sh '$url' '$folder' '$id'";
-            exec($shCommand, $output, $statusCode);
-
-            if ($statusCode !== 0) {
+            if ($attempts >= 20 && $statusCode !== 0) {
                 throw new DocumentInvalidException('Error al descargar el archivo. Código de estado: ' . $statusCode . " Comando: " .$shCommand. " Error: ".json_encode($output));
             }
 
-            if (file_exists($command->getDocumentId())) {
-                unlink($command->getDocumentId());
-            }
-
-            $this->repository->updatePathFile($command->getDocumentId(), $command->getGuideNumber());
             return;
 
 
