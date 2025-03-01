@@ -40,20 +40,20 @@ final class SaveInformationController extends ApiController
      * @return \App\DocumentManagement\Domain\Response
      * @throws NullException
      */
-    public function RadicarTramite(mixed $comunicacionVo): \App\DocumentManagement\Domain\ResponseWrap
+    public function RadicarTramite(mixed $ComunicacionVo): \App\DocumentManagement\Domain\ResponseWrap
     {
         $request = get_defined_vars();
         $response = new \App\DocumentManagement\Domain\Response();
 
-        if (empty($comunicacionVo)) {
+        if (empty($ComunicacionVo)) {
             throw new NullException("La propiedad ComunicacionVo es requerida.");
         }
 
-        if (empty($comunicacionVo->comunicacionVo)) {
+        if (empty($ComunicacionVo->comunicacionVo)) {
             throw new NullException("La propiedad ComunicacionVo es requerida.");
         }
 
-        $comunicacionVo = $comunicacionVo->comunicacionVo;
+        $comunicacionVo = $ComunicacionVo->comunicacionVo;
 
         /** @var Comunication $comunicacionVo */
         try {
