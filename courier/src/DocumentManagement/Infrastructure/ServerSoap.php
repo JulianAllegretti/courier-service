@@ -20,7 +20,7 @@ class ServerSoap implements Server
     public function render(array $data): Response
     {
         if ($data['wsdl'])
-            return $this->handleWSDL($data['uri'], $data['handler']);
+            return $this->handleWSDL('http://soap.canal.ws/', $data['handler']);
 
         return $this->handleSOAP($data['uri'], $data['handler'], $data['user'], $data['password']);
     }
@@ -52,7 +52,7 @@ class ServerSoap implements Server
 
         foreach ($parts as $part) {
             if ($part->getAttribute('name') === 'return') {
-                $part->setAttribute('name', 'RadicarTramiteResult'); // Cambia 'customReturn' al nombre que desees
+                $part->setAttribute('name', 'RadicarTramiteResult');
             }
         }
 
@@ -85,7 +85,7 @@ class ServerSoap implements Server
             $soapXml
         );
         $soapXml = str_replace(
-            'xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"',
+            'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ',
             '',
             $soapXml
         );

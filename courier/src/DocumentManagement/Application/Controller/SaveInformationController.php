@@ -36,11 +36,11 @@ final class SaveInformationController extends ApiController
     }
 
     /**
-     * @param App\DocumentManagement\Domain\Comunication $comunicacionVo
+     * @param App\DocumentManagement\Domain\Comunication $ComunicacionVo
      * @return \App\DocumentManagement\Domain\Response
      * @throws NullException
      */
-    public function RadicarTramite(mixed $comunicacionVo): \App\DocumentManagement\Domain\Response
+    public function RadicarTramite(mixed $comunicacionVo): \App\DocumentManagement\Domain\ResponseWrap
     {
         $request = get_defined_vars();
         $response = new \App\DocumentManagement\Domain\Response();
@@ -48,6 +48,12 @@ final class SaveInformationController extends ApiController
         if (empty($comunicacionVo)) {
             throw new NullException("La propiedad ComunicacionVo es requerida.");
         }
+
+        if (empty($comunicacionVo->comunicacionVo)) {
+            throw new NullException("La propiedad ComunicacionVo es requerida.");
+        }
+
+        $comunicacionVo = $comunicacionVo->comunicacionVo;
 
         /** @var Comunication $comunicacionVo */
         try {
@@ -107,7 +113,7 @@ final class SaveInformationController extends ApiController
         $response->setNumTramite($comunicacionVo->NumTramite);
         $this->logger->notice('Response ' . $comunicacionVo->NumRadicado, [$response]);
 
-        return $response;
+        return new \App\DocumentManagement\Domain\ResponseWrap($response);
     }
 
 
