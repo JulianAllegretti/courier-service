@@ -14,7 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ServerSoap implements Server
 {
-    public function __construct(private readonly string $app_user, private readonly string $app_password)
+    public function __construct(
+        private readonly string $app_user,
+        private readonly string $app_password,
+        private readonly string $app_url
+    )
     {}
 
     public function render(array $data): Response
@@ -64,7 +68,7 @@ class ServerSoap implements Server
             return new Response("Access Denied", Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Basic realm="SoapServiceCourier"']);
         }*/
 
-        $soap = new SoapServer('http://nginx/wscolpensionesPROD/ServiceColpensiones?wsdl');
+        $soap = new SoapServer('http://nginx/'.$this->app_url.'/ServiceColpensiones?wsdl');
         $soap->setObject($class);
 
         $response = new Response();
@@ -77,7 +81,7 @@ class ServerSoap implements Server
 
         $soapXml = str_replace(['SOAP-ENV', 'ns1'], ['soapenv', 'soap'], $soapXml);
         $soapXml = str_replace(
-            'xmlns:soap="http://nginx/wscolpensionesPROD/ServiceColpensiones?wsdl="',
+            'xmlns:soap="http://nginx/'.$this->app_url.'/ServiceColpensiones?wsdl="',
             'xmlns:soap="http://soap.canal.ws/"',
             $soapXml
         );
