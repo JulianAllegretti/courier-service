@@ -24,7 +24,7 @@ class ServerSoap implements Server
     public function render(array $data): Response
     {
         if ($data['wsdl'])
-            return $this->handleWSDL('http://soap.canal.ws/', $data['handler']);
+            return $this->handleWSDL($data['uri'], $data['handler']);
 
         return $this->handleSOAP($data['uri'], $data['handler'], $data['user'], $data['password']);
     }
@@ -32,9 +32,6 @@ class ServerSoap implements Server
     public function handleWSDL($uri, $class): Response
     {
         $autoDiscover = new AutoDiscover(new ArrayOfTypeSequence());
-        $autoDiscover->setBindingStyle(['style' => 'document', 'transport' => 'http://schemas.xmlsoap.org/soap/http']);
-
-        $autoDiscover->setOperationBodyStyle(['use' => 'literal', 'namespace' => $uri]);
         $autoDiscover->setClass($class);
         $autoDiscover->setUri($uri);
 
@@ -56,7 +53,7 @@ class ServerSoap implements Server
 
         foreach ($parts as $part) {
             if ($part->getAttribute('name') === 'return') {
-                $part->setAttribute('name', 'RadicarTramiteResult');
+                $part->setAttribute('name', 'RadicarTramiteResult'); // Cambia 'customReturn' al nombre que desees
             }
         }
 
@@ -89,7 +86,7 @@ class ServerSoap implements Server
             $soapXml
         );
         $soapXml = str_replace(
-            'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ',
+            'xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"',
             '',
             $soapXml
         );
