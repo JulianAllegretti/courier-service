@@ -16,13 +16,14 @@
                 <tbody>
                 {% for document in documents  %}
                     <tr>
-                        <th scope="row">{{ document.id_gestor_documento }}</th>
-                        <td>{{ document.ruta }}</td>
-                        <td>{{ document.created_at }}</td>
+                        <th scope="row">{{ document.getIdGestorDocumento() }}</th>
+                        <td>{{ document.getRuta() }}</td>
+                        <td>{{ document.getCreatedAt() }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+            {% include 'Shared/paginator.html.twig' with {'totalPages': totalPages, 'page':  page, 'route': 'documents'} %}
         </div>
     </div>
 {% endblock %}

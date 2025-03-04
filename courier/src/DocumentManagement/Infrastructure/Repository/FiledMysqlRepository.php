@@ -5,14 +5,18 @@ namespace App\DocumentManagement\Infrastructure\Repository;
 use App\DocumentManagement\Domain\Entity\Filed;
 use App\DocumentManagement\Domain\Entity\Identification;
 use App\DocumentManagement\Domain\Repository\FiledRepository;
+use App\DocumentManagement\Domain\ResponsePaginator;
 use App\DocumentManagement\Domain\ValueObjects\FiledNumberValueObject;
 use App\Shared\Domain\Exceptions\ExistException;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepository
 {
+    const PAGE_LIMIT = 10;
+
     public function __construct(private ManagerRegistry $registry)
     {
         parent::__construct($registry, Filed::class);
@@ -89,14 +93,22 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->getOneOrNullResult();
     }
 
-    function getAllFiled(): array
+    function getAllFiled($page): ResponsePaginator
     {
-        return $this->getEntityManager()
+        $queryFiltered = $this
+            ->getEntityManager()
             ->createQueryBuilder()
             ->select('r')
             ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
-            ->setMaxResults(20)
-            ->getQuery()
-            ->getArrayResult();
+            ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
+            ->setMaxResults(self::PAGE_LIMIT)
+            ->getQuery();
+
+        $paginator = new Paginator($queryFiltered);
+
+        $totalItems = $paginator->count();
+        $totalPages = ceil($totalItems/self::PAGE_LIMIT);
+
+        return new ResponsePaginator($paginator, $totalPages);
     }
 }

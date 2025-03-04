@@ -4,6 +4,7 @@ namespace App\DocumentManagement\Domain\Repository;
 
 use App\DocumentManagement\Domain\Entity\Filed;
 use App\DocumentManagement\Domain\Entity\Identification;
+use App\DocumentManagement\Domain\ResponsePaginator;
 use App\DocumentManagement\Domain\ValueObjects\FiledNumberValueObject;
 
 interface FiledRepository
@@ -14,5 +15,5 @@ interface FiledRepository
 
     function getDocuments(string $time_start, string $time_end, string $difference_days) : array;
 
-    function getAllFiled() : array;
+    function getAllFiled(int $page) : ResponsePaginator;
 }

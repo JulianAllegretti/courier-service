@@ -2,20 +2,40 @@
 
 namespace App\DocumentManagement\Application\Commands\GetAllDocuments;
 
+use App\DocumentManagement\Domain\ResponsePaginator;
 use App\Shared\Domain\Command;
 
 class GetAllDocumentsCommand implements Command
 {
-    private array $documents;
-    public function __construct(){}
+    private ResponsePaginator $documents;
+    private int $page;
 
-    public function getDocuments(): array
+    /**
+     * @param int $page
+     */
+    public function __construct(int $page)
+    {
+        $this->page = $page;
+    }
+
+    public function getDocuments(): ResponsePaginator
     {
         return $this->documents;
     }
 
-    public function setDocuments(array $documents): void
+    public function setDocuments(ResponsePaginator $documents): void
     {
         $this->documents = $documents;
     }
+
+    public function getPage(): int
+    {
+        return $this->page;
+    }
+
+    public function setPage(int $page): void
+    {
+        $this->page = $page;
+    }
+
 }

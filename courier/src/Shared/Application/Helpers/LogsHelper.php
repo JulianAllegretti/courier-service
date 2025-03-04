@@ -6,18 +6,28 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class LogsHelper
 {
-    public function mapLogResponse(array $logResponse): ArrayCollection
+    public function mapLogResponse(array $logResponse, bool $documents = false): ArrayCollection
     {
         $collection = new ArrayCollection($logResponse);
-        $logs = $collection->map(function (array $value){
-            if (!$value['error']) {
-                return $value;
+        $logs = $collection->map(function ($value) use ($documents) {
+            $array = [
+                'numero_radicado' => $value->getNumeroRadicado(),
+                'error_code' => '',
+                'error_message' => '',
+                'created_at' => $value->getCreatedAt()
+            ];
+            if ($documents) {
+                $array['id_documento'] = $value->getIdDocumento();
             }
-            $error = json_decode($value['error']);
-            $value['error_code'] = $error->ErrorCode ?? '';
-            $value['error_message'] = $error->ErrorMessage ?? '';
 
-            return $value;
+            if (!$value->getError()) {
+                return $array;
+            }
+            $error = json_decode($value->getError());
+            $array['error_code'] = $error->ErrorCode ?? '';
+            $array['error_message'] = $error->ErrorMessage ?? '';
+
+            return $array;
         });
 
         return $logs;

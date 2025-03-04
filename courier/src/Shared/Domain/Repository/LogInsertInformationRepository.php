@@ -2,6 +2,7 @@
 
 namespace App\Shared\Domain\Repository;
 
+use App\DocumentManagement\Domain\ResponsePaginator;
 use App\Shared\Domain\Entity\LogInsertInformation;
 
 interface LogInsertInformationRepository
@@ -10,5 +11,5 @@ interface LogInsertInformationRepository
 
     function getLogs(string $time_start, string $time_end, string $difference_days) : array;
 
-    function getAllLogs() : array;
+    function getAllLogs(int $page) : ResponsePaginator;
 }
