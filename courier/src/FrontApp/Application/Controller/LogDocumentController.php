@@ -6,6 +6,7 @@ use App\Shared\Application\Commands\GetAllLogsDocuments\GetAllLogsDocumentsComma
 use App\Shared\Application\Helpers\LogsHelper;
 use App\Shared\Domain\CommandBus;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -16,15 +17,19 @@ class LogDocumentController extends AbstractController
     }
 
     #[Route('/logs-documents', name: 'app_logs_documents')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $documents = new GetAllLogsDocumentsCommand();
-        $this->commandBus->dispatch($documents);
-        $logs = $this->helper->mapLogResponse($documents->getLogs());
+        $page = $request->query->get('page', 1);
+        $logs = new GetAllLogsDocumentsCommand($page);
+        $this->commandBus->dispatch($logs);
+        $arrayLogs = iterator_to_array($logs->getLogs()->getPaginator());
+        $logsFinal = $this->helper->mapLogResponse($arrayLogs, true);
 
         return $this->render('logs.html.twig', [
-            'logs' => $logs,
-            'type' => 'documents'
+            'logs' => $logsFinal,
+            'type' => 'documents',
+            'totalPages' =>  $logs->getLogs()->getTotalPages(),
+            'page' => $page
         ]);
     }
 }

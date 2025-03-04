@@ -5,13 +5,17 @@ namespace App\DocumentManagement\Infrastructure\Repository;
 use App\DocumentManagement\Domain\Entity\Document;
 use App\DocumentManagement\Domain\Entity\Filed;
 use App\DocumentManagement\Domain\Repository\DocumentRepository;
+use App\DocumentManagement\Domain\ResponsePaginator;
 use App\Shared\Domain\Exceptions\DocumentNotExistException;
 use App\Shared\Domain\Exceptions\ExistException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 class DocumentMysqlRepository extends ServiceEntityRepository implements DocumentRepository
 {
+    const PAGE_LIMIT = 10;
+
     public function __construct(private ManagerRegistry $registry)
     {
         parent::__construct($registry, Document::class);
@@ -70,14 +74,21 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
         $this->registry->getManager()->flush();
     }
 
-    public function getAllDocuments(): array
+    public function getAllDocuments(int $page): ResponsePaginator
     {
-        return $this->getEntityManager()
+        $query = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('d')
             ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
-            ->setMaxResults(20)
-            ->getQuery()
-            ->getArrayResult();
+            ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
+            ->setMaxResults(self::PAGE_LIMIT)
+            ->getQuery();
+
+        $paginator = new Paginator($query);
+
+        $totalItems = $paginator->count();
+        $totalPages = ceil($totalItems/self::PAGE_LIMIT);
+
+        return new ResponsePaginator($paginator, $totalPages);
     }
 }

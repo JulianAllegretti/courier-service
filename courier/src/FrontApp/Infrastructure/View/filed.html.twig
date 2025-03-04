@@ -4,8 +4,9 @@
 {% block content %}
     <div class="render_wrap">
         <h3>Radicados</h3>
-        <div class="table-responsive">
-            <table class="table table-bordered">
+        {% if page <= totalPages %}
+            <div class="table-responsive">
+                <table class="table table-bordered">
                 <thead class="table-dark">
                 <tr>
                     <th scope="col">Nº Radicado</th>
@@ -19,16 +20,20 @@
                 <tbody>
                 {% for file in filed  %}
                     <tr>
-                        <th scope="row">{{ file.num_radicado }}</th>
-                        <td>{{ file.nombre_completo }}</td>
-                        <td>{{ file.telefono }}</td>
-                        <td>{{ file.radicado_caso_padre }}</td>
-                        <td>{{ file.codigo_guia }}</td>
-                        <td>{{ file.created_at }}</td>
+                        <th scope="row">{{ file.getNumRadicado() }}</th>
+                        <td>{{ file.getNombreCompleto() }}</td>
+                        <td>{{ file.getTelefono() }}</td>
+                        <td>{{ file.getRadicadoCasoPadre() }}</td>
+                        <td>{{ file.getCodigoGuia() }}</td>
+                        <td>{{ file.getCreatedAt() }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-        </div>
+            {% include 'Shared/paginator.html.twig' with {'totalPages': totalPages, 'page':  page, 'route': 'filed'} %}
+            </div>
+        {% else %}
+            <h6>No hay data</h6>
+        {% endif %}
     </div>
 {% endblock %}

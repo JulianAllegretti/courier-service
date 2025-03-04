@@ -13,6 +13,6 @@ readonly class GetAllLogsDocumentsCommandHandler implements CommandHandler
 
     public function __invoke(GetAllLogsDocumentsCommand $command): void
     {
-        $command->setLogs($this->repository->getAllLogs());
+        $command->setLogs($this->repository->getAllLogs($command->getPage()));
     }
 }

@@ -14,6 +14,6 @@ readonly class GetFiledCommandHandler implements CommandHandler
 
     public function __invoke(GetFiledCommand $command): void
     {
-        $command->setFiled($this->repository->getAllFiled());
+        $command->setFiled($this->repository->getAllFiled($command->getPage()));
     }
 }

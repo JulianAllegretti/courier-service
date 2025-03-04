@@ -2,14 +2,17 @@
 
 namespace App\Shared\Infrastructure\Repository;
 
+use App\DocumentManagement\Domain\ResponsePaginator;
 use App\Shared\Domain\Repository\LogInsertInformationRepository;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Shared\Domain\Entity\LogInsertInformation;
 
 class LogInsertInformationMysqlRepository extends ServiceEntityRepository implements LogInsertInformationRepository
 {
+    const PAGE_LIMIT = 10;
 
     public function __construct(private ManagerRegistry $registry)
     {
@@ -49,14 +52,21 @@ class LogInsertInformationMysqlRepository extends ServiceEntityRepository implem
     }
 
 
-    function getAllLogs(): array
+    function getAllLogs(int $page): ResponsePaginator
     {
-        return $this->getEntityManager()
+        $query = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('l')
             ->from('App\Shared\Domain\Entity\LogInsertInformation', 'l')
-            ->setMaxResults(20)
-            ->getQuery()
-            ->getArrayResult();
+            ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
+            ->setMaxResults(self::PAGE_LIMIT)
+            ->getQuery();
+
+        $paginator = new Paginator($query);
+
+        $totalItems = $paginator->count();
+        $totalPages = ceil($totalItems/self::PAGE_LIMIT);
+
+        return new ResponsePaginator($paginator, $totalPages);
     }
 }

@@ -2,24 +2,40 @@
 
 namespace App\Shared\Application\Commands\GetAllLogsDocuments;
 
+use App\DocumentManagement\Domain\ResponsePaginator;
 use App\Shared\Domain\Command;
 
 class GetAllLogsDocumentsCommand implements Command
 {
-    private array $logs;
+    private ResponsePaginator $logs;
+    private int $page;
 
-    public function __construct()
+    /**
+     * @param int $page
+     */
+    public function __construct(int $page)
     {
+        $this->page = $page;
     }
 
-    public function getLogs(): array
+    public function getLogs(): ResponsePaginator
     {
         return $this->logs;
     }
 
-    public function setLogs(array $logs): void
+    public function setLogs(ResponsePaginator $logs): void
     {
         $this->logs = $logs;
+    }
+
+    public function getPage(): int
+    {
+        return $this->page;
+    }
+
+    public function setPage(int $page): void
+    {
+        $this->page = $page;
     }
 
 }
