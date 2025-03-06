@@ -14,13 +14,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ServerSoap implements Server
 {
-    public function __construct(private readonly string $app_user, private readonly string $app_password)
+    public function __construct(private readonly string $app_user, private readonly string $app_password, private readonly string $app_url)
     {}
 
     public function render(array $data): Response
     {
+        $data['uri'] = str_replace('?wsdl=', '', $data['uri']);
+
         if ($data['wsdl'])
-            return $this->handleWSDL('http://soap.canal.ws/', $data['handler']);
+            return $this->handleWSDL($data['uri'], $data['handler']);
 
         return $this->handleSOAP($data['uri'], $data['handler'], $data['user'], $data['password']);
     }
@@ -66,8 +68,10 @@ class ServerSoap implements Server
          * if (!$this->authenticate($user, $password)) {
             return new Response("Access Denied", Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Basic realm="SoapServiceCourier"']);
         }*/
-
-        $soap = new SoapServer('http://nginx/wscolpensionesPROD/ServiceColpensiones?wsdl');
+        $wsdl_url = 'http://nginx/wscolpensionesPROD/ServiceColpensiones?wsdl';
+        $wsdl = file_get_contents($wsdl_url);
+        $wsdl = str_replace("http://nginx/".$this->app_url.'/ServiceColpensiones', $uri, $wsdl);
+        $soap = new SoapServer('data://text/plain,' . urlencode($wsdl));
         $soap->setObject($class);
 
         $response = new Response();
@@ -79,11 +83,6 @@ class ServerSoap implements Server
         ob_end_clean();
 
         $soapXml = str_replace(['SOAP-ENV', 'ns1'], ['soapenv', 'soap'], $soapXml);
-        $soapXml = str_replace(
-            'xmlns:soap="http://nginx/wscolpensionesPROD/ServiceColpensiones?wsdl="',
-            'xmlns:soap="http://soap.canal.ws/"',
-            $soapXml
-        );
         $soapXml = str_replace(
             'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ',
             '',

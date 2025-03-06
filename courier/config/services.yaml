@@ -6,6 +6,7 @@
 parameters:
     app_user: "%env(APP_USER)%"
     app_password: "%env(APP_PASSWORD)%"
+    app_url: "%env(APP_URL)%"
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -50,6 +51,7 @@ services:
         arguments:
             - '%app_user%'
             - '%app_password%'
+            - '%app_url%'
             - !tagged courier.server
 
     App\Shared\Infrastructure\SymfonyCommandBus:
