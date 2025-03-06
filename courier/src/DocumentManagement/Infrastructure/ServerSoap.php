@@ -68,7 +68,7 @@ class ServerSoap implements Server
          * if (!$this->authenticate($user, $password)) {
             return new Response("Access Denied", Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Basic realm="SoapServiceCourier"']);
         }*/
-        $wsdl_url = 'http://nginx/wscolpensionesPROD/ServiceColpensiones?wsdl';
+        $wsdl_url = 'http://nginx/'.$this->app_url.'/ServiceColpensiones?wsdl';
         $wsdl = file_get_contents($wsdl_url);
         $wsdl = str_replace("http://nginx/".$this->app_url.'/ServiceColpensiones', $uri, $wsdl);
         $soap = new SoapServer('data://text/plain,' . urlencode($wsdl));
