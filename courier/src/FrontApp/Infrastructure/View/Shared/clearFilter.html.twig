@@ -1,0 +1,11 @@
+{% block clear_filters %}
+    <script>
+        document.getElementById('clearFilters').addEventListener('click', function() {
+            var form = document.querySelector('form');
+            form.querySelectorAll('input').forEach(function(input) {
+                input.value = '';
+            });
+            form.submit();
+        });
+    </script>
+{% endblock %}

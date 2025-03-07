@@ -9,6 +9,17 @@ class GetFiledCommand implements Command
 {
     private ResponsePaginator $filed;
     private int $page;
+    private array $params;
+
+    /**
+     * @param int $page
+     * @param array $params
+     */
+    public function __construct(int $page, array $params)
+    {
+        $this->page = $page;
+        $this->params = $params;
+    }
 
     public function getPage(): int
     {
@@ -17,9 +28,6 @@ class GetFiledCommand implements Command
 
     public function setPage(int $page): void
     {
-        $this->page = $page;
-    }
-    public function __construct(int $page){
         $this->page = $page;
     }
 
@@ -31,5 +39,15 @@ class GetFiledCommand implements Command
     public function setFiled(ResponsePaginator $filed): void
     {
         $this->filed = $filed;
+    }
+
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    public function setParams(array $params): void
+    {
+        $this->params = $params;
     }
 }
