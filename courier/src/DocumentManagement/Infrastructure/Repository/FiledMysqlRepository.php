@@ -93,7 +93,7 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->getOneOrNullResult();
     }
 
-    function getAllFiled($page): ResponsePaginator
+    function getAllFiled($page, $paramsToSearch): ResponsePaginator
     {
         $queryFiltered = $this
             ->getEntityManager()
@@ -101,8 +101,45 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->select('r')
             ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
             ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
-            ->setMaxResults(self::PAGE_LIMIT)
-            ->getQuery();
+            ->setMaxResults(self::PAGE_LIMIT);
+
+        if (isset($paramsToSearch['num_radicado']) && $paramsToSearch['num_radicado'] != ''){
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.num_radicado like :num_radicado')
+                ->setParameter('num_radicado','%'.$paramsToSearch['num_radicado'].'%');
+        }
+
+        if (isset($paramsToSearch['name']) && $paramsToSearch['name'] != ''){
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.nombre_completo like :name')
+                ->setParameter('name','%'.$paramsToSearch['name'].'%');
+        }
+
+        if (isset($paramsToSearch['phone']) && $paramsToSearch['phone'] != ''){
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.telefono like :phone')
+                ->setParameter('phone','%'.$paramsToSearch['phone'].'%');
+        }
+
+        if (isset($paramsToSearch['radicado_padre']) && $paramsToSearch['radicado_padre'] != ''){
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.radicado_caso_padre like :radicado_padre')
+                ->setParameter('radicado_padre','%'.$paramsToSearch['radicado_padre'].'%');
+        }
+
+        if (isset($paramsToSearch['guia']) && $paramsToSearch['guia'] != ''){
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.codigo_guia like :guia')
+                ->setParameter('guia','%'.$paramsToSearch['guia'].'%');
+        }
+
+        if (isset($paramsToSearch['created_at']) && $paramsToSearch['created_at'] != ''){
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.created_at like :created_at')
+                ->setParameter('created_at','%'.$paramsToSearch['created_at'].'%');
+        }
+
+        $queryFiltered = $queryFiltered->getQuery();
 
         $paginator = new Paginator($queryFiltered);
 

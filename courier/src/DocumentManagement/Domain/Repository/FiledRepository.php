@@ -15,5 +15,5 @@ interface FiledRepository
 
     function getDocuments(string $time_start, string $time_end, string $difference_days) : array;
 
-    function getAllFiled(int $page) : ResponsePaginator;
+    function getAllFiled(int $page, array $params) : ResponsePaginator;
 }

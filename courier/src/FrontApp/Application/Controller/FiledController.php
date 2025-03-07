@@ -18,13 +18,15 @@ class FiledController extends AbstractController
     #[Route('/filed', name: 'app_filed')]
     public function index(Request $request): Response
     {
+        $params = $request->query->all();
         $page = $request->query->get('page', 1);
-        $filed = new GetFiledCommand($page);
+        $filed = new GetFiledCommand($page, $params);
         $this->commandBus->dispatch($filed);
         return $this->render('filed.html.twig', [
             'filed' =>  $filed->getFiled()->getPaginator(),
             'totalPages' =>  $filed->getFiled()->getTotalPages(),
-            'page' => $page
+            'page' => $page,
+            'params' => $params,
         ]);
     }
 }
