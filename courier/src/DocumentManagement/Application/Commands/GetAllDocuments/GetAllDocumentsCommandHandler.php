@@ -13,6 +13,6 @@ readonly class GetAllDocumentsCommandHandler implements CommandHandler
 
     public function __invoke(GetAllDocumentsCommand $command): void
     {
-        $command->setDocuments($this->repository->getAllDocuments($command->getPage()));
+        $command->setDocuments($this->repository->getAllDocuments($command->getPage(), $command->getParams()));
     }
 }

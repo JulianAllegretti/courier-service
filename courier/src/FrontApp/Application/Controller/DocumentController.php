@@ -19,13 +19,15 @@ class DocumentController extends AbstractController
     #[Route('/documents', name: 'app_documents')]
     public function index(Request $request): Response
     {
+        $params = $request->query->all();
         $page = $request->query->get('page', 1);
-        $documents = new GetAllDocumentsCommand($page);
+        $documents = new GetAllDocumentsCommand($page, $params);
         $this->commandBus->dispatch($documents);
         return $this->render('documents.html.twig', [
             'documents' =>  $documents->getDocuments()->getPaginator(),
             'totalPages' =>  $documents->getDocuments()->getTotalPages(),
-            'page' => $page
+            'page' => $page,
+            'params' => $params,
         ]);
     }
 }

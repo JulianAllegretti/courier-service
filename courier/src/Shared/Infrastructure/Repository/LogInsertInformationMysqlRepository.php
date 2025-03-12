@@ -52,15 +52,34 @@ class LogInsertInformationMysqlRepository extends ServiceEntityRepository implem
     }
 
 
-    function getAllLogs(int $page): ResponsePaginator
+    function getAllLogs(int $page, array $paramsToSearch): ResponsePaginator
     {
         $query = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('l')
             ->from('App\Shared\Domain\Entity\LogInsertInformation', 'l')
             ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
-            ->setMaxResults(self::PAGE_LIMIT)
-            ->getQuery();
+            ->setMaxResults(self::PAGE_LIMIT);
+
+        if (isset($paramsToSearch['id_radicado']) && $paramsToSearch['id_radicado'] != ''){
+            $query = $query
+                ->andWhere('l.numero_radicado like :id_radicado')
+                ->setParameter('id_radicado','%'.$paramsToSearch['id_radicado'].'%');
+        }
+
+        if (isset($paramsToSearch['error']) && $paramsToSearch['error'] != ''){
+            $query = $query
+                ->andWhere('l.error like :error')
+                ->setParameter('error','%'.$paramsToSearch['error'].'%');
+        }
+
+        if (isset($paramsToSearch['created_at']) && $paramsToSearch['created_at'] != ''){
+            $query = $query
+                ->andWhere('l.created_at like :created_at')
+                ->setParameter('created_at','%'.$paramsToSearch['created_at'].'%');
+        }
+
+        $query = $query->getQuery();
 
         $paginator = new Paginator($query);
 
