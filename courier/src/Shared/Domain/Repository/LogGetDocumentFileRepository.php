@@ -11,5 +11,5 @@ interface LogGetDocumentFileRepository
 
     function getLogs(string $time_start, string $time_end, string $difference_days) : array;
 
-    function getAllLogs(int $page) : ResponsePaginator;
+    function getAllLogs(int $page, array $params) : ResponsePaginator;
 }

@@ -9,14 +9,18 @@ class GetAllLogsDocumentsCommand implements Command
 {
     private ResponsePaginator $logs;
     private int $page;
+    private array $params;
 
     /**
      * @param int $page
+     * @param array $params
      */
-    public function __construct(int $page)
+    public function __construct(int $page, array $params)
     {
         $this->page = $page;
+        $this->params = $params;
     }
+
 
     public function getLogs(): ResponsePaginator
     {
@@ -36,6 +40,16 @@ class GetAllLogsDocumentsCommand implements Command
     public function setPage(int $page): void
     {
         $this->page = $page;
+    }
+
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    public function setParams(array $params): void
+    {
+        $this->params = $params;
     }
 
 }

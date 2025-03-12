@@ -19,8 +19,9 @@ class LogController extends AbstractController
     #[Route('/logs', name: 'app_logs')]
     public function index(Request $request): Response
     {
+        $params = $request->query->all();
         $page = $request->query->get('page', 1);
-        $logs = new GetAllLogsCommand($page);
+        $logs = new GetAllLogsCommand($page, $params);
         $this->commandBus->dispatch($logs);
         $arrayLogs = iterator_to_array($logs->getLogs()->getPaginator());
         $logsFinal = $this->helper->mapLogResponse($arrayLogs);
@@ -29,7 +30,8 @@ class LogController extends AbstractController
             'logs' => $logsFinal,
             'type' => '',
             'totalPages' =>  $logs->getLogs()->getTotalPages(),
-            'page' => $page
+            'page' => $page,
+            'params' => $params
         ]);
     }
 }

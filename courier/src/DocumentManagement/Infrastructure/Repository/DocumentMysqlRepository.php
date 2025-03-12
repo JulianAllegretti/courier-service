@@ -74,15 +74,34 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
         $this->registry->getManager()->flush();
     }
 
-    public function getAllDocuments(int $page): ResponsePaginator
+    public function getAllDocuments(int $page, array $paramsToSearch): ResponsePaginator
     {
         $query = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('d')
             ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
             ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
-            ->setMaxResults(self::PAGE_LIMIT)
-            ->getQuery();
+            ->setMaxResults(self::PAGE_LIMIT);
+
+        if (isset($paramsToSearch['id_documento']) && $paramsToSearch['id_documento'] != ''){
+            $query = $query
+                ->andWhere('d.id_gestor_documento like :id_documento')
+                ->setParameter('id_documento','%'.$paramsToSearch['id_documento'].'%');
+        }
+
+        if (isset($paramsToSearch['ruta']) && $paramsToSearch['ruta'] != ''){
+            $query = $query
+                ->andWhere('d.ruta like :ruta')
+                ->setParameter('ruta','%'.$paramsToSearch['ruta'].'%');
+        }
+
+        if (isset($paramsToSearch['created_at']) && $paramsToSearch['created_at'] != ''){
+            $query = $query
+                ->andWhere('d.created_at like :created_at')
+                ->setParameter('created_at','%'.$paramsToSearch['created_at'].'%');
+        }
+
+        $query = $query->getQuery();
 
         $paginator = new Paginator($query);
 
