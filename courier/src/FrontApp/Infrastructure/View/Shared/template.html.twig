@@ -51,11 +51,13 @@
                                 <img src="/images/log-get-document.svg" alt=""> <span>Logs descarga de documentos</span>
                             </a>
                         </li>
-                        <li>
-                            <a class="{{ app.request.pathinfo == '/admin' ? 'active' : '' }}" href="/admin">
-                                <img src="/images/gear.svg" alt=""> <span>Administración</span>
-                            </a>
-                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a class="{{ app.request.pathinfo == '/admin' ? 'active' : '' }}" href="/admin">
+                                    <img src="/images/gear.svg" alt=""> <span>Administración</span>
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
                     <div class="logout">
                         <a href="/logout" class="link-reference">

@@ -1,0 +1,55 @@
+{% extends "Shared/template.html.twig" %}
+{% use 'Shared/clearFilter.html.twig' %}
+
+{% block title %}Documento ID: {{ document.getIdGestorDocumento() }}{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/show.css"/>
+{% endblock %}
+{% block content %}
+    <div class="render_wrap">
+        <div class="description">
+            <aside class="description__data">
+                <h3 class="description__data__title">Documento</h3>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">ID:</h3>
+                    <span class="description__data__field--value">
+                        {{ document.getIdGestorDocumento() }}
+                    </span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Ruta:</h3>
+                    <span class="description__data__field--value">
+                        <a href="/{{ document.getRuta() }}" target="_blank">{{ document.getRuta() }}</a>
+                    </span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Radicado:</h3>
+                    <span class="description__data__field--value"><a href="/filed/{{ document.getFkRadicado() }}">Ir a radicado</a></span>
+                </div>
+            </aside>
+            <section class="description__additional_data">
+                <article class="description__additional_data--logs">
+                    <h3>Errores de descarga de documentos</h3>
+                    {% if (logsDocuments|length > 0) %}
+                        <ul>
+                            {% for log in logsDocuments %}
+                                <li>
+                                    <h5>{{ log['created_at'] }}</h5>
+                                    <p>Id Documento:</p>
+                                    <pre>{{ log['id_documento'] }}</pre>
+                                    <p>Request:</p>
+                                    <pre>{{ log['request'] | json_encode(constant('JSON_PRETTY_PRINT'))}}</pre>
+                                    <p>Error:</p>
+                                    <pre>{{ log['error'] | json_encode(constant('JSON_PRETTY_PRINT'))}}</pre>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <span>No hay errores de inserción asociados a este radicado</span>
+                    {% endif %}
+                </article>
+            </section>
+        </div>
+    </div>
+{% endblock %}

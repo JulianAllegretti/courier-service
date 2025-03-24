@@ -3,6 +3,7 @@
 namespace App\FrontApp\Application\Controller;
 
 use App\Shared\Application\Commands\GetAllLogsDocuments\GetAllLogsDocumentsCommand;
+use App\Shared\Application\Commands\GetLogById\GetLogByIdCommand;
 use App\Shared\Application\Helpers\LogsHelper;
 use App\Shared\Domain\CommandBus;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,12 +27,25 @@ class LogDocumentController extends AbstractController
         $arrayLogs = iterator_to_array($logs->getLogs()->getPaginator());
         $logsFinal = $this->helper->mapLogResponse($arrayLogs, true);
 
-        return $this->render('logs.html.twig', [
+        return $this->render('logs/index.html.twig', [
             'logs' => $logsFinal,
             'type' => 'documents',
             'totalPages' =>  $logs->getLogs()->getTotalPages(),
             'page' => $page,
-            'params' => $params
+            'params' => $params,
+            'url' => 'document-log'
+        ]);
+    }
+
+    #[Route('/log-document/{log_id}', name: 'app_log_document_by_id')]
+    public function show(int $log_id): Response
+    {
+        $command = new GetLogByIdCommand('document', $log_id);
+        $this->commandBus->dispatch($command);
+
+        return $this->render('logs/show.html.twig', [
+            'log' => $command->getLog(),
+            'type' => 'document'
         ]);
     }
 }

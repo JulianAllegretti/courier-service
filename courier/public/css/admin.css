@@ -1,0 +1,30 @@
+/*.admin_disclaimers {
+    background: #087990;
+    color: #6edff6;
+    border: #b8daff;
+}*/
+
+.admin_disclaimers__item--warning {
+}
+
+.admin_disclaimers__item {
+    padding: 10px;
+    border-width: 1px;
+    border-style: solid;
+    border-left-width: 5px;
+    border-radius: 5px;
+    border-color: #eee;
+    border-left-color: #f0ad4e;
+}
+
+.admin_disclaimers__item--danger {
+    border-left-color: #721c24;
+}
+
+.admin_disclaimers__item--success {
+    border-left-color: #155724;
+}
+
+.admin_disclaimers__item--blue {
+    border-left-color: #004085;
+}

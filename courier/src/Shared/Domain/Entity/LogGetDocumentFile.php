@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Shared\Domain\Entity;
+use App\Shared\Domain\Log;
 use App\Shared\Domain\Repository\LogGetDocumentFileRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LogGetDocumentFileRepository::class)]
 #[ORM\Table('log_get_document')]
-class LogGetDocumentFile
+class LogGetDocumentFile implements Log
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -75,4 +76,13 @@ class LogGetDocumentFile
         return $this->created_at;
     }
 
+    function getDecodedRequest(): mixed
+    {
+        return json_decode(trim($this->request));
+    }
+
+    function getDecodedError(): mixed
+    {
+        return json_decode(trim($this->error));
+    }
 }

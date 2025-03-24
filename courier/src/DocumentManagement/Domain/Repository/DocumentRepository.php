@@ -11,4 +11,5 @@ interface DocumentRepository
     function create(Document $document, Filed $filed): Document;
     function updatePathFile(string $documentId, string $guideNumber): void;
     function getAllDocuments(int $page, array $params): ResponsePaginator;
+    function getDocumentById(int $documentId): Document|null;
 }

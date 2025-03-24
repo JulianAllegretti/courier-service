@@ -6,7 +6,7 @@
     <div class="render_wrap">
         <h3 class="mb-5">Radicados</h3>
         <div class="filters">
-            <form action="/filed">
+            <form action="/filed" id="form">
                 <div class="row mb-4">
                     <div class="form-group col-4">
                         <input type="text" class="form-control" placeholder="Numero de radicado" name="num_radicado" value="{{ params['num_radicado'] ?? ''}}">
@@ -33,8 +33,12 @@
                         <input type="date" class="form-control" placeholder="Fecha de creación" name="created_at" value="{{ params['created_at'] ?? ''}}">
                     </div>
                 </div>
+                <input type="hidden" name="csv" value="false" id="csv">
                 <button type="submit" class="btn btn-primary mb-4 col-2">Filtrar</button>
                 <button id="clearFilters" type="button" class="btn btn-secondary mb-4 col-2" value="reset">Limpiar filtros</button>
+                <button onclick="document.getElementById('csv').value = true; document.getElementById('form').submit();" class="btn mb-4 col-2 btn-success">
+                    Descargar CSV
+                </button>
             </form>
         </div>
         {% if page <= totalPages %}
@@ -53,12 +57,42 @@
                 <tbody>
                 {% for file in filed  %}
                     <tr>
-                        <th scope="row">{{ file.getNumRadicado() }}</th>
-                        <td>{{ file.getNombreCompleto() }}</td>
-                        <td>{{ file.getTelefono() }}</td>
-                        <td>{{ file.getRadicadoCasoPadre() }}</td>
-                        <td>{{ file.getCodigoGuia() }}</td>
-                        <td>{{ file.getCreatedAt() }}</td>
+                        <th scope="row">
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getNumRadicado() }}
+                            </div>
+                        </th>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getNombreCompleto() }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getTelefono() }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getRadicadoCasoPadre() }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getCodigoGuia() }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getCreatedAt() }}
+                            </div>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

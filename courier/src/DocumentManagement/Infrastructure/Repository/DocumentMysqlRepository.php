@@ -110,4 +110,16 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
 
         return new ResponsePaginator($paginator, $totalPages);
     }
+
+    function getDocumentById(int $documentId): Document|null
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('d')
+            ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
+            ->where('d.id_documento = :id')
+            ->setParameter('id', $documentId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

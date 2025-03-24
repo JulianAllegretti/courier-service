@@ -11,6 +11,7 @@ class LogsHelper
         $collection = new ArrayCollection($logResponse);
         $logs = $collection->map(function ($value) use ($documents) {
             $array = [
+                'id' => ($documents) ? $value->getIdLogGetDocument() : $value->getIdLogInsertInformation(),
                 'numero_radicado' => $value->getNumeroRadicado(),
                 'error_code' => '',
                 'error_message' => '',
