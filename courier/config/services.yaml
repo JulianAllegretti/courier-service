@@ -6,6 +6,10 @@
 parameters:
     app_user: "%env(APP_USER)%"
     app_password: "%env(APP_PASSWORD)%"
+    app_env: "%env(APP_ENV)%"
+    time_start: "%env(TIME_START_REPORT)%"
+    time_end: "%env(TIME_START_REPORT)%"
+    difference_days: "%env(DIFFERENCE_DAYS)%"
 services:
     # default configuration for services in *this* file
     _defaults:

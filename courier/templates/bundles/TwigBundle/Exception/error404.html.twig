@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block title %}404 error page!{% endblock %}
+{% block body %}
+    <div class="error_wrap">
+        <h1>404</h1>
+        <h2>Error</h2>
+        <h3>Page not found</h3>
+        <p>The requested page couldn't be located. Checkout for any URL misspelling</p>
+        <a class="btn btn-danger" href="{{ path('home') }}" role="button">Return to the homepage</a>
+    </div>
+{% endblock %}

@@ -230,4 +230,8 @@ class Filed
         $this->codigo_guia = $codigo_guia;
     }
 
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
 }

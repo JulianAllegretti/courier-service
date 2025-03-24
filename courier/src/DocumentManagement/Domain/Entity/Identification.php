@@ -3,6 +3,7 @@
 namespace App\DocumentManagement\Domain\Entity;
 
 use App\DocumentManagement\Domain\Repository\IdentificationRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: IdentificationRepository::class)]
@@ -19,6 +20,9 @@ class Identification
 
     #[ORM\Column(length: 255)]
     private ?string $tipo_documento;
+
+    #[ORM\OneToMany(targetEntity: Filed::class, mappedBy: 'identification')]
+    private Collection $filed;
 
     /**
      * @param int|null $id_identificacion

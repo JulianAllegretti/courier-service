@@ -4,6 +4,7 @@ namespace App\Shared\Infrastructure\Repository;
 
 use App\DocumentManagement\Domain\ResponsePaginator;
 use App\Shared\Domain\Entity\LogGetDocumentFile;
+use App\Shared\Domain\Log;
 use App\Shared\Domain\Repository\LogGetDocumentFileRepository;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -93,5 +94,41 @@ class LogGetDocumentFileMysqlRepository extends ServiceEntityRepository implemen
         $totalPages = ceil($totalItems/self::PAGE_LIMIT);
 
         return new ResponsePaginator($paginator, $totalPages);
+    }
+
+    function getLogsByNumFiled(string $num_filed): array
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('l')
+            ->from('App\Shared\Domain\Entity\LogGetDocumentFile', 'l')
+            ->where('l.numero_radicado = :num_filed')
+            ->setParameter('num_filed', $num_filed)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    function getLogsByDocumentId(string $document_id): array
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('l')
+            ->from('App\Shared\Domain\Entity\LogGetDocumentFile', 'l')
+            ->where('l.id_documento = :document_id')
+            ->setParameter('document_id', $document_id)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    function getLogById(int $log_id): Log|null
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('l')
+            ->from('App\Shared\Domain\Entity\LogGetDocumentFile', 'l')
+            ->where('l.id_log_get_document = :id')
+            ->setParameter('id', $log_id)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

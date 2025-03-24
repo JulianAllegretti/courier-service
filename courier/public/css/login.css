@@ -1,5 +1,8 @@
 @import "colors.css";
-
+.main__content {
+    padding: 0;
+    overflow: hidden;
+}
 .container-wrap {
     background-color: var(--background-blue-color);
     height: 100vh;

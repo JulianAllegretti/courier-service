@@ -18,12 +18,29 @@ home:
 filed:
     path: /filed
     controller: App\FrontApp\Application\Controller\FiledController::index
+filed_by_id:
+    path: /filed/{id_filed}
+    controller: App\FrontApp\Application\Controller\FiledController::show
+    requirements:
+        id_filed: '\d+'
 documents:
     path: /documents
     controller: App\FrontApp\Application\Controller\DocumentController::index
+document_by_id:
+    path: /document/{id_document}
+    controller: App\FrontApp\Application\Controller\DocumentController::show
 logs:
     path: /logs
     controller: App\FrontApp\Application\Controller\LogController::index
+log_by_id:
+    path: /log/{log_id}
+    controller: App\FrontApp\Application\Controller\LogController::show
 logs-documents:
     path: /logs-documents
     controller: App\FrontApp\Application\Controller\LogDocumentController::index
+log_document_by_id:
+    path: /document-log/{log_id}
+    controller: App\FrontApp\Application\Controller\LogDocumentController::show
+error_404:
+    path: /404
+    controller: App\FrontApp\Application\Controller\ExceptionController::showNotFoundError

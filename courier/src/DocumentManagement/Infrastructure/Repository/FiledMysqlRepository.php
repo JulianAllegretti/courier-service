@@ -98,8 +98,10 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
         $queryFiltered = $this
             ->getEntityManager()
             ->createQueryBuilder()
-            ->select('r')
+            ->select('r', 'i', 'd')
             ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
+            ->leftJoin('r.identification', 'i')
+            ->leftJoin('r.documents', 'd')
             ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
             ->setMaxResults(self::PAGE_LIMIT);
 
@@ -147,5 +149,18 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
         $totalPages = ceil($totalItems/self::PAGE_LIMIT);
 
         return new ResponsePaginator($paginator, $totalPages);
+    }
+
+    function getFiledById(int $id_filed): Filed|null
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('f', 'i')
+            ->from('App\DocumentManagement\Domain\Entity\Filed', 'f')
+            ->where('f.id_radicado = :id')
+            ->setParameter('id', $id_filed)
+            ->leftJoin('f.identification', 'i')
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

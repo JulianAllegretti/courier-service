@@ -36,9 +36,24 @@
                 <tbody>
                 {% for document in documents  %}
                     <tr>
-                        <th scope="row">{{ document.getIdGestorDocumento() }}</th>
-                        <td>{{ document.getRuta() }}</td>
-                        <td>{{ document.getCreatedAt() }}</td>
+                        <th scope="row">
+                            <div class="position-relative">
+                                <a href="/document/{{ document.getIdDocumento() }}" class="stretched-link"></a>
+                                {{ document.getIdGestorDocumento() }}
+                            </div>
+                        </th>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/document/{{ document.getIdDocumento() }}" class="stretched-link"></a>
+                                {{ document.getRuta() }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/document/{{ document.getIdDocumento() }}" class="stretched-link"></a>
+                                {{ document.getCreatedAt() }}
+                            </div>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
