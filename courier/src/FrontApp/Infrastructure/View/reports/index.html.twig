@@ -1,0 +1,18 @@
+{% extends "Shared/template.html.twig" %}
+{% block title %}Reportes{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="/js/jquery.hottie.js"></script>
+    <link rel="stylesheet" href="/css/reports.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{% endblock %}
+{% block content %}
+    <h3 class="mb-4">Reportes</h3>
+    {% embed "reports/heatmap.html.twig" %}{% endembed %}
+    {% embed "reports/filed.html.twig"%}{% endembed %}
+    {% embed "reports/log.html.twig"%}{% endembed %}
+    {% embed "reports/pie.html.twig"%}{% endembed %}
+{% endblock %}

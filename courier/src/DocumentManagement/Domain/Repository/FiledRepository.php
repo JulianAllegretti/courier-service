@@ -18,4 +18,8 @@ interface FiledRepository
     function getAllFiled(int $page, array $params) : ResponsePaginator;
 
     function getFiledById(int $id_filed) : Filed|null;
+
+    function getReportByHourAndDate(): array;
+
+    function getReport(\DateTime $dateStart, \DateTime|null $dateEnd): array;
 }

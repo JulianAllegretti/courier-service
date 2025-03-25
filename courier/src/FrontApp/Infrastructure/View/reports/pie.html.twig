@@ -1,0 +1,86 @@
+{% block pie %}
+    <h4 class="mb-4 mt-4">Tipo de errores de inserción</h4>
+    <div class="filters mb-4">
+        <input type="text" id="fechaInicioLogPie" placeholder="Fecha de inicio">
+        <input type="text" id="fechaFinLogPie" placeholder="Fecha de fin">
+        <div class="mt-4">
+            <button id="button-search-log-pie" type="button" class="btn btn-primary">Buscar</button>
+        </div>
+    </div>
+    <div style="width: 800px;" id="render">
+        <div class="spinner-border" role="status" id="sniper-filed-log-pie"></div>
+        <h5 style="color: red; display: none" id="title-data-log-pie">No hay datos disponibles</h5>
+        <canvas id="log-pie"></canvas>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            $("#fechaInicioLogPie").datepicker({
+                dateFormat: "yy-mm-dd",
+                onSelect: function (selectedDate) {
+                    $("#fechaFinLogPie").datepicker("option", "minDate", selectedDate);
+                }
+            });
+
+            $("#fechaFinLogPie").datepicker({
+                dateFormat: "yy-mm-dd",
+                onSelect: function (selectedDate) {
+                    $("#fechaInicioLogPie").datepicker("option", "maxDate", selectedDate);
+                }
+            });
+
+            const ctx = document.getElementById("log-pie").getContext("2d");
+            let chartInstance = new Chart(ctx, {
+                type: "pie",
+                data: { labels: [], datasets: [] },
+                options: { responsive: true }
+            });
+
+            $('#button-search-log-pie').click(function (){
+                $('#sniper-filed-log-pie').css("display", "block");
+                $('#title-data-log-pie').css('display', 'none');
+                chartInstance.data.labels = [];
+                chartInstance.data.datasets = [];
+                chartInstance.update();
+                let dateStart = $('#fechaInicioLogPie').datepicker('getDate');
+                let dateEnd = $('#fechaFinLogPie').datepicker('getDate');
+                let month = [];
+                month[0] = "01";
+                month[1] = "02";
+                month[2] = "03";
+                month[3] = "04";
+                month[4] = "05";
+                month[5] = "06";
+                month[6] = "07";
+                month[7] = "08";
+                month[8] = "09";
+                month[9] = "10";
+                month[10] = "11";
+                month[11] = "12";
+                cargarGrafica(
+                    dateStart ? dateStart.getFullYear() + '-' + month[dateStart.getMonth()] + '-' + dateStart.getDate() : '',
+                    dateEnd ? dateEnd.getFullYear() + '-' + month[dateEnd   .getMonth()] + '-' + dateEnd.getDate() : ''
+                );
+            });
+
+            function cargarGrafica(date_start='', date_end='') {
+                fetch(`/reports/log-pie?date_start=${date_start}&date_end=${date_end}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.labels.length === 0) {
+                            $('#title-data-log-pie').css('display', 'block');
+                            $('#sniper-filed-log-pie').css("display", "none");
+                            return;
+                        }
+                        $('#title-data-log-pie').css('display', 'none');
+                        $('#sniper-filed-log-pie').css("display", "none");
+                        chartInstance.data.labels = data.labels;
+                        chartInstance.data.datasets = data.datasets;
+                        chartInstance.update();
+                    })
+                    .catch(error => console.error("Error cargando datos", error));
+            }
+
+            cargarGrafica();
+        });
+    </script>
+{% endblock %}

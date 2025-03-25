@@ -1,0 +1,11 @@
+{% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
+    <ul class="heatmap__data_list">
+        {% for hour in range(0, 23) %}
+            {% if day in heatmap|keys and hour in heatmap[day]|keys%}
+                <li class="heatmap__item">{{ heatmap[day][hour] }}</li>
+            {% else %}
+                <li class="heatmap__item">0</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% endfor %}

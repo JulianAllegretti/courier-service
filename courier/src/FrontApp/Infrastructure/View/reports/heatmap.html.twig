@@ -1,0 +1,61 @@
+{% block heatmap %}
+    <h4 class="mb-4">Tabla de calor con las horas de mayor inserción de documentos</h4>
+    <div class="heatmap">
+        <ul class="heatmap__frequency">
+            <li class="heatmap__item">Día/Hora</li>
+            <li class="heatmap__item">Lun</li>
+            <li class="heatmap__item">Mar</li>
+            <li class="heatmap__item">Mie</li>
+            <li class="heatmap__item">Jue</li>
+            <li class="heatmap__item">Vie</li>
+            <li class="heatmap__item">Sab</li>
+            <li class="heatmap__item">Dom</li>
+        </ul>
+        <div class="heatmap__main">
+            <ul class="heatmap__time">
+                <li class="heatmap__item">00:00</li>
+                <li class="heatmap__item">01:00</li>
+                <li class="heatmap__item">02:00</li>
+                <li class="heatmap__item">03:00</li>
+                <li class="heatmap__item">04:00</li>
+                <li class="heatmap__item">05:00</li>
+                <li class="heatmap__item">06:00</li>
+                <li class="heatmap__item">07:00</li>
+                <li class="heatmap__item">08:00</li>
+                <li class="heatmap__item">09:00</li>
+                <li class="heatmap__item">10:00</li>
+                <li class="heatmap__item">11:00</li>
+                <li class="heatmap__item">12:00</li>
+                <li class="heatmap__item">13:00</li>
+                <li class="heatmap__item">14:00</li>
+                <li class="heatmap__item">15:00</li>
+                <li class="heatmap__item">16:00</li>
+                <li class="heatmap__item">17:00</li>
+                <li class="heatmap__item">18:00</li>
+                <li class="heatmap__item">19:00</li>
+                <li class="heatmap__item">20:00</li>
+                <li class="heatmap__item">21:00</li>
+                <li class="heatmap__item">22:00</li>
+                <li class="heatmap__item">23:00</li>
+            </ul>
+            <div id="heatmap__data">
+                <div class="spinner-border" role="status"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $.ajax({url: "/reports/heatmap"})
+            .done(function( data ) {
+                $("#heatmap__data").html(data);
+                $("#heatmap__data .heatmap__item").hottie({
+                    colorArray : [
+                        "#63BE7B",
+                        "#FBE983",
+                        "#F8696B"
+                    ]
+                });
+            });
+    </script>
+{% endblock %}

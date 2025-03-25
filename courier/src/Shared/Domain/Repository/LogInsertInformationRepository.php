@@ -17,4 +17,8 @@ interface LogInsertInformationRepository
     function getLogsByNumFiled(string $num_filed) : array;
 
     function getLogById(int $log_id): Log|null;
+
+    function getReport(\DateTime $dateStart, \DateTime|null $dateEnd): array;
+
+    function getReportPie(\DateTime $dateStart, \DateTime|null $dateEnd): array;
 }
