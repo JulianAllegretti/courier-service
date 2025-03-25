@@ -58,6 +58,14 @@
                                 </a>
                             </li>
                         {% endif %}
+                        <li>
+                            <a
+                                    class="{{ app.request.pathinfo == '/reports' ? 'active' : '' }}"
+                                    href="/reports"
+                            >
+                                <img src="/images/bar-chart.svg" alt=""> <span>Reportes</span>
+                            </a>
+                        </li>
                     </ul>
                     <div class="logout">
                         <a href="/logout" class="link-reference">

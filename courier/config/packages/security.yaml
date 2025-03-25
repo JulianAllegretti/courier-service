@@ -29,7 +29,7 @@ security:
             entry_point: form_login
             remember_me:
                 secret: '%kernel.secret%'
-                lifetime: 604800
+                lifetime: 28800
                 path: /
 
     # Easy way to control access for large sections of your site

@@ -44,3 +44,18 @@ log_document_by_id:
 error_404:
     path: /404
     controller: App\FrontApp\Application\Controller\ExceptionController::showNotFoundError
+reports:
+    path: /reports
+    controller: App\FrontApp\Application\Controller\ReportController::index
+heatmap_report:
+    path: /reports/heatmap
+    controller: App\FrontApp\Application\Controller\ReportController::heatmap_report
+filed_report:
+    path: /reports/filed
+    controller: App\FrontApp\Application\Controller\ReportController::filed_report
+log_report:
+    path: /reports/log
+    controller: App\FrontApp\Application\Controller\ReportController::log_report
+log_pie_report:
+    path: /reports/log-pie
+    controller: App\FrontApp\Application\Controller\ReportController::log_report_pie

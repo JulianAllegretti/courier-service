@@ -114,4 +114,59 @@ class LogInsertInformationMysqlRepository extends ServiceEntityRepository implem
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    function getReport(\DateTime $dateStart, ?\DateTime $dateEnd): array
+    {
+        $query = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->from('App\Shared\Domain\Entity\LogInsertInformation', 'l');
+
+        if ($dateEnd == null) {
+            $date = $dateStart->format('Y-m-d');
+            $query = $query->select([
+                "HOUR(l.created_at) AS hora",
+                "COUNT(l.id_log_insert_information) AS total"
+            ])
+                ->where("l.created_at >= '".$date." 00:00:00' and l.created_at <= '".$date." 23:59:59'")
+                ->groupBy('hora')
+                ->addOrderBy('hora', 'ASC');
+        }
+        else {
+            $initDate = $dateStart->format('Y-m-d');
+            $endDate = $dateEnd->format('Y-m-d');
+            $query = $query->select([
+                "DATE(l.created_at) AS fecha",
+                "COUNT(l.id_log_insert_information) AS total"
+            ])
+                ->where("l.created_at >= '".$initDate." 00:00:00' and l.created_at <= '".$endDate." 23:59:59'")
+                ->groupBy('fecha')
+                ->addOrderBy('fecha', 'ASC');
+        }
+
+        return $query
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    function getReportPie(\DateTime $dateStart, ?\DateTime $dateEnd): array
+    {
+        $initDate = $dateStart->format('Y-m-d');
+        $endDate = $dateStart->format('Y-m-d');
+        if ($dateEnd != null) {
+            $endDate = $dateEnd->format('Y-m-d');
+        }
+
+        return  $this->getEntityManager()
+            ->createQueryBuilder()
+            ->from('App\Shared\Domain\Entity\LogInsertInformation', 'l')
+            ->select([
+                "JSON_EXTRACT(l.error, '$.ErrorCode') AS errorCode",
+                "COUNT(l.id_log_insert_information) AS total"
+            ])
+            ->groupBy('errorCode')
+            ->addOrderBy('errorCode', 'ASC')
+            ->where("l.created_at >= '".$initDate." 00:00:00' and l.created_at <= '".$endDate." 23:59:59'")
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

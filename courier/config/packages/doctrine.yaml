@@ -40,6 +40,13 @@ doctrine:
                 alias: Shared
         controller_resolver:
             auto_mapping: false
+        dql:
+            datetime_functions:
+                DATE_FORMAT: DoctrineExtensions\Query\Mysql\DateFormat
+                HOUR: DoctrineExtensions\Query\Mysql\Hour
+                DATE: DoctrineExtensions\Query\Mysql\Date
+            string_functions:
+                JSON_EXTRACT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonExtract
 
 when@test:
     doctrine:
