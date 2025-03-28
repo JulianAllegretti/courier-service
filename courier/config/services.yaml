@@ -80,6 +80,7 @@ services:
         $password_service: "%env(PASSWORD_SERVICE)%"
         $application_id: "%env(APPLICATION_ID)%"
         $transaction_id: "%env(TRANSACTION_ID)%"
+        $app_env: "%env(APP_ENV)%"
 
 
 
