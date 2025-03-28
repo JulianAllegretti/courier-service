@@ -3,3 +3,8 @@ courier_service:
     controller: App\DocumentManagement\Application\Controller\SaveInformationController
     defaults: { auth: false, app_url: '%app_url%' }
     methods: [ GET, POST ]
+courier_service_472:
+    path: /{app_url}/Service472
+    controller: App\DocumentManagement\Application\Controller\SaveInformationController472
+    defaults: { auth: false, app_url: '%app_url%' }
+    methods: [ GET, POST ]

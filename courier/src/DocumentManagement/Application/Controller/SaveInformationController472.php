@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Throwable;
 
-final class SaveInformationController extends ApiController
+final class SaveInformationController472 extends ApiController
 {
     private Server $server;
 
@@ -36,18 +36,24 @@ final class SaveInformationController extends ApiController
     }
 
     /**
-     * @param App\DocumentManagement\Domain\Comunication $comunicacionVo
+     * @param App\DocumentManagement\Domain\Comunication $ComunicacionVo
      * @return \App\DocumentManagement\Domain\Response
      * @throws NullException
      */
-    public function RadicarTramite(mixed $comunicacionVo): \App\DocumentManagement\Domain\Response
+    public function RadicarTramite(mixed $ComunicacionVo): \App\DocumentManagement\Domain\ResponseWrap
     {
         $request = get_defined_vars();
-        if (empty($comunicacionVo)) {
+        if (empty($ComunicacionVo)) {
             throw new NullException("La propiedad ComunicacionVo es requerida.");
         }
 
-        return $this->insertFiled($comunicacionVo, $request);
+        if (empty($ComunicacionVo->ComunicacionVo)) {
+            throw new NullException("La propiedad ComunicacionVo es requerida.");
+        }
+
+        $comunicacionVo = $ComunicacionVo->ComunicacionVo;
+
+        return new \App\DocumentManagement\Domain\ResponseWrap($this->insertFiled($comunicacionVo, $request));
     }
 
     public function __invoke(Request $request): Response
@@ -64,7 +70,8 @@ final class SaveInformationController extends ApiController
             'uri' => $request->getUri(),
             'handler' => $this,
             'user' => $_SERVER['PHP_AUTH_USER'] ?? '',
-            'password' => $_SERVER['PHP_AUTH_PW'] ?? ''
+            'password' => $_SERVER['PHP_AUTH_PW'] ?? '',
+            'rpc' => true
         ]);
     }
 }

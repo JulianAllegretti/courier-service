@@ -23,15 +23,23 @@ class ServerSoap implements Server
 
     public function render(array $data): Response
     {
-        if ($data['wsdl'])
-            return $this->handleWSDL($data['uri'], $data['handler']);
+        if (isset($data['rpc']) && $data['rpc'] === true){
+            $data['uri'] = str_replace('?wsdl=', '', $data['uri']);
+        }
 
-        return $this->handleSOAP($data['uri'], $data['handler'], $data['user'], $data['password']);
+        if ($data['wsdl'])
+            return $this->handleWSDL($data['uri'], $data['handler'], $data['rpc'] ?? false);
+
+        return $this->handleSOAP($data['uri'], $data['handler'], $data['user'], $data['password'], $data['rpc'] ?? false);
     }
 
-    public function handleWSDL($uri, $class): Response
+    public function handleWSDL($uri, $class, $rpc = false): Response
     {
         $autoDiscover = new AutoDiscover(new ArrayOfTypeSequence());
+        if ($rpc) {
+            $autoDiscover->setBindingStyle(['style' => 'document', 'transport' => 'http://schemas.xmlsoap.org/soap/http']);
+            $autoDiscover->setOperationBodyStyle(['use' => 'literal', 'namespace' => $uri]);
+        }
         $autoDiscover->setClass($class);
         $autoDiscover->setUri($uri);
 
@@ -61,14 +69,20 @@ class ServerSoap implements Server
         return $response;
     }
 
-    public function handleSOAP($uri, $class, $user, $password): Response
+    public function handleSOAP($uri, $class, $user, $password, $rpc = false): Response
     {
         /*Se comenta por si en algun momento se desea volver a activar dicha funcionalidad
          * if (!$this->authenticate($user, $password)) {
             return new Response("Access Denied", Response::HTTP_UNAUTHORIZED, ['WWW-Authenticate' => 'Basic realm="SoapServiceCourier"']);
         }*/
-
         $soap = new SoapServer('http://nginx/'.$this->app_url.'/ServiceColpensiones?wsdl');
+        if ($rpc) {
+            $wsdl_url = 'http://nginx/'.$this->app_url.'/Service472?wsdl';
+            $wsdl = file_get_contents($wsdl_url);
+            $wsdl = str_replace("http://nginx/".$this->app_url.'/Service472', $uri, $wsdl);
+            $soap = new SoapServer('data://text/plain,' . urlencode($wsdl));
+        }
+
         $soap->setObject($class);
 
         $response = new Response();
@@ -80,16 +94,25 @@ class ServerSoap implements Server
         ob_end_clean();
 
         $soapXml = str_replace(['SOAP-ENV', 'ns1'], ['soapenv', 'soap'], $soapXml);
-        $soapXml = str_replace(
-            'xmlns:soap="http://nginx/'.$this->app_url.'/ServiceColpensiones?wsdl="',
-            'xmlns:soap="http://soap.canal.ws/"',
-            $soapXml
-        );
-        $soapXml = str_replace(
-            'xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"',
-            '',
-            $soapXml
-        );
+        if ($rpc) {
+            $soapXml = str_replace(
+                'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ',
+                '',
+                $soapXml
+            );
+        } else {
+            $soapXml = str_replace(
+                'xmlns:soap="http://nginx/'.$this->app_url.'/ServiceColpensiones?wsdl="',
+                'xmlns:soap="http://soap.canal.ws/"',
+                $soapXml
+            );
+            $soapXml = str_replace(
+                'xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"',
+                '',
+                $soapXml
+            );
+        }
+
         $soapXml = str_replace(['xsi:type="xsd:int"', 'xsi:type="xsd:string"', 'xsi:type="soap:Response"', 'xsi:nil="true"', ' >'], ['', '', '', '', '>'], $soapXml);
         $soapXml = str_replace(
             ['<ErrorCode />', '<ErrorMessage />', '<NumRadicado />', '<CodGuia />'],
