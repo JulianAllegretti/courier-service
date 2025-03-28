@@ -36,7 +36,7 @@ final class SaveInformationController extends ApiController
     }
 
     /**
-     * @param App\DocumentManagement\Domain\Comunication $comunicacionVo
+     * @param App\DocumentManagement\Domain\Comunication $ComunicacionVo
      * @return \App\DocumentManagement\Domain\Response
      * @throws NullException
      */
@@ -113,7 +113,7 @@ final class SaveInformationController extends ApiController
         $response->setNumTramite($comunicacionVo->NumTramite);
         $this->logger->notice('Response ' . $comunicacionVo->NumRadicado, [$response]);
 
-        return $response;
+        return new \App\DocumentManagement\Domain\ResponseWrap($response);
     }
 
 
