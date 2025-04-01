@@ -99,10 +99,8 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
         $queryFiltered = $this
             ->getEntityManager()
             ->createQueryBuilder()
-            ->select('r', 'i', 'd')
+            ->select('r')
             ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
-            ->leftJoin('r.identification', 'i')
-            ->leftJoin('r.documents', 'd')
             ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
             ->setMaxResults(self::PAGE_LIMIT)
             ->orderBy('r.id_radicado', 'DESC');
