@@ -78,6 +78,7 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
         $pdf = fopen('files/'.$command->getDocumentId().'.pdf','w');
         fwrite ($pdf, $pdf_decoded);
         fclose ($pdf);
+        $this->repository->updatePathFile($command->getDocumentId(), $command->getGuideNumber());
     }
 
     /**
