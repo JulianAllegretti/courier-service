@@ -4,7 +4,7 @@
 {% block title %}Logs{% endblock %}
 {% block content %}
     <div class="render_wrap">
-        <h3>Log de inserción de radicados</h3>
+        <h3>Log de errores en {% if type != 'documents' %}inserción de radicados{% else %}Descarga de documentos{% endif %}</h3>
         <div class="filters">
             <form action="{% if type != 'documents' %}/logs{% else %}/logs-documents{% endif %}">
                 <div class="row mb-4">
@@ -37,60 +37,66 @@
                 </button>
             </form>
         </div>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead class="table-dark">
-                <tr>
-                    <th scope="col"># Radicado</th>
-                    {% if type == 'documents' %}
-                        <th scope="col">Id Documento</th>
-                    {% endif %}
-                    <th scope="col">Error</th>
-                    <th scope="col">Codigo</th>
-                    <th scope="col">Fecha de creación</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for log in logs %}
+        {% if page <= totalPages %}
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-dark">
                     <tr>
-                        <th scope="row">
-                            <div class="position-relative">
-                                <a href="/{{ url }}/{{ log.id }}" class="stretched-link"></a>
-                                {{ log.numero_radicado }}
-                            </div>
-                        </th>
+                        <th scope="col"># Radicado</th>
                         {% if type == 'documents' %}
+                            <th scope="col">Id Documento</th>
+                        {% endif %}
+                        <th scope="col">Error</th>
+                        <th scope="col">Codigo</th>
+                        <th scope="col">Fecha de creación</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for log in logs %}
+                        <tr>
+                            <th scope="row">
+                                <div class="position-relative">
+                                    <a href="/{{ url }}/{{ log.id }}" class="stretched-link"></a>
+                                    {{ log.numero_radicado }}
+                                </div>
+                            </th>
+                            {% if type == 'documents' %}
+                                <td>
+                                    <div class="position-relative">
+                                        <a href="/{{ url }}/{{ log.id }}" class="stretched-link"></a>
+                                        {{ log.id_documento }}
+                                    </div>
+                                </td>
+                            {% endif %}
                             <td>
                                 <div class="position-relative">
                                     <a href="/{{ url }}/{{ log.id }}" class="stretched-link"></a>
-                                    {{ log.id_documento }}
+                                    {{ log.error_message }}
                                 </div>
                             </td>
-                        {% endif %}
-                        <td>
-                            <div class="position-relative">
-                                <a href="/{{ url }}/{{ log.id }}" class="stretched-link"></a>
-                                {{ log.error_message }}
-                            </div>
-                        </td>
-                        <td>
-                            <div class="position-relative">
-                                <a href="/{{ url }}/{{ log.id }}" class="stretched-link"></a>
-                                {{ log.error_code }}
-                            </div>
-                        </td>
-                        <td>
-                            <div class="position-relative">
-                                <a href="/{{ url }}/{{ log.id }}" class="stretched-link"></a>
-                                {{ log.created_at }}
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {% include 'Shared/paginator.html.twig' with {'totalPages': totalPages, 'page':  page, 'route': type != 'documents' ? 'logs' : 'logs-documents'} %}
-        </div>
+                            <td>
+                                <div class="position-relative">
+                                    <a href="/{{ url }}/{{ log.id }}" class="stretched-link"></a>
+                                    {{ log.error_code }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="position-relative">
+                                    <a href="/{{ url }}/{{ log.id }}" class="stretched-link"></a>
+                                    {{ log.created_at }}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% include 'Shared/paginator.html.twig' with {'totalPages': totalPages, 'page':  page, 'route': type != 'documents' ? 'logs' : 'logs-documents'} %}
+            </div>
+        {% elseif params|length == 0 %}
+            <h4>Presiona filtrar para realizar la consulta</h4>
+        {% else %}
+            <h4>No hay data</h4>
+        {% endif %}
     </div>
     {% block clear_filters %}{{ parent() }}{% endblock %}
 {% endblock %}

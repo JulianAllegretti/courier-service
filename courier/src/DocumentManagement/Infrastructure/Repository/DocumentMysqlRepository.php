@@ -81,7 +81,8 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
             ->select('d')
             ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
             ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
-            ->setMaxResults(self::PAGE_LIMIT);
+            ->setMaxResults(self::PAGE_LIMIT)
+            ->orderBy('d.id_documento', 'DESC');
 
         if (isset($paramsToSearch['id_documento']) && $paramsToSearch['id_documento'] != ''){
             $query = $query

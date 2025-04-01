@@ -24,7 +24,13 @@ class FiledController extends AbstractController
         $params = $request->query->all();
         $page = $request->query->get('page', 1);
         $filed = new GetFiledCommand($page, $params);
-        $this->commandBus->dispatch($filed);
+        $paginator = null;
+        $totalPages = 0;
+        if (count($params) > 0) {
+            $this->commandBus->dispatch($filed);
+            $paginator = $filed->getFiled()->getPaginator();
+            $totalPages = $filed->getFiled()->getTotalPages();
+        }
 
         if (isset($params['csv']) && $params['csv'] === "true") {
             $response = $this->helper->downloadCSVFiled($filed->getFiled()->getPaginator());
@@ -35,8 +41,8 @@ class FiledController extends AbstractController
         }
 
         return $this->render('filed/index.html.twig', [
-            'filed' =>  $filed->getFiled()->getPaginator(),
-            'totalPages' =>  $filed->getFiled()->getTotalPages(),
+            'filed' =>  $paginator,
+            'totalPages' =>  $totalPages,
             'page' => $page,
             'params' => $params,
         ]);

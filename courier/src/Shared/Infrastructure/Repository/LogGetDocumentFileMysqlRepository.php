@@ -60,7 +60,8 @@ class LogGetDocumentFileMysqlRepository extends ServiceEntityRepository implemen
             ->select('l')
             ->from('App\Shared\Domain\Entity\LogGetDocumentFile', 'l')
             ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
-            ->setMaxResults(self::PAGE_LIMIT);
+            ->setMaxResults(self::PAGE_LIMIT)
+            ->orderBy('l.id_log_get_document', 'DESC');
 
         if (isset($paramsToSearch['id_radicado']) && $paramsToSearch['id_radicado'] != ''){
             $query = $query
