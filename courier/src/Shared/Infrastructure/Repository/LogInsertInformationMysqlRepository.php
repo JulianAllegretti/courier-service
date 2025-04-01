@@ -61,7 +61,8 @@ class LogInsertInformationMysqlRepository extends ServiceEntityRepository implem
             ->select('l')
             ->from('App\Shared\Domain\Entity\LogInsertInformation', 'l')
             ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
-            ->setMaxResults(self::PAGE_LIMIT);
+            ->setMaxResults(self::PAGE_LIMIT)
+            ->orderBy('l.id_log_insert_information', 'DESC');
 
         if (isset($paramsToSearch['id_radicado']) && $paramsToSearch['id_radicado'] != ''){
             $query = $query

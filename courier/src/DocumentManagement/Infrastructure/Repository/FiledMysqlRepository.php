@@ -104,7 +104,8 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->leftJoin('r.identification', 'i')
             ->leftJoin('r.documents', 'd')
             ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
-            ->setMaxResults(self::PAGE_LIMIT);
+            ->setMaxResults(self::PAGE_LIMIT)
+            ->orderBy('r.id_radicado', 'DESC');
 
         if (isset($paramsToSearch['num_radicado']) && $paramsToSearch['num_radicado'] != '') {
             $queryFiltered = $queryFiltered

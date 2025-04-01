@@ -24,10 +24,16 @@ class DocumentController extends AbstractController
         $params = $request->query->all();
         $page = $request->query->get('page', 1);
         $documents = new GetAllDocumentsCommand($page, $params);
-        $this->commandBus->dispatch($documents);
+        $paginator = null;
+        $totalPages = 0;
+        if (count($params) > 0) {
+            $this->commandBus->dispatch($documents);
+            $paginator = $documents->getDocuments()->getPaginator();
+            $totalPages = $documents->getDocuments()->getTotalPages();
+        }
         return $this->render('documents/index.html.twig', [
-            'documents' =>  $documents->getDocuments()->getPaginator(),
-            'totalPages' =>  $documents->getDocuments()->getTotalPages(),
+            'documents' =>  $paginator,
+            'totalPages' =>  $totalPages,
             'page' => $page,
             'params' => $params,
         ]);

@@ -23,14 +23,19 @@ class LogController extends AbstractController
         $params = $request->query->all();
         $page = $request->query->get('page', 1);
         $logs = new GetAllLogsCommand($page, $params);
-        $this->commandBus->dispatch($logs);
-        $arrayLogs = iterator_to_array($logs->getLogs()->getPaginator());
-        $logsFinal = $this->helper->mapLogResponse($arrayLogs);
+        $logsFinal = [];
+        $totalPages = 0;
+        if (count($params) > 0) {
+            $this->commandBus->dispatch($logs);
+            $arrayLogs = iterator_to_array($logs->getLogs()->getPaginator());
+            $logsFinal = $this->helper->mapLogResponse($arrayLogs);
+            $totalPages = $logs->getLogs()->getTotalPages();
+        }
 
         return $this->render('logs/index.html.twig', [
             'logs' => $logsFinal,
             'type' => '',
-            'totalPages' =>  $logs->getLogs()->getTotalPages(),
+            'totalPages' =>  $totalPages,
             'page' => $page,
             'params' => $params,
             'url' => 'log'

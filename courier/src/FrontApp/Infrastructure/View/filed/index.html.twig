@@ -99,8 +99,10 @@
             </table>
             {% include 'Shared/paginator.html.twig' with {'totalPages': totalPages, 'page':  page, 'route': 'filed', 'params': params} %}
             </div>
+        {% elseif params|length == 0 %}
+            <h4>Presiona filtrar para realizar la consulta</h4>
         {% else %}
-            <h6>No hay data</h6>
+            <h4>No hay data</h4>
         {% endif %}
     </div>
     {% block clear_filters %}{{ parent() }}{% endblock %}
