@@ -8,3 +8,59 @@ courier_service_472:
     controller: App\DocumentManagement\Application\Controller\SaveInformationController472
     defaults: { auth: false, app_url: '%app_url%' }
     methods: [ GET, POST ]
+
+
+# Routes Front
+login:
+    path: /login
+    controller: App\FrontApp\Application\Controller\LoginController::login
+admin:
+    path: /admin
+    controller: App\FrontApp\Application\Controller\AdminController::admin
+home:
+    path: /
+    controller: App\FrontApp\Application\Controller\HomeController::index
+filed:
+    path: /filed
+    controller: App\FrontApp\Application\Controller\FiledController::index
+filed_by_id:
+    path: /filed/{id_filed}
+    controller: App\FrontApp\Application\Controller\FiledController::show
+    requirements:
+        id_filed: '\d+'
+documents:
+    path: /documents
+    controller: App\FrontApp\Application\Controller\DocumentController::index
+document_by_id:
+    path: /document/{id_document}
+    controller: App\FrontApp\Application\Controller\DocumentController::show
+logs:
+    path: /logs
+    controller: App\FrontApp\Application\Controller\LogController::index
+log_by_id:
+    path: /log/{log_id}
+    controller: App\FrontApp\Application\Controller\LogController::show
+logs-documents:
+    path: /logs-documents
+    controller: App\FrontApp\Application\Controller\LogDocumentController::index
+log_document_by_id:
+    path: /document-log/{log_id}
+    controller: App\FrontApp\Application\Controller\LogDocumentController::show
+error_404:
+    path: /404
+    controller: App\FrontApp\Application\Controller\ExceptionController::showNotFoundError
+reports:
+    path: /reports
+    controller: App\FrontApp\Application\Controller\ReportController::index
+heatmap_report:
+    path: /reports/heatmap
+    controller: App\FrontApp\Application\Controller\ReportController::heatmap_report
+filed_report:
+    path: /reports/filed
+    controller: App\FrontApp\Application\Controller\ReportController::filed_report
+log_report:
+    path: /reports/log
+    controller: App\FrontApp\Application\Controller\ReportController::log_report
+log_pie_report:
+    path: /reports/log-pie
+    controller: App\FrontApp\Application\Controller\ReportController::log_report_pie

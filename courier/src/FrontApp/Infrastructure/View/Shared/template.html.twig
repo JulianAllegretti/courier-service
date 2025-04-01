@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+            <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+            <link rel="stylesheet" href="/css/main.css"/>
+            <script src="/js/bootstrap.bundle.min.js"></script>
+            <title>{% block title %}{% endblock %} - Prindel App</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div class="main">
+            {% for type, messages in { 'success': 'alert-success', 'error': 'alert-danger', 'warning': 'alert-warning' } %}
+                {% for message in app.flashes(type) %}
+                    <div class="alert {{ messages }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% if app.user %}
+                <div class="side-header">
+                    <div class="logo">
+                        <img src="/images/logo-menu.png" alt="">
+                    </div>
+                    <p class="username icon-container">
+                        <img class="icon-menu" src="/images/person-circle.svg" alt="">
+                        {{ app.user.email }}
+                    </p>
+                    <ul class="menu">
+                        <li>
+                            <a class="{{ app.request.pathinfo == '/filed' ? 'active' : '' }}" href="/filed">
+                                <img src="/images/filed.svg" alt=""> <span>Radicados</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ app.request.pathinfo == '/documents' ? 'active' : '' }}" href="/documents">
+                                <img src="/images/printer.svg" alt=""> <span>Documentos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{ app.request.pathinfo == '/logs' ? 'active' : '' }}" href="/logs">
+                                <img src="/images/log-insert-error.svg" alt=""> <span>Logs inserción de radicados</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                class="{{ app.request.pathinfo == '/logs-documents' ? 'active' : '' }}"
+                                href="/logs-documents"
+                            >
+                                <img src="/images/log-get-document.svg" alt=""> <span>Logs descarga de documentos</span>
+                            </a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a class="{{ app.request.pathinfo == '/admin' ? 'active' : '' }}" href="/admin">
+                                    <img src="/images/gear.svg" alt=""> <span>Administración</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <a
+                                    class="{{ app.request.pathinfo == '/reports' ? 'active' : '' }}"
+                                    href="/reports"
+                            >
+                                <img src="/images/bar-chart.svg" alt=""> <span>Reportes</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="logout">
+                        <a href="/logout" class="link-reference">
+                            <div class="icon-container">
+                                <img class="icon-menu" src="/images/logout.svg" alt="">
+                                Cerrar sesión
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="main__content">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </body>
+</html>

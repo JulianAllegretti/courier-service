@@ -1,0 +1,117 @@
+@import "colors.css";
+
+.alert {
+   position: fixed;
+   width: 100vw;
+   top: 0;
+}
+
+.main {
+   display: flex;
+}
+
+.side-header {
+   width: 300px;
+   background-color: var(--main-blue-color);
+   height: 100vh;
+   display: flex;
+   flex-direction: column;
+}
+
+.logo {
+   width: 100%;
+   text-align: center;
+   padding: 20px 0;
+}
+
+.logo img{
+   width: 80%;
+}
+
+.username {
+   font-size: 16px;
+   color: white;
+   text-align: center;
+}
+
+.menu {
+   list-style: none;
+   padding: 0;
+   margin-top: 20px;
+}
+.menu .active {
+   background: var(--secondary-blue-color);
+}
+.menu li{
+   color: white;
+   font-size: 18px;
+}
+.menu li a {
+   color: white;
+   padding-left: 20px;
+   padding-top: 15px;
+   padding-bottom: 15px;
+   text-decoration: none;
+   position: relative;
+   transition: all 0.3s ease-in-out;
+   display: flex;
+   align-items: center;
+}
+.menu img {
+   margin-right: 10px;
+   width: 20px;
+}
+.menu a span{
+   font-size: 16px;
+}
+.menu li a:hover {
+   z-index: 1;
+}
+.menu li a:hover::before {
+   width: 100%;
+}
+.menu li a::before {
+   content: "";
+   position: absolute;
+   background: var(--secondary-blue-color);
+   width: 0;
+   height: 100%;
+   left: 0;
+   top: 0;
+   z-index: -1;
+   transition: width 0.3s ease-in-out;
+}
+
+.logout {
+   margin-top: auto;
+   color: white;
+   font-size: 16px;
+   padding-bottom: 20px;
+}
+.logout .link-reference {
+   color: white;
+   cursor: pointer;
+   display: block;
+   width: 150px;
+   margin: 0 auto;
+}
+.icon-menu {
+   width: 30px;
+   margin-right: 20px;
+}
+.icon-container {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+.main__content {
+   flex: 1;
+   padding: 16px;
+   height: 100vh;
+   overflow: scroll;
+}
+
+.main__content table {
+   width: 100%;
+   overflow: scroll;
+}

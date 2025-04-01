@@ -1,0 +1,37 @@
+{% extends "Shared/template.html.twig" %}
+{% use 'Shared/clearFilter.html.twig' %}
+
+{% block title %}Log{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/show.css"/>
+{% endblock %}
+{% block content %}
+    <div class="render_wrap">
+        <div class="description">
+            <div class="description__data--complete">
+                <h3 class="description__data__title">Log</h3>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Número de Radicado:</h3>
+                    <span class="description__data__field--value">{{ log.getNumeroRadicado() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Fecha de creación:</h3>
+                    <span class="description__data__field--value">{{ log.getCreatedAt() }}</span>
+                </div>
+                {% if (type == 'document') %}
+                    <div class="description__data__field">
+                        <h3 class="description__data__field--title">Id Documento:</h3>
+                        <span class="description__data__field--value">{{ log.getIdDocumento() }}</span>
+                    </div>
+                {% endif %}
+                <article class="description__additional_data--logs">
+                    <p>Request:</p>
+                    <pre>{{ log.getDecodedRequest() | json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                    <p>Error:</p>
+                    <pre>{{ log.getDecodedError() | json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+                </article>
+            </div>
+        </div>
+    </div>
+{% endblock %}

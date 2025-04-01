@@ -1,0 +1,66 @@
+@import "colors.css";
+*{
+    box-sizing: border-box;
+}
+.main__content{
+    padding: 0;
+}
+.description {
+    display: flex;
+    align-items: flex-start;
+}
+.description__data {
+    width: 50%;
+    padding: 8px;
+}
+.description__data--complete {
+    width: 70%;
+    padding: 8px;
+}
+.description__data__title {
+    margin-bottom: 30px;
+}
+.description__data__field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.description__data__field--title {
+    font-size: 24px;
+    margin: 0 15px 0 0;
+}
+.description__additional_data {
+    width: 50%;
+    background-color: rgb(29, 30, 34);
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 8px;
+}
+article h3 {
+    color: var(--title-blue);
+}
+.description__additional_data--documents {
+    color: white;
+}
+.description__additional_data--documents li{
+    margin-bottom: 15px;
+}
+.description__additional_data--documents a{
+    color: white !important;
+}
+
+.description__additional_data--logs {
+    color: white;
+}
+.description__additional_data--logs p{
+    color: var(--section-title);
+    font-weight: bold;
+    margin-bottom: 0;
+}
+.description__additional_data--logs pre {
+    background-color: #4c4f5a;
+    padding: 5px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}

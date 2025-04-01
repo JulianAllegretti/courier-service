@@ -1,0 +1,36 @@
+{% extends "Shared/template.html.twig" %}
+
+{% block title %}Login{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/login.css"/>
+{% endblock %}
+{% block content %}
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+    <div class="container-wrap">
+        <div class="login-form">
+            <div class="row header">
+                <div class="col">
+                    <img src="/images/header-image.png" alt="Prindel Logo">
+                </div>
+            </div>
+            <div class="row form">
+                <form class="col" method="post">
+                    <div class="div-control">
+                        <label for="emailInput" class="form-label">Email</label>
+                        <input required type="email" value="{{ last_username }}" class="form-control" id="emailInput" name="email">
+                    </div>
+                    <div class="div-control">
+                        <label for="inputPassword" class="form-label">Password</label>
+                        <input required type="password" class="form-control" id="inputPassword" name="password">
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

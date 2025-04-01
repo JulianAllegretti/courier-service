@@ -1,0 +1,86 @@
+{% block filed %}
+    <h4 class="mb-4 mt-4">Reporte de errores de inserción</h4>
+    <div class="filters mb-4">
+        <input type="text" id="fechaInicioLog" placeholder="Fecha de inicio">
+        <input type="text" id="fechaFinLog" placeholder="Fecha de fin">
+        <div class="mt-4">
+            <button id="button-search-log" type="button" class="btn btn-primary">Buscar</button>
+        </div>
+    </div>
+    <div style="width: 800px;" id="render">
+        <div class="spinner-border" role="status" id="sniper-filed-log"></div>
+        <h5 style="color: red; display: none" id="title-data-log">No hay datos disponibles</h5>
+        <canvas id="log"></canvas>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            $("#fechaInicioLog").datepicker({
+                dateFormat: "yy-mm-dd",
+                onSelect: function (selectedDate) {
+                    $("#fechaFinLog").datepicker("option", "minDate", selectedDate);
+                }
+            });
+
+            $("#fechaFinLog").datepicker({
+                dateFormat: "yy-mm-dd",
+                onSelect: function (selectedDate) {
+                    $("#fechaInicioLog").datepicker("option", "maxDate", selectedDate);
+                }
+            });
+
+            const ctx = document.getElementById("log").getContext("2d");
+            let chartInstance = new Chart(ctx, {
+                type: "bar",
+                data: { labels: [], datasets: [] },
+                options: { responsive: true }
+            });
+
+            $('#button-search-log').click(function (){
+                $('#sniper-filed-log').css("display", "block");
+                $('#title-data-log').css('display', 'none');
+                chartInstance.data.labels = [];
+                chartInstance.data.datasets = [];
+                chartInstance.update();
+                let dateStart = $('#fechaInicioLog').datepicker('getDate');
+                let dateEnd = $('#fechaFinLog').datepicker('getDate');
+                let month = [];
+                month[0] = "01";
+                month[1] = "02";
+                month[2] = "03";
+                month[3] = "04";
+                month[4] = "05";
+                month[5] = "06";
+                month[6] = "07";
+                month[7] = "08";
+                month[8] = "09";
+                month[9] = "10";
+                month[10] = "11";
+                month[11] = "12";
+                cargarGrafica(
+                    dateStart ? dateStart.getFullYear() + '-' + month[dateStart.getMonth()] + '-' + dateStart.getDate() : '',
+                    dateEnd ? dateEnd.getFullYear() + '-' + month[dateEnd   .getMonth()] + '-' + dateEnd.getDate() : ''
+                );
+            });
+
+            function cargarGrafica(date_start='', date_end='') {
+                fetch(`/reports/log?date_start=${date_start}&date_end=${date_end}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.labels.length === 0) {
+                            $('#title-data-log').css('display', 'block');
+                            $('#sniper-filed-log').css("display", "none");
+                            return;
+                        }
+                        $('#title-data-log').css('display', 'none');
+                        $('#sniper-filed-log').css("display", "none");
+                        chartInstance.data.labels = data.labels;
+                        chartInstance.data.datasets = data.datasets;
+                        chartInstance.update();
+                    })
+                    .catch(error => console.error("Error cargando datos", error));
+            }
+
+            cargarGrafica();
+        });
+    </script>
+{% endblock %}

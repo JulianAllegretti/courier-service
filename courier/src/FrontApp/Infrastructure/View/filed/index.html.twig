@@ -1,0 +1,107 @@
+{% extends "Shared/template.html.twig" %}
+{% use 'Shared/clearFilter.html.twig' %}
+
+{% block title %}Radicados{% endblock %}
+{% block content %}
+    <div class="render_wrap">
+        <h3 class="mb-5">Radicados</h3>
+        <div class="filters">
+            <form action="/filed" id="form">
+                <div class="row mb-4">
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" placeholder="Numero de radicado" name="num_radicado" value="{{ params['num_radicado'] ?? ''}}">
+                    </div>
+
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" placeholder="Nombre" name="name" value="{{ params['name'] ?? ''}}">
+                    </div>
+
+                    <div class="form-group col-4">
+                        <input type="phone" class="form-control" placeholder="Telefono" name="phone" value="{{ params['phone'] ?? ''}}">
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" placeholder="Radicado padre" name="radicado_padre" value="{{ params['radicado_padre'] ?? ''}}">
+                    </div>
+
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" placeholder="Codigo de guia" name="guia" value="{{ params['guia'] ?? ''}}">
+                    </div>
+
+                    <div class="form-group col-4">
+                        <input type="date" class="form-control" placeholder="Fecha de creación" name="created_at" value="{{ params['created_at'] ?? ''}}">
+                    </div>
+                </div>
+                <input type="hidden" name="csv" value="false" id="csv">
+                <button type="submit" class="btn btn-primary mb-4 col-2">Filtrar</button>
+                <button id="clearFilters" type="button" class="btn btn-secondary mb-4 col-2" value="reset">Limpiar filtros</button>
+                <button onclick="document.getElementById('csv').value = true; document.getElementById('form').submit();" class="btn mb-4 col-2 btn-success">
+                    Descargar CSV
+                </button>
+            </form>
+        </div>
+        {% if page <= totalPages %}
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">Nº Radicado</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Teléfono</th>
+                    <th scope="col">Radicado Padre</th>
+                    <th scope="col">Codigo de guia</th>
+                    <th scope="col">Fecha de creación</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for file in filed  %}
+                    <tr>
+                        <th scope="row">
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getNumRadicado() }}
+                            </div>
+                        </th>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getNombreCompleto() }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getTelefono() }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getRadicadoCasoPadre() }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getCodigoGuia() }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/filed/{{ file.getIdRadicado() }}" class="stretched-link"></a>
+                                {{ file.getCreatedAt() }}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% include 'Shared/paginator.html.twig' with {'totalPages': totalPages, 'page':  page, 'route': 'filed', 'params': params} %}
+            </div>
+        {% else %}
+            <h6>No hay data</h6>
+        {% endif %}
+    </div>
+    {% block clear_filters %}{{ parent() }}{% endblock %}
+{% endblock %}

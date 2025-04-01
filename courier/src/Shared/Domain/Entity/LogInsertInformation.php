@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Shared\Domain\Entity;
+use App\Shared\Domain\Log;
 use App\Shared\Domain\Repository\LogInsertInformationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LogInsertInformationRepository::class)]
 #[ORM\Table('log_insert_information')]
-class LogInsertInformation
+class LogInsertInformation implements Log
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -65,4 +66,13 @@ class LogInsertInformation
         return $this->created_at;
     }
 
+    function getDecodedRequest(): mixed
+    {
+        return json_decode(trim($this->request));
+    }
+
+    function getDecodedError(): mixed
+    {
+        return json_decode(trim($this->error));
+    }
 }

@@ -1,0 +1,65 @@
+{% extends "Shared/template.html.twig" %}
+{% use 'Shared/clearFilter.html.twig' %}
+
+{% block title %}Radicados{% endblock %}
+{% block content %}
+    <div class="render_wrap">
+        <h3>Documentos</h3>
+        <div class="filters">
+            <form action="/documents">
+                <div class="row mb-4">
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" placeholder="Id Documento" name="id_documento" value="{{ params['id_documento'] ?? ''}}">
+                    </div>
+
+                    <div class="form-group col-4">
+                        <input type="text" class="form-control" placeholder="Ruta" name="ruta" value="{{ params['ruta'] ?? ''}}">
+                    </div>
+
+                    <div class="form-group col-4">
+                        <input type="date" class="form-control" placeholder="Fecha de creación" name="created_at" value="{{ params['created_at'] ?? ''}}">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mb-4 col-2">Filtrar</button>
+                <button id="clearFilters" type="button" class="btn btn-secondary mb-4 col-2" value="reset">Limpiar filtros</button>
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">Id Documento</th>
+                    <th scope="col">Ruta</th>
+                    <th scope="col">Fecha de creación</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for document in documents  %}
+                    <tr>
+                        <th scope="row">
+                            <div class="position-relative">
+                                <a href="/document/{{ document.getIdDocumento() }}" class="stretched-link"></a>
+                                {{ document.getIdGestorDocumento() }}
+                            </div>
+                        </th>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/document/{{ document.getIdDocumento() }}" class="stretched-link"></a>
+                                {{ document.getRuta() }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <a href="/document/{{ document.getIdDocumento() }}" class="stretched-link"></a>
+                                {{ document.getCreatedAt() }}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% include 'Shared/paginator.html.twig' with {'totalPages': totalPages, 'page':  page, 'route': 'documents'} %}
+        </div>
+    </div>
+    {% block clear_filters %}{{ parent() }}{% endblock %}
+{% endblock %}

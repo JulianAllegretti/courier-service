@@ -1,0 +1,49 @@
+{% if totalPages > 1 %}
+    <nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                <a class="page-link" href="{{ path(route, params|merge({'page': page - 1})) }}" tabindex="-1">
+                    Anterior
+                </a>
+            </li>
+
+            <li class="page-item {% if page == 1 %}active{% endif %}">
+                {% if page == 1 %}
+                    <a class="page-link" href="{{ path(route, params|merge({'page': page})) }}">{{ page }}</a>
+                {% elseif page == totalPages and totalPages > 2 %}
+                    <a class="page-link" href="{{ path(route, params|merge({'page': page - 2})) }}">{{ page - 2 }}</a>
+                {% else %}
+                    <a class="page-link" href="{{ path(route, params|merge({'page': page - 1})) }}">{{ page - 1 }}</a>
+                {% endif %}
+            </li>
+
+            {% if totalPages > 2%}
+                <li class="page-item {% if page != 1 and page < totalPages %}active{% endif %}">
+                    {% if page == 1%}
+                        <a class="page-link" href="{{ path(route, params|merge({'page': page + 1})) }}">{{ page + 1 }}</a>
+                    {% elseif page == totalPages %}
+                        <a class="page-link" href="{{ path(route, params|merge({'page': page - 1})) }}">{{ page - 1 }}</a>
+                    {% else %}
+                        <a class="page-link" href="{{ path(route, params|merge({'page': page})) }}">{{ page }}</a>
+                    {% endif %}
+                </li>
+            {% endif %}
+
+            <li class="page-item {% if page != 1 and page == totalPages %}active{% endif %}">
+                {% if page == 1 and totalPages > 2 %}
+                    <a class="page-link" href="{{ path(route, params|merge({'page': page + 2})) }}">{{ page + 2 }}</a>
+                {% elseif page == totalPages %}
+                    <a class="page-link" href="{{ path(route, params|merge({'page': page})) }}">{{ page }}</a>
+                {% else %}
+                    <a class="page-link" href="{{ path(route, params|merge({'page': page + 1})) }}">{{ page + 1 }}</a>
+                {% endif %}
+            </li>
+
+            <li class="page-item {% if page == totalPages %}disabled{% endif %}">
+                <a class="page-link" href="{{ path(route, params|merge({'page': page + 1})) }}">
+                    Siguiente
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endif %}

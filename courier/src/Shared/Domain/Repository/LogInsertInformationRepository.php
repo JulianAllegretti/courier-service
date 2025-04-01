@@ -2,11 +2,23 @@
 
 namespace App\Shared\Domain\Repository;
 
+use App\DocumentManagement\Domain\ResponsePaginator;
 use App\Shared\Domain\Entity\LogInsertInformation;
+use App\Shared\Domain\Log;
 
 interface LogInsertInformationRepository
 {
     function create(LogInsertInformation $log): LogInsertInformation;
 
     function getLogs(string $time_start, string $time_end, string $difference_days) : array;
+
+    function getAllLogs(int $page, array $params) : ResponsePaginator;
+
+    function getLogsByNumFiled(string $num_filed) : array;
+
+    function getLogById(int $log_id): Log|null;
+
+    function getReport(\DateTime $dateStart, \DateTime|null $dateEnd): array;
+
+    function getReportPie(\DateTime $dateStart, \DateTime|null $dateEnd): array;
 }

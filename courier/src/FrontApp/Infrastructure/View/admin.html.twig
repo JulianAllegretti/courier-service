@@ -1,0 +1,95 @@
+{% extends "Shared/template.html.twig" %}
+
+{% block title %}Admin{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/admin.css"/>
+{% endblock %}
+{% block content %}
+    <div class="render_wrap">
+        <h3 class="mb-3">Administración</h3>
+
+        <form action="/admin" id="form" class="mb-4" method="post">
+            <div class="admin_cron">
+                <h5>Cron</h5>
+                <div class="row mb-4">
+                    <div class="form-group col-4">
+                        <label for="time_start" class="form-label">Hora de inicio</label>
+                        <input type="time" class="form-control" placeholder="Hora de inicio" name="time_start" value="{{ time_start }}">
+                    </div>
+
+                    <div class="form-group col-4">
+                        <label for="time_end" class="form-label">Hora final</label>
+                        <input type="time" class="form-control" placeholder="Hora de fin" name="time_end" value="{{ time_end }}">
+                    </div>
+
+                    <div class="form-group col-4">
+                        <label for="time_end" class="form-label">Días de diferencia</label>
+                        <input type="number" class="form-control" placeholder="Dias de diferencia" name="difference_days" value="{{ difference_days }}">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Correr Cron de planos</button>
+            </div>
+        </form>
+
+        <h5>Comandos</h5>
+
+        <div class="admin_disclaimers__item admin_disclaimers__item--blue mb-3">
+            Para reconstruir todos los sistemas: Ingresa al servidor y correr el siguiente comando: <b>make rebuild</b>
+        </div>
+
+        <div class="admin_disclaimers__item admin_disclaimers__item--blue mb-3">
+            Para conectarse a cualquier sistema: Ingresa al servidor y correr el siguiente comando: <b>make connect APP=(php, nginx ó db)</b>
+        </div>
+
+        <div class="admin_disclaimers mb-4">
+            <div class="admin_disclaimers__item mb-3">
+                Para reiniciar todos los sistemas: Ingresa al servidor y correr el siguiente comando: <b>make
+                    restart</b>
+            </div>
+            <div class="admin_disclaimers__item mb-3">
+                Para reiniciar nginx: Ingresa al servidor y correr el siguiente comando: <b>make restart_app
+                    APP=nginx</b>
+            </div>
+            <div class="admin_disclaimers__item mb-3">
+                Para reiniciar php: Ingresa al servidor y correr el siguiente comando: <b>make restart_app APP=php</b>
+            </div>
+            <div class="admin_disclaimers__item mb-3">
+                Para reiniciar base de datos: Ingresa al servidor y correr el siguiente comando: <b>make restart_app
+                    APP=db</b>
+            </div>
+        </div>
+
+        <div class="admin_disclaimers mb-4">
+            <div class="admin_disclaimers__item admin_disclaimers__item--danger mb-3">
+                Para apagar todos los sistemas: Ingresa al servidor y correr el siguiente comando: <b>make down</b>
+            </div>
+            <div class="admin_disclaimers__item admin_disclaimers__item--danger mb-3">
+                Para apagar nginx: Ingresa al servidor y correr el siguiente comando: <b>make down_app APP=nginx</b>
+            </div>
+            <div class="admin_disclaimers__item admin_disclaimers__item--danger mb-3">
+                Para apagar php: Ingresa al servidor y correr el siguiente comando: <b>make down_app APP=php</b>
+            </div>
+            <div class="admin_disclaimers__item admin_disclaimers__item--danger mb-3">
+                Para apagar la base de datos: Ingresa al servidor y correr el siguiente comando: <b>make down_app
+                    APP=db</b>
+            </div>
+        </div>
+
+        <div class="admin_disclaimers mb-4">
+            <div class="admin_disclaimers__item admin_disclaimers__item--success mb-3">
+                Para iniciar todos los sistemas: Ingresa al servidor y correr el siguiente comando: <b>make start</b>
+            </div>
+            <div class="admin_disclaimers__item admin_disclaimers__item--success mb-3">
+                Para iniciar nginx: Ingresa al servidor y correr el siguiente comando: <b>make start_app APP=nginx</b>
+            </div>
+            <div class="admin_disclaimers__item admin_disclaimers__item--success mb-3">
+                Para iniciar php: Ingresa al servidor y correr el siguiente comando: <b>make start_app APP=php</b>
+            </div>
+            <div class="admin_disclaimers__item admin_disclaimers__item--success mb-3">
+                Para iniciar la base de datos: Ingresa al servidor y correr el siguiente comando: <b>make start_app
+                    APP=db</b>
+            </div>
+        </div>
+    </div>
+{% endblock %}

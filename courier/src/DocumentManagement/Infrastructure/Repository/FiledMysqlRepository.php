@@ -5,14 +5,18 @@ namespace App\DocumentManagement\Infrastructure\Repository;
 use App\DocumentManagement\Domain\Entity\Filed;
 use App\DocumentManagement\Domain\Entity\Identification;
 use App\DocumentManagement\Domain\Repository\FiledRepository;
+use App\DocumentManagement\Domain\ResponsePaginator;
 use App\DocumentManagement\Domain\ValueObjects\FiledNumberValueObject;
 use App\Shared\Domain\Exceptions\ExistException;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepository
 {
+    const PAGE_LIMIT = 10;
+
     public function __construct(private ManagerRegistry $registry)
     {
         parent::__construct($registry, Filed::class);
@@ -52,16 +56,17 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
      * @param string $difference_days
      * @return Filed[]
      */
-    function getDocuments(string $time_start, string $time_end, string $difference_days) : array {
+    function getDocuments(string $time_start, string $time_end, string $difference_days): array
+    {
         $date = new DateTime();
-        $queryDateStart = $date->format('Y-m-d') . ' '. $time_start;
+        $queryDateStart = $date->format('Y-m-d') . ' ' . $time_start;
         if ($difference_days > 0) {
-            $date->modify('-'.$difference_days.' days');
-            $queryDateStart = $date->format('Y-m-d') . ' '. $time_start;
+            $date->modify('-' . $difference_days . ' days');
+            $queryDateStart = $date->format('Y-m-d') . ' ' . $time_start;
         }
 
         $dateEnd = new DateTime();
-        $queryDateEnd = $dateEnd->format('Y-m-d') . ' '. $time_end;
+        $queryDateEnd = $dateEnd->format('Y-m-d') . ' ' . $time_end;
 
         return $this->getEntityManager()
             ->createQueryBuilder()
@@ -87,5 +92,126 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->setParameter('filedNumber', $filedNumberValueObject->getValue())
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    function getAllFiled($page, $paramsToSearch): ResponsePaginator
+    {
+        $queryFiltered = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select('r', 'i', 'd')
+            ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
+            ->leftJoin('r.identification', 'i')
+            ->leftJoin('r.documents', 'd')
+            ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
+            ->setMaxResults(self::PAGE_LIMIT);
+
+        if (isset($paramsToSearch['num_radicado']) && $paramsToSearch['num_radicado'] != '') {
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.num_radicado like :num_radicado')
+                ->setParameter('num_radicado', '%' . $paramsToSearch['num_radicado'] . '%');
+        }
+
+        if (isset($paramsToSearch['name']) && $paramsToSearch['name'] != '') {
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.nombre_completo like :name')
+                ->setParameter('name', '%' . $paramsToSearch['name'] . '%');
+        }
+
+        if (isset($paramsToSearch['phone']) && $paramsToSearch['phone'] != '') {
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.telefono like :phone')
+                ->setParameter('phone', '%' . $paramsToSearch['phone'] . '%');
+        }
+
+        if (isset($paramsToSearch['radicado_padre']) && $paramsToSearch['radicado_padre'] != '') {
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.radicado_caso_padre like :radicado_padre')
+                ->setParameter('radicado_padre', '%' . $paramsToSearch['radicado_padre'] . '%');
+        }
+
+        if (isset($paramsToSearch['guia']) && $paramsToSearch['guia'] != '') {
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.codigo_guia like :guia')
+                ->setParameter('guia', '%' . $paramsToSearch['guia'] . '%');
+        }
+
+        if (isset($paramsToSearch['created_at']) && $paramsToSearch['created_at'] != '') {
+            $queryFiltered = $queryFiltered
+                ->andWhere('r.created_at like :created_at')
+                ->setParameter('created_at', '%' . $paramsToSearch['created_at'] . '%');
+        }
+
+        $queryFiltered = $queryFiltered->getQuery();
+
+        $paginator = new Paginator($queryFiltered);
+
+        $totalItems = $paginator->count();
+        $totalPages = ceil($totalItems / self::PAGE_LIMIT);
+
+        return new ResponsePaginator($paginator, $totalPages);
+    }
+
+    function getFiledById(int $id_filed): Filed|null
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('f', 'i')
+            ->from('App\DocumentManagement\Domain\Entity\Filed', 'f')
+            ->where('f.id_radicado = :id')
+            ->setParameter('id', $id_filed)
+            ->leftJoin('f.identification', 'i')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    function getReportByHourAndDate(): array
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select([
+                "DATE_FORMAT(r.created_at, '%W') AS diaSemana",
+                "HOUR(r.created_at) AS hora",
+                "COUNT(r.id_radicado) AS totalRadicados"
+            ])
+            ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
+            ->where('r.created_at is not null')
+            ->groupBy('diaSemana, hora')
+            ->addOrderBy('hora', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    function getReport(\DateTime $dateStart, \DateTime|null $dateEnd): array
+    {
+        $query = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->from('App\DocumentManagement\Domain\Entity\Filed', 'r');
+
+        if ($dateEnd == null) {
+            $date = $dateStart->format('Y-m-d');
+            $query = $query->select([
+                "HOUR(r.created_at) AS hora",
+                "COUNT(r.id_radicado) AS total"
+            ])
+            ->where("r.created_at >= '".$date." 00:00:00' and r.created_at <= '".$date." 23:59:59'")
+            ->groupBy('hora')
+            ->addOrderBy('hora', 'ASC');
+        }
+        else {
+            $initDate = $dateStart->format('Y-m-d');
+            $endDate = $dateEnd->format('Y-m-d');
+            $query = $query->select([
+                "DATE(r.created_at) AS fecha",
+                "COUNT(r.id_radicado) AS total"
+            ])
+                ->where("r.created_at >= '".$initDate." 00:00:00' and r.created_at <= '".$endDate." 23:59:59'")
+                ->groupBy('fecha')
+                ->addOrderBy('fecha', 'ASC');
+        }
+
+        return $query
+            ->getQuery()
+            ->getArrayResult();
     }
 }

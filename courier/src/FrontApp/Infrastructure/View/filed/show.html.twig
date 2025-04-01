@@ -1,0 +1,132 @@
+{% extends "Shared/template.html.twig" %}
+{% use 'Shared/clearFilter.html.twig' %}
+
+{% block title %}Radicado #{{ filed.getNumRadicado() }}{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/show.css"/>
+{% endblock %}
+{% block content %}
+    <div class="render_wrap">
+        <div class="description">
+            <aside class="description__data">
+                <h3 class="description__data__title">Radicado # {{ filed.getNumRadicado() }}</h3>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Número de Radicado:</h3>
+                    <span class="description__data__field--value">{{ filed.getNumRadicado() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Nombre completo:</h3>
+                    <span class="description__data__field--value">{{ filed.getNombreCompleto() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Celular:</h3>
+                    <span class="description__data__field--value">{{ filed.getCelular() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Tipo documento:</h3>
+                    <span class="description__data__field--value">{{ filed.getIdentification().getTipoDocumento() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Tipo documento:</h3>
+                    <span class="description__data__field--value">{{ filed.getIdentification().getDocumento() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Direccion:</h3>
+                    <span class="description__data__field--value">{{ filed.getDireccion() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Número de tramite:</h3>
+                    <span class="description__data__field--value">{{ filed.getNumTramite() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Codigo DANE:</h3>
+                    <span class="description__data__field--value">{{ filed.getCodDane() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Radicado Caso padre:</h3>
+                    <span class="description__data__field--value">{{ filed.getRadicadoCasoPadre() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Codigo guía:</h3>
+                    <span class="description__data__field--value">{{ filed.getCodigoGuia() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Usuario solicitante:</h3>
+                    <span class="description__data__field--value">{{ filed.getUsuarioSolicitante() }}</span>
+                </div>
+                <div class="description__data__field">
+                    <h3 class="description__data__field--title">Fecha de creación:</h3>
+                    <span class="description__data__field--value">{{ filed.getCreatedAt() }}</span>
+                </div>
+            </aside>
+            <section class="description__additional_data">
+                <article class="description__additional_data--documents">
+                    <h3>Documentos</h3>
+                    {% if (filed.getDocuments().count() > 0) %}
+                        <ul>
+                            {% for document in filed.getDocuments() %}
+                                <li>
+                                    <a href="/{{ document.getRuta() }}" target="_blank">
+                                        {{ document.getIdGestorDocumento() }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <span>No hay documentos asociados a este radicado</span>
+                    {% endif %}
+                </article>
+
+                <article class="description__additional_data--logs">
+                    <h3>Errores de inserción de radicados</h3>
+                    {% if (logsInsert|length > 0) %}
+                        <ul>
+                            {% for log in logsInsert %}
+                                <li>
+                                    <h5>{{ log['created_at'] }}</h5>
+                                    <p>Request:</p>
+                                    <pre>{{ log['request'] | json_encode(constant('JSON_PRETTY_PRINT'))}}</pre>
+                                    <p>Error:</p>
+                                    <pre>{{ log['error'] | json_encode(constant('JSON_PRETTY_PRINT'))}}</pre>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <span>No hay errores de inserción asociados a este radicado</span>
+                    {% endif %}
+                </article>
+
+                <article class="description__additional_data--logs">
+                    <h3>Errores de descarga de documentos</h3>
+                    {% if (logsDocuments|length > 0) %}
+                        <ul>
+                            {% for log in logsDocuments %}
+                                <li>
+                                    <h5>{{ log['created_at'] }}</h5>
+                                    <p>Id Documento:</p>
+                                    <pre>{{ log['id_documento'] }}</pre>
+                                    <p>Request:</p>
+                                    <pre>{{ log['request'] | json_encode(constant('JSON_PRETTY_PRINT'))}}</pre>
+                                    <p>Error:</p>
+                                    <pre>{{ log['error'] | json_encode(constant('JSON_PRETTY_PRINT'))}}</pre>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <span>No hay errores de inserción asociados a este radicado</span>
+                    {% endif %}
+                </article>
+
+                <article class="description__additional_data--logs">
+                    <h3>Logs del servidor</h3>
+                    {% if (request != '') %}
+                        <pre>{{ request}}</pre>
+                    {% else %}
+                        <span>No hay logs en el servidor de este radicado</span>
+                    {% endif %}
+                </article>
+            </section>
+        </div>
+    </div>
+{% endblock %}

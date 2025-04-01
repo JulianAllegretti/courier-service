@@ -5,13 +5,17 @@ namespace App\DocumentManagement\Infrastructure\Repository;
 use App\DocumentManagement\Domain\Entity\Document;
 use App\DocumentManagement\Domain\Entity\Filed;
 use App\DocumentManagement\Domain\Repository\DocumentRepository;
+use App\DocumentManagement\Domain\ResponsePaginator;
 use App\Shared\Domain\Exceptions\DocumentNotExistException;
 use App\Shared\Domain\Exceptions\ExistException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 class DocumentMysqlRepository extends ServiceEntityRepository implements DocumentRepository
 {
+    const PAGE_LIMIT = 10;
+
     public function __construct(private ManagerRegistry $registry)
     {
         parent::__construct($registry, Document::class);
@@ -68,5 +72,54 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
         $exist->setRuta('files/'.$documentId.'.pdf');
         $this->registry->getManager()->persist($exist);
         $this->registry->getManager()->flush();
+    }
+
+    public function getAllDocuments(int $page, array $paramsToSearch): ResponsePaginator
+    {
+        $query = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('d')
+            ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
+            ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
+            ->setMaxResults(self::PAGE_LIMIT);
+
+        if (isset($paramsToSearch['id_documento']) && $paramsToSearch['id_documento'] != ''){
+            $query = $query
+                ->andWhere('d.id_gestor_documento like :id_documento')
+                ->setParameter('id_documento','%'.$paramsToSearch['id_documento'].'%');
+        }
+
+        if (isset($paramsToSearch['ruta']) && $paramsToSearch['ruta'] != ''){
+            $query = $query
+                ->andWhere('d.ruta like :ruta')
+                ->setParameter('ruta','%'.$paramsToSearch['ruta'].'%');
+        }
+
+        if (isset($paramsToSearch['created_at']) && $paramsToSearch['created_at'] != ''){
+            $query = $query
+                ->andWhere('d.created_at like :created_at')
+                ->setParameter('created_at','%'.$paramsToSearch['created_at'].'%');
+        }
+
+        $query = $query->getQuery();
+
+        $paginator = new Paginator($query);
+
+        $totalItems = $paginator->count();
+        $totalPages = ceil($totalItems/self::PAGE_LIMIT);
+
+        return new ResponsePaginator($paginator, $totalPages);
+    }
+
+    function getDocumentById(int $documentId): Document|null
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('d')
+            ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
+            ->where('d.id_documento = :id')
+            ->setParameter('id', $documentId)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
