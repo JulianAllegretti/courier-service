@@ -4,3 +4,4 @@
 0 5 * * * cd /var/www/symfony && /usr/local/bin/php -d memory_limit=512M bin/console app:generate-report --env=$APP_ENV >> /var/log/cron.log 2>&1
 30 5 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:generate-report-get-document --env=$APP_ENV >> /var/log/cron.log 2>&1
 45 5 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:generate-report-insert --env=$APP_ENV >> /var/log/cron.log 2>&1
+0 6 * * * cd /var/www/symfony && /usr/local/bin/php -d memory_limit=512M bin/console app:send-shipments --env=$APP_ENV >> /var/log/cron-472.log 2>&1
