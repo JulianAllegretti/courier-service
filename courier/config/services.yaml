@@ -11,6 +11,7 @@ parameters:
     time_start: "%env(TIME_START_REPORT)%"
     time_end: "%env(TIME_START_REPORT)%"
     difference_days: "%env(DIFFERENCE_DAYS)%"
+    app_472_url: "%env(APP_472_URL)%"
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -57,6 +58,9 @@ services:
             - '%app_password%'
             - '%app_url%'
             - !tagged courier.server
+    App\DocumentManagement\Application\UseCases\SendShipmentsUseCase:
+        arguments:
+            - '%app_472_url%'
 
     App\Shared\Infrastructure\SymfonyCommandBus:
         arguments: [ !tagged courier.command_handler ]
@@ -76,6 +80,10 @@ services:
         $time_start: "%env(TIME_START_REPORT_GET_DOCUMENT)%"
         $time_end: "%env(TIME_END_REPORT_GET_DOCUMENT)%"
         $difference_days: "%env(DIFFERENCE_DAYS_GET_DOCUMENT)%"
+    App\DocumentManagement\Application\Commands\SendShipments\SendShipmentsCommand:
+        $time_start: "%env(TIME_START_SEND_SHIPMENTS)%"
+        $time_end: "%env(TIME_END_SEND_SHIPMENTS)%"
+        $difference_days: "%env(DIFFERENCE_DAYS_SEND_SHIPMENTS)%"
 
     App\DocumentManagement\Application\Commands\GetDocumentFile\GetDocumentFileCommandHandler:
         $url_service: "%env(URL_SERVICE)%"
