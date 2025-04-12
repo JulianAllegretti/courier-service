@@ -8,6 +8,7 @@ class SendShipments472Request
     private string $nombreDestinatario;
     private string $direccionDestinatario;
     private string $ciudadDestinatario;
+    private string $departamentoDestinatario;
     private string $referencia;
     private string $observacion;
 
@@ -19,12 +20,13 @@ class SendShipments472Request
      * @param string $referencia
      * @param string $observacion
      */
-    public function __construct(string $guia, string $nombreDestinatario, string $direccionDestinatario, string $ciudadDestinatario, string $referencia, string $observacion)
+    public function __construct(string $guia, string $nombreDestinatario, string $direccionDestinatario, string $ciudadDestinatario, string $departamentoDestinatario, string $referencia, string $observacion)
     {
         $this->guia = $guia;
         $this->nombreDestinatario = $nombreDestinatario;
         $this->direccionDestinatario = $direccionDestinatario;
         $this->ciudadDestinatario = $ciudadDestinatario;
+        $this->departamentoDestinatario = $departamentoDestinatario;
         $this->referencia = $referencia;
         $this->observacion = $observacion;
     }
@@ -87,5 +89,15 @@ class SendShipments472Request
     public function setObservacion(string $observacion): void
     {
         $this->observacion = $observacion;
+    }
+
+    public function getDepartamentoDestinatario(): string
+    {
+        return $this->departamentoDestinatario;
+    }
+
+    public function setDepartamentoDestinatario(string $departamentoDestinatario): void
+    {
+        $this->departamentoDestinatario = $departamentoDestinatario;
     }
 }
