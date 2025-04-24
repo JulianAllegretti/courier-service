@@ -22,6 +22,8 @@ readonly class SendShipmentsUseCase implements ISendShipmentsUseCase
             $documents = $item['documents'];
             if (count($documents) == 0) continue;
 
+            if (!in_array($item['codigo_guia'], ['MT901096329CO','MT901094793CO','MT901093000CO','MT901091622CO','MT901095477CO','MT901092412CO','MT901094097CO','MT901092946CO','MT901093876CO','MT901091644CO','MT901094380CO','MT901092699CO','MT901092948CO','MT901094781CO','MT901095034CO','MT901095072CO','MT901091151CO','MT901091321CO','MT901095218CO','MT901094499CO','MT901096288CO','MT901096291CO','MT901096255CO','MT901094111CO','MT901094085CO','MT901095140CO','MT901093191CO','MT901095740CO'])) continue;
+
             $codeDane = $this->codDaneRepository->getCodDane($item['cod_dane']);
             if ($codeDane == null && $output != null) {
                 $output->writeln('Guia : ' . $item['codigo_guia'] . ' No tiene Cod Dane asignado. No se enviará');
