@@ -29,7 +29,7 @@ readonly class SendShipmentsUseCase implements ISendShipmentsUseCase
             }
 
             $shipment = new SendShipments472Request(
-                $item['codigo_guia'], $item['nombre_completo'], $item['direccion'],
+                $item['codigo_guia'], $this->clearText($item['nombre_completo']), $this->clearText($item['direccion']),
                 $codeDane->getName(), $codeDane->getDepto(), $item['num_radicado'], strtolower($item['prioridad']) == 'si' ? 'Urgente' : 'Normal'
             );
 
@@ -41,5 +41,9 @@ readonly class SendShipmentsUseCase implements ISendShipmentsUseCase
         $output?->writeln('Cantidad de guias enviadas: ' . count($request));
 
         return $this->apiHTTPClient->post($this->app_472_url, $request);
+    }
+
+    private function clearText(string $text): string {
+        return preg_replace('/[\x00-\x1F\x7F]/u', '', $text);
     }
 }
