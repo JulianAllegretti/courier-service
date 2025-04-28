@@ -44,6 +44,11 @@ readonly class SendShipmentsUseCase implements ISendShipmentsUseCase
     }
 
     private function clearText(string $text): string {
-        return preg_replace('/[\x00-\x1F\x7F]/u', '', $text);
+        $textWithoutAccents = str_replace(
+            array("á", "é", "í", "ó", "ú", "Á", "É", "Í", "Ó", "Ú", "ñ", "Ñ"),
+            array("a", "e", "i", "o", "u", "A", "E", "I", "O", "U", "n", "N"),
+            $text
+        );
+        return preg_replace('/[\x00-\x1F\x7F]/u', '', $textWithoutAccents);
     }
 }
