@@ -26,20 +26,25 @@ class CodDane
     #[ORM\Column(length: 255)]
     private string $name;
 
+    #[ORM\Column(length: 50)]
+    private string $courier;
+
     /**
      * @param int|null $id
      * @param string $depto
      * @param string $provincia
      * @param string $code
      * @param string $name
+     * @param string $courier
      */
-    public function __construct(?int $id, string $depto, string $provincia, string $code, string $name)
+    public function __construct(?int $id, string $depto, string $provincia, string $code, string $name, string $courier)
     {
         $this->id = $id;
         $this->depto = $depto;
         $this->provincia = $provincia;
         $this->code = $code;
         $this->name = $name;
+        $this->courier = $courier;
     }
 
     public function getId(): ?int
@@ -92,5 +97,13 @@ class CodDane
         $this->name = $name;
     }
 
+    public function getCourier(): string
+    {
+        return $this->courier;
+    }
 
+    public function setCourier(string $courier): void
+    {
+        $this->courier = $courier;
+    }
 }
