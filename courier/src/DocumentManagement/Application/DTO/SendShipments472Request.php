@@ -11,16 +11,19 @@ class SendShipments472Request
     private string $departamentoDestinatario;
     private string $referencia;
     private string $observacion;
+    private string $centroOperativo;
 
     /**
      * @param string $guia
      * @param string $nombreDestinatario
      * @param string $direccionDestinatario
      * @param string $ciudadDestinatario
+     * @param string $departamentoDestinatario
      * @param string $referencia
      * @param string $observacion
+     * @param string $centroOperativo
      */
-    public function __construct(string $guia, string $nombreDestinatario, string $direccionDestinatario, string $ciudadDestinatario, string $departamentoDestinatario, string $referencia, string $observacion)
+    public function __construct(string $guia, string $nombreDestinatario, string $direccionDestinatario, string $ciudadDestinatario, string $departamentoDestinatario, string $referencia, string $observacion, string $centroOperativo)
     {
         $this->guia = $guia;
         $this->nombreDestinatario = $nombreDestinatario;
@@ -29,6 +32,7 @@ class SendShipments472Request
         $this->departamentoDestinatario = $departamentoDestinatario;
         $this->referencia = $referencia;
         $this->observacion = $observacion;
+        $this->centroOperativo = $centroOperativo;
     }
 
     public function getGuia(): string
@@ -99,5 +103,15 @@ class SendShipments472Request
     public function setDepartamentoDestinatario(string $departamentoDestinatario): void
     {
         $this->departamentoDestinatario = $departamentoDestinatario;
+    }
+
+    public function getCentroOperativo(): string
+    {
+        return $this->centroOperativo;
+    }
+
+    public function setCentroOperativo(string $centroOperativo): void
+    {
+        $this->centroOperativo = $centroOperativo;
     }
 }
