@@ -12,6 +12,7 @@ class SendShipments472Request
     private string $referencia;
     private string $observacion;
     private string $centroOperativo;
+    private string $prioridad;
 
     /**
      * @param string $guia
@@ -23,7 +24,7 @@ class SendShipments472Request
      * @param string $observacion
      * @param string $centroOperativo
      */
-    public function __construct(string $guia, string $nombreDestinatario, string $direccionDestinatario, string $ciudadDestinatario, string $departamentoDestinatario, string $referencia, string $observacion, string $centroOperativo)
+    public function __construct(string $guia, string $nombreDestinatario, string $direccionDestinatario, string $ciudadDestinatario, string $departamentoDestinatario, string $referencia, string $observacion, string $centroOperativo, string $prioridad)
     {
         $this->guia = $guia;
         $this->nombreDestinatario = $nombreDestinatario;
@@ -33,6 +34,7 @@ class SendShipments472Request
         $this->referencia = $referencia;
         $this->observacion = $observacion;
         $this->centroOperativo = $centroOperativo;
+        $this->prioridad = $prioridad;
     }
 
     public function getGuia(): string
@@ -114,4 +116,15 @@ class SendShipments472Request
     {
         $this->centroOperativo = $centroOperativo;
     }
+
+    public function getPrioridad(): string
+    {
+        return $this->prioridad;
+    }
+
+    public function setPrioridad(string $prioridad): void
+    {
+        $this->prioridad = $prioridad;
+    }
+
 }

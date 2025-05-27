@@ -31,7 +31,7 @@ readonly class SendShipmentsUseCase implements ISendShipmentsUseCase
             $shipment = new SendShipments472Request(
                 $item['codigo_guia'], $this->clearText($item['nombre_completo']), $this->clearText($item['direccion']),
                 $codeDane->getName(), $codeDane->getDepto(), $item['num_radicado'], strtolower($item['prioridad']) == 'si' ? 'Urgente' : 'Normal',
-                $codeDane->getCourier()
+                $codeDane->getCourier(), $item['prioridad']
             );
 
             $request[] = $shipment;
