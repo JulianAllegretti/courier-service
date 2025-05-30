@@ -14,6 +14,8 @@ class SendShipments472Request
     private string $centroOperativo;
     private string $prioridad;
 
+    private string $codigoDane;
+
     /**
      * @param string $guia
      * @param string $nombreDestinatario
@@ -23,8 +25,10 @@ class SendShipments472Request
      * @param string $referencia
      * @param string $observacion
      * @param string $centroOperativo
+     * @param string $prioridad
+     * @param string $codigoDane
      */
-    public function __construct(string $guia, string $nombreDestinatario, string $direccionDestinatario, string $ciudadDestinatario, string $departamentoDestinatario, string $referencia, string $observacion, string $centroOperativo, string $prioridad)
+    public function __construct(string $guia, string $nombreDestinatario, string $direccionDestinatario, string $ciudadDestinatario, string $departamentoDestinatario, string $referencia, string $observacion, string $centroOperativo, string $prioridad, string $codigoDane)
     {
         $this->guia = $guia;
         $this->nombreDestinatario = $nombreDestinatario;
@@ -35,6 +39,7 @@ class SendShipments472Request
         $this->observacion = $observacion;
         $this->centroOperativo = $centroOperativo;
         $this->prioridad = $prioridad;
+        $this->codigoDane = $codigoDane;
     }
 
     public function getGuia(): string
@@ -125,6 +130,16 @@ class SendShipments472Request
     public function setPrioridad(string $prioridad): void
     {
         $this->prioridad = $prioridad;
+    }
+
+    public function getCodigoDane(): string
+    {
+        return $this->codigoDane;
+    }
+
+    public function setCodigoDane(string $codigoDane): void
+    {
+        $this->codigoDane = $codigoDane;
     }
 
 }
