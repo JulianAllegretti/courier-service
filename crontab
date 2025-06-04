@@ -1,7 +1,7 @@
 #!/bin/bash -l
 0 0 * * * cd /var/www/symfony && DATE=$(date +\%Y-\%m-\%d) && LOG_REQUEST_FILE="var/log/${APP_ENV}-request-${DATE}.log" && LOG_ERROR_FILE="var/log/${APP_ENV}-nested-${DATE}.log" && LOG_FILE="var/log/${APP_ENV}-${DATE}.log" && touch $LOG_FILE $LOG_ERROR_FILE $LOG_REQUEST_FILE && chown -R www-data:www-data var/log && chmod -R 775 var/log
 #0 0 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:check-guide-number --env=$APP_ENV && chown -R www-data:www-data var/log >> /var/log/cron.log 2>&1
-10 12 * * * cd /var/www/symfony && /usr/local/bin/php -d memory_limit=512M bin/console app:generate-report --env=$APP_ENV >> /var/log/cron.log 2>&1
-40 12 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:generate-report-get-document --env=$APP_ENV >> /var/log/cron.log 2>&1
-55 12 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:generate-report-insert --env=$APP_ENV >> /var/log/cron.log 2>&1
+10 0 * * * cd /var/www/symfony && /usr/local/bin/php -d memory_limit=512M bin/console app:generate-report --env=$APP_ENV >> /var/log/cron.log 2>&1
+40 0 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:generate-report-get-document --env=$APP_ENV >> /var/log/cron.log 2>&1
+55 0 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:generate-report-insert --env=$APP_ENV >> /var/log/cron.log 2>&1
 0 6 * * * cd /var/www/symfony && /usr/local/bin/php -d memory_limit=512M bin/console app:send-shipments --env=$APP_ENV >> /var/log/cron-472.log 2>&1
