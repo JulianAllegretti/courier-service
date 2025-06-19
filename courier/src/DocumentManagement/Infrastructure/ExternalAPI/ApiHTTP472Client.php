@@ -40,6 +40,7 @@ class ApiHTTP472Client implements IApiHTTPClient
                 'Content-Type' => 'application/json',
             ],
             'body' => $json,
+            'timeout' => 3600
         ]);
 
         return $response->getContent();
