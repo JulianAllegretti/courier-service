@@ -137,15 +137,19 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
 
         $sql .= " ORDER BY r.id_radicado DESC";
 
-        $stmt = $connection->prepare($sql);
-        $result = $stmt->executeQuery($parameters);
-        $allIds = $result->fetchFirstColumn();
+        $countSql = str_replace("SELECT r.id_radicado", "SELECT COUNT(*) as total", $sql);
+        $countStmt = $connection->prepare($countSql);
+        $countResult = $countStmt->executeQuery($parameters);
+        $totalItems = $countResult->fetchOne();
 
-        $totalItems = count($allIds);
         $totalPages = ceil($totalItems / self::PAGE_LIMIT);
 
         $offset = ($page - 1) * self::PAGE_LIMIT;
-        $pageIds = array_slice($allIds, $offset, self::PAGE_LIMIT);
+        $sql .= " LIMIT " . self::PAGE_LIMIT . " OFFSET " . $offset;
+
+        $stmt = $connection->prepare($sql);
+        $result = $stmt->executeQuery($parameters);
+        $pageIds = $result->fetchFirstColumn();
 
         if (!empty($pageIds)) {
             $queryBuilder = $this->getEntityManager()
