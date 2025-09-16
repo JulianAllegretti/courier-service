@@ -106,39 +106,50 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->orderBy('r.id_radicado', 'DESC');
 
         if (isset($paramsToSearch['num_radicado']) && $paramsToSearch['num_radicado'] != '') {
+            // Usar Full-Text Search en BOOLEAN MODE para simular LIKE '%texto%'
+            $searchTerm = '*' . $paramsToSearch['num_radicado'] . '*';
             $queryFiltered = $queryFiltered
-                ->andWhere('r.num_radicado like :num_radicado')
-                ->setParameter('num_radicado', '%' . $paramsToSearch['num_radicado'] . '%');
+                ->andWhere('MATCH(r.num_radicado) AGAINST(:num_radicado IN BOOLEAN MODE)')
+                ->setParameter('num_radicado', $searchTerm);
         }
 
         if (isset($paramsToSearch['name']) && $paramsToSearch['name'] != '') {
+            // Usar Full-Text Search en BOOLEAN MODE para simular LIKE '%texto%'
+            $searchTerm = '*' . $paramsToSearch['name'] . '*';
             $queryFiltered = $queryFiltered
-                ->andWhere('r.nombre_completo like :name')
-                ->setParameter('name', '%' . $paramsToSearch['name'] . '%');
+                ->andWhere('MATCH(r.nombre_completo) AGAINST(:name IN BOOLEAN MODE)')
+                ->setParameter('name', $searchTerm);
         }
 
         if (isset($paramsToSearch['phone']) && $paramsToSearch['phone'] != '') {
+            // Usar Full-Text Search en BOOLEAN MODE para simular LIKE '%texto%'
+            $searchTerm = '*' . $paramsToSearch['phone'] . '*';
             $queryFiltered = $queryFiltered
-                ->andWhere('r.telefono like :phone')
-                ->setParameter('phone', '%' . $paramsToSearch['phone'] . '%');
+                ->andWhere('MATCH(r.telefono) AGAINST(:phone IN BOOLEAN MODE)')
+                ->setParameter('phone', $searchTerm);
         }
 
         if (isset($paramsToSearch['radicado_padre']) && $paramsToSearch['radicado_padre'] != '') {
+            // Usar Full-Text Search en BOOLEAN MODE para simular LIKE '%texto%'
+            $searchTerm = '*' . $paramsToSearch['radicado_padre'] . '*';
             $queryFiltered = $queryFiltered
-                ->andWhere('r.radicado_caso_padre like :radicado_padre')
-                ->setParameter('radicado_padre', '%' . $paramsToSearch['radicado_padre'] . '%');
+                ->andWhere('MATCH(r.radicado_caso_padre) AGAINST(:radicado_padre IN BOOLEAN MODE)')
+                ->setParameter('radicado_padre', $searchTerm);
         }
 
         if (isset($paramsToSearch['guia']) && $paramsToSearch['guia'] != '') {
+            // Usar Full-Text Search en BOOLEAN MODE para simular LIKE '%texto%'
+            $searchTerm = '*' . $paramsToSearch['guia'] . '*';
             $queryFiltered = $queryFiltered
-                ->andWhere('r.codigo_guia like :guia')
-                ->setParameter('guia', '%' . $paramsToSearch['guia'] . '%');
+                ->andWhere('MATCH(r.codigo_guia) AGAINST(:guia IN BOOLEAN MODE)')
+                ->setParameter('guia', $searchTerm);
         }
 
         if (isset($paramsToSearch['created_at']) && $paramsToSearch['created_at'] != '') {
+            // Para fechas usar comparación directa en lugar de LIKE
             $queryFiltered = $queryFiltered
-                ->andWhere('r.created_at like :created_at')
-                ->setParameter('created_at', '%' . $paramsToSearch['created_at'] . '%');
+                ->andWhere('DATE(r.created_at) = :created_at')
+                ->setParameter('created_at', $paramsToSearch['created_at']);
         }
 
         $queryFiltered = $queryFiltered->getQuery();
