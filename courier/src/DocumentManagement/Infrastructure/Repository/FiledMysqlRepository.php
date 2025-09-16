@@ -96,68 +96,78 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
 
     function getAllFiled($page, $paramsToSearch): ResponsePaginator
     {
-        $queryFiltered = $this
-            ->getEntityManager()
-            ->createQueryBuilder()
-            ->select('r')
-            ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
-            ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
-            ->setMaxResults(self::PAGE_LIMIT)
-            ->orderBy('r.id_radicado', 'DESC');
+        $connection = $this->getEntityManager()->getConnection();
+        $sql = "SELECT r.id_radicado FROM radicado r WHERE 1=1";
+        $parameters = [];
 
         if (isset($paramsToSearch['num_radicado']) && $paramsToSearch['num_radicado'] != '') {
-            // Usar Full-Text Search en BOOLEAN MODE para simular LIKE '%texto%'
             $searchTerm = '*' . $paramsToSearch['num_radicado'] . '*';
-            $queryFiltered = $queryFiltered
-                ->andWhere('MATCH(r.num_radicado) AGAINST(:num_radicado IN BOOLEAN MODE)')
-                ->setParameter('num_radicado', $searchTerm);
+            $escapedTerm = $connection->quote($searchTerm);
+            $sql .= " AND MATCH(r.num_radicado) AGAINST($escapedTerm IN BOOLEAN MODE)";
         }
 
         if (isset($paramsToSearch['name']) && $paramsToSearch['name'] != '') {
-            // Usar Full-Text Search en BOOLEAN MODE para simular LIKE '%texto%'
             $searchTerm = '*' . $paramsToSearch['name'] . '*';
-            $queryFiltered = $queryFiltered
-                ->andWhere('MATCH(r.nombre_completo) AGAINST(:name IN BOOLEAN MODE)')
-                ->setParameter('name', $searchTerm);
+            $escapedTerm = $connection->quote($searchTerm);
+            $sql .= " AND MATCH(r.nombre_completo) AGAINST($escapedTerm IN BOOLEAN MODE)";
         }
 
         if (isset($paramsToSearch['phone']) && $paramsToSearch['phone'] != '') {
-            // Usar Full-Text Search en BOOLEAN MODE para simular LIKE '%texto%'
             $searchTerm = '*' . $paramsToSearch['phone'] . '*';
-            $queryFiltered = $queryFiltered
-                ->andWhere('MATCH(r.telefono) AGAINST(:phone IN BOOLEAN MODE)')
-                ->setParameter('phone', $searchTerm);
+            $escapedTerm = $connection->quote($searchTerm);
+            $sql .= " AND MATCH(r.telefono) AGAINST($escapedTerm IN BOOLEAN MODE)";
         }
 
         if (isset($paramsToSearch['radicado_padre']) && $paramsToSearch['radicado_padre'] != '') {
-            // Usar Full-Text Search en BOOLEAN MODE para simular LIKE '%texto%'
             $searchTerm = '*' . $paramsToSearch['radicado_padre'] . '*';
-            $queryFiltered = $queryFiltered
-                ->andWhere('MATCH(r.radicado_caso_padre) AGAINST(:radicado_padre IN BOOLEAN MODE)')
-                ->setParameter('radicado_padre', $searchTerm);
+            $escapedTerm = $connection->quote($searchTerm);
+            $sql .= " AND MATCH(r.radicado_caso_padre) AGAINST($escapedTerm IN BOOLEAN MODE)";
         }
 
         if (isset($paramsToSearch['guia']) && $paramsToSearch['guia'] != '') {
-            // Usar Full-Text Search en BOOLEAN MODE para simular LIKE '%texto%'
             $searchTerm = '*' . $paramsToSearch['guia'] . '*';
-            $queryFiltered = $queryFiltered
-                ->andWhere('MATCH(r.codigo_guia) AGAINST(:guia IN BOOLEAN MODE)')
-                ->setParameter('guia', $searchTerm);
+            $escapedTerm = $connection->quote($searchTerm);
+            $sql .= " AND MATCH(r.codigo_guia) AGAINST($escapedTerm IN BOOLEAN MODE)";
         }
 
         if (isset($paramsToSearch['created_at']) && $paramsToSearch['created_at'] != '') {
-            // Para fechas usar comparación directa en lugar de LIKE
-            $queryFiltered = $queryFiltered
-                ->andWhere('DATE(r.created_at) = :created_at')
-                ->setParameter('created_at', $paramsToSearch['created_at']);
+            $sql .= " AND DATE(r.created_at) = ?";
+            $parameters[] = $paramsToSearch['created_at'];
         }
 
-        $queryFiltered = $queryFiltered->getQuery();
+        $sql .= " ORDER BY r.id_radicado DESC";
 
-        $paginator = new Paginator($queryFiltered);
+        $stmt = $connection->prepare($sql);
+        $result = $stmt->executeQuery($parameters);
+        $allIds = $result->fetchFirstColumn();
 
-        $totalItems = $paginator->count();
+        $totalItems = count($allIds);
         $totalPages = ceil($totalItems / self::PAGE_LIMIT);
+
+        $offset = ($page - 1) * self::PAGE_LIMIT;
+        $pageIds = array_slice($allIds, $offset, self::PAGE_LIMIT);
+
+        if (!empty($pageIds)) {
+            $queryBuilder = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('r')
+                ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
+                ->where('r.id_radicado IN (:ids)')
+                ->orderBy('r.id_radicado', 'DESC')
+                ->setParameter('ids', $pageIds);
+
+            $dqlQuery = $queryBuilder->getQuery();
+            $paginator = new Paginator($dqlQuery);
+        } else {
+            $dqlQuery = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('r')
+                ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
+                ->where('1=0')
+                ->getQuery();
+
+            $paginator = new Paginator($dqlQuery);
+        }
 
         return new ResponsePaginator($paginator, $totalPages);
     }
