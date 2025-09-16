@@ -4,6 +4,7 @@ namespace App\Shared\Application;
 
 use App\DocumentManagement\Application\Commands\CreateInformation\CreateInformationCommand;
 use App\DocumentManagement\Application\Commands\GetDocumentFile\GetDocumentFileCommand;
+use App\DocumentManagement\Application\Services\GetFiledService;
 use App\DocumentManagement\Domain\Comunication;
 use App\DocumentManagement\Domain\Document;
 use App\DocumentManagement\Domain\Enums\PortPayment;
@@ -12,6 +13,7 @@ use App\DocumentManagement\Domain\Enums\Priority;
 use App\DocumentManagement\Domain\Enums\ProcessType;
 use App\DocumentManagement\Domain\Enums\TypePortPayment;
 use App\DocumentManagement\Domain\Identification;
+use App\DocumentManagement\Domain\ValueObjects\FiledNumberValueObject;
 use App\Shared\Application\Commands\CreateLogGetDocumentFile\CreateLogGetDocumentFileCommand;
 use App\Shared\Application\Commands\CreateLogInsertInformation\CreateLogInsertInformationCommand;
 use App\Shared\Domain\Command;
@@ -26,7 +28,8 @@ class ApiController
 {
     public function __construct(
         private readonly CommandBus $commandBus,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly GetFiledService $getFiledService
     ) {}
 
     protected function dispatch(Command $command): void
@@ -46,6 +49,16 @@ class ApiController
             ) {
                 $identificationObj = new Identification($comunicacionVo->IdentificacionVo->Documento, $comunicacionVo->IdentificacionVo->TipoDocumento);
             }
+
+            $commandFiledNumber = new FiledNumberValueObject($comunicacionVo->NumRadicado);
+            $existFiled = $this->getFiledService->__invoke($commandFiledNumber);
+            if ($existFiled) {
+                $response->setCodGuia($existFiled->getCodigoGuia());
+                $response->setNumTramite($comunicacionVo->NumTramite);
+                $this->logger->notice('Response ' . $comunicacionVo->NumRadicado, [$response]);
+                return $response;
+            }
+
 
             if (!isset($comunicacionVo->Documentos)) {
                 throw new NullException("La propiedad Documentos es requerida.");

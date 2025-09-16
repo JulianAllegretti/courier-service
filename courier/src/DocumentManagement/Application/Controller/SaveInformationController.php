@@ -4,6 +4,7 @@ namespace App\DocumentManagement\Application\Controller;
 
 use App\DocumentManagement\Application\Commands\CreateInformation\CreateInformationCommand;
 use App\DocumentManagement\Application\Commands\GetDocumentFile\GetDocumentFileCommand;
+use App\DocumentManagement\Application\Services\GetFiledService;
 use App\DocumentManagement\Domain\Document;
 use App\DocumentManagement\Domain\Comunication;
 use App\DocumentManagement\Domain\Enums\PortPayment;
@@ -29,10 +30,15 @@ final class SaveInformationController extends ApiController
 {
     private Server $server;
 
-    public function __construct(Server $server, private readonly CommandBus $commandBus, private readonly LoggerInterface $logger)
+    public function __construct(
+        Server $server,
+        private readonly CommandBus $commandBus,
+        private readonly LoggerInterface $logger,
+        private readonly GetFiledService $getFiledService
+    )
     {
         $this->server = $server;
-        parent::__construct($this->commandBus, $this->logger);
+        parent::__construct($this->commandBus, $this->logger, $this->getFiledService);
     }
 
     /**
