@@ -1,5 +1,5 @@
 #!/bin/bash -l
-0 0 * * * cd /var/www/symfony && DATE=$(date +\%Y-\%m-\%d) && LOG_REQUEST_FILE="var/log/${APP_ENV}-request-${DATE}.log" && LOG_ERROR_FILE="var/log/${APP_ENV}-nested-${DATE}.log" && LOG_FILE="var/log/${APP_ENV}-${DATE}.log" && touch $LOG_FILE $LOG_ERROR_FILE $LOG_REQUEST_FILE && chown -R www-data:www-data var/log && chmod -R 775 var/log
+0 0 * * * cd /var/www/symfony && DATE=$(date +\%Y-\%m-\%d) && LOG_REQUEST_FILE="var/log/${APP_ENV}-request-${DATE}.log" && LOG_ERROR_FILE="var/log/${APP_ENV}-nested-${DATE}.log" && LOG_FILE="var/log/${APP_ENV}-${DATE}.log" CRITICAL_FILE="var/log/${APP_ENV}-critical-${DATE}.log" WARNING_FILE="var/log/${APP_ENV}-warning-${DATE}.log" ERROR_FILE="var/log/${APP_ENV}-error-${DATE}.log" && touch $LOG_FILE $LOG_ERROR_FILE $LOG_REQUEST_FILE $CRITICAL_FILE $WARNING_FILE $ERROR_FILE && chown -R www-data:www-data var/log && chmod -R 775 var/log
 #0 0 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:check-guide-number --env=$APP_ENV && chown -R www-data:www-data var/log >> /var/log/cron.log 2>&1
 0 21 * * * cd /var/www/symfony && /usr/local/bin/php -d memory_limit=1024M bin/console app:generate-report --env=$APP_ENV >> /var/log/cron.log 2>&1
 30 21 * * * cd /var/www/symfony && /usr/local/bin/php bin/console app:generate-report-get-document --env=$APP_ENV >> /var/log/cron.log 2>&1
