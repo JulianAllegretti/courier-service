@@ -76,38 +76,59 @@ class DocumentMysqlRepository extends ServiceEntityRepository implements Documen
 
     public function getAllDocuments(int $page, array $paramsToSearch): ResponsePaginator
     {
-        $query = $this->getEntityManager()
-            ->createQueryBuilder()
-            ->select('d')
-            ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
-            ->setFirstResult(($page - 1) * self::PAGE_LIMIT)
-            ->setMaxResults(self::PAGE_LIMIT)
-            ->orderBy('d.id_documento', 'DESC');
+        $connection = $this->getEntityManager()->getConnection();
+        $sql = "SELECT d.id_documento FROM documento d WHERE 1=1";
 
-        if (isset($paramsToSearch['id_documento']) && $paramsToSearch['id_documento'] != ''){
-            $query = $query
-                ->andWhere('d.id_gestor_documento like :id_documento')
-                ->setParameter('id_documento','%'.$paramsToSearch['id_documento'].'%');
+        if (isset($paramsToSearch['id_documento']) && $paramsToSearch['id_documento'] != '') {
+            $escapedTerm = $connection->quote('%' . $paramsToSearch['id_documento'] . '%');
+            $sql .= " AND d.id_gestor_documento LIKE $escapedTerm";
         }
 
-        if (isset($paramsToSearch['ruta']) && $paramsToSearch['ruta'] != ''){
-            $query = $query
-                ->andWhere('d.ruta like :ruta')
-                ->setParameter('ruta','%'.$paramsToSearch['ruta'].'%');
+        if (isset($paramsToSearch['ruta']) && $paramsToSearch['ruta'] != '') {
+            $escapedTerm = $connection->quote('%' . $paramsToSearch['ruta'] . '%');
+            $sql .= " AND d.ruta LIKE $escapedTerm";
         }
 
-        if (isset($paramsToSearch['created_at']) && $paramsToSearch['created_at'] != ''){
-            $query = $query
-                ->andWhere('d.created_at like :created_at')
-                ->setParameter('created_at','%'.$paramsToSearch['created_at'].'%');
+        if (isset($paramsToSearch['created_at']) && $paramsToSearch['created_at'] != '') {
+            $escapedTerm = $connection->quote('%' . $paramsToSearch['created_at'] . '%');
+            $sql .= " AND d.created_at LIKE $escapedTerm";
         }
 
-        $query = $query->getQuery();
+        $sql .= " ORDER BY d.id_documento DESC";
 
-        $paginator = new Paginator($query);
+        $countSql = str_replace("SELECT d.id_documento", "SELECT COUNT(*) as total", $sql);
+        $countResult = $connection->executeQuery($countSql);
+        $totalItems = $countResult->fetchOne();
 
-        $totalItems = $paginator->count();
-        $totalPages = ceil($totalItems/self::PAGE_LIMIT);
+        $totalPages = ceil($totalItems / self::PAGE_LIMIT);
+
+        $offset = ($page - 1) * self::PAGE_LIMIT;
+        $sql .= " LIMIT " . self::PAGE_LIMIT . " OFFSET " . $offset;
+
+        $result = $connection->executeQuery($sql);
+        $pageIds = $result->fetchFirstColumn();
+
+        if (!empty($pageIds)) {
+            $queryBuilder = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('d')
+                ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
+                ->where('d.id_documento IN (:ids)')
+                ->orderBy('d.id_documento', 'DESC')
+                ->setParameter('ids', $pageIds);
+
+            $dqlQuery = $queryBuilder->getQuery();
+            $paginator = new Paginator($dqlQuery);
+        } else {
+            $dqlQuery = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('d')
+                ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
+                ->where('1=0')
+                ->getQuery();
+
+            $paginator = new Paginator($dqlQuery);
+        }
 
         return new ResponsePaginator($paginator, $totalPages);
     }
