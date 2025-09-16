@@ -98,7 +98,6 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
     {
         $connection = $this->getEntityManager()->getConnection();
         $sql = "SELECT r.id_radicado FROM radicado r WHERE 1=1";
-        $parameters = [];
 
         if (isset($paramsToSearch['num_radicado']) && $paramsToSearch['num_radicado'] != '') {
             $searchTerm = '*' . $paramsToSearch['num_radicado'] . '*';
@@ -131,15 +130,14 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
         }
 
         if (isset($paramsToSearch['created_at']) && $paramsToSearch['created_at'] != '') {
-            $sql .= " AND DATE(r.created_at) = ?";
-            $parameters[] = $paramsToSearch['created_at'];
+            $escapedDate = $connection->quote($paramsToSearch['created_at']);
+            $sql .= " AND DATE(r.created_at) = $escapedDate";
         }
 
         $sql .= " ORDER BY r.id_radicado DESC";
 
         $countSql = str_replace("SELECT r.id_radicado", "SELECT COUNT(*) as total", $sql);
-        $countStmt = $connection->prepare($countSql);
-        $countResult = $countStmt->executeQuery($parameters);
+        $countResult = $connection->executeQuery($countSql);
         $totalItems = $countResult->fetchOne();
 
         $totalPages = ceil($totalItems / self::PAGE_LIMIT);
@@ -147,8 +145,7 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
         $offset = ($page - 1) * self::PAGE_LIMIT;
         $sql .= " LIMIT " . self::PAGE_LIMIT . " OFFSET " . $offset;
 
-        $stmt = $connection->prepare($sql);
-        $result = $stmt->executeQuery($parameters);
+        $result = $connection->executeQuery($sql);
         $pageIds = $result->fetchFirstColumn();
 
         if (!empty($pageIds)) {
