@@ -91,7 +91,9 @@ class ApiController
 
             $this->dispatch($command);
             if (!$command->isAlreadyExist()) {
+                $this->logger->notice('Inicio de descarga de documento');
                 $this->getDocumentFile($documentArrayObj, $command->getGuideNumber());
+                $this->logger->notice('Fin de descarga de documento');
             }
 
             $response->setCodGuia($command->getGuideNumber());
