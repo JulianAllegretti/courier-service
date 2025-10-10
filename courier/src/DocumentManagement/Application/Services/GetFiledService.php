@@ -12,8 +12,8 @@ readonly class GetFiledService
     {
     }
 
-    public function __invoke(FiledNumberValueObject $filedNumber): Filed|null
+    public function __invoke(FiledNumberValueObject $filedNumber, bool $checkDocuments = false): Filed|array|null
     {
-        return $this->filedRepository->getFiled($filedNumber);
+        return $this->filedRepository->getFiled($filedNumber, $checkDocuments);
     }
 }

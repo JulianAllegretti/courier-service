@@ -7,6 +7,7 @@ use App\DocumentManagement\Application\Commands\GetDocumentFile\GetDocumentFileC
 use App\DocumentManagement\Application\Services\GetFiledService;
 use App\DocumentManagement\Domain\Comunication;
 use App\DocumentManagement\Domain\Document;
+use App\DocumentManagement\Domain\Entity\Filed;
 use App\DocumentManagement\Domain\Enums\PortPayment;
 use App\DocumentManagement\Domain\Enums\Printed;
 use App\DocumentManagement\Domain\Enums\Priority;
@@ -51,14 +52,31 @@ class ApiController
             }
 
             $commandFiledNumber = new FiledNumberValueObject($comunicacionVo->NumRadicado);
-            $existFiled = $this->getFiledService->__invoke($commandFiledNumber);
-            if ($existFiled) {
+            $existFiled = $this->getFiledService->__invoke($commandFiledNumber, true);
+            if ($existFiled instanceof Filed) {
                 $response->setCodGuia($existFiled->getCodigoGuia());
                 $response->setNumTramite($comunicacionVo->NumTramite);
                 $this->logger->notice('Response ' . $comunicacionVo->NumRadicado, [$response]);
                 return $response;
             }
 
+            if (is_array($existFiled)) {
+                $documentArrayObj = [];
+                foreach ($existFiled[1] as $document) {
+                    $documentArrayObj[] = new Document(
+                        $document['id_gestor_documento'], $document['end_point_file_net'], $document['orden_imp'], $document['num_paginas']
+                    );
+                }
+
+                $this->logger->notice('Intento de descarga (de nuevo) de documento del radicado '. $comunicacionVo->NumRadicado);
+                $this->getDocumentFile($documentArrayObj, $existFiled[0]->getCodigoGuia());
+                $this->logger->notice('Fin de descarga del radicado '.$comunicacionVo->NumRadicado);
+
+                $response->setCodGuia($existFiled->getCodigoGuia());
+                $response->setNumTramite($comunicacionVo->NumTramite);
+                $this->logger->notice('Response ' . $comunicacionVo->NumRadicado, [$response]);
+                return $response;
+            }
 
             if (!isset($comunicacionVo->Documentos)) {
                 throw new NullException("La propiedad Documentos es requerida.");

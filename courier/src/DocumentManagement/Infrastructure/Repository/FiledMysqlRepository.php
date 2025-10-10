@@ -82,9 +82,9 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->getArrayResult();
     }
 
-    function getFiled(FiledNumberValueObject $filedNumberValueObject): Filed|null
+    function getFiled(FiledNumberValueObject $filedNumberValueObject, bool $checkDocuments = false):  Filed|array|null
     {
-        return $this->getEntityManager()
+        $filed = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('r')
             ->from('App\DocumentManagement\Domain\Entity\Filed', 'r')
@@ -92,6 +92,23 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->setParameter('filedNumber', $filedNumberValueObject->getValue())
             ->getQuery()
             ->getOneOrNullResult();
+
+        if (!$filed) return null;
+        if (!$checkDocuments) return $filed;
+
+        $documents = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('d')
+            ->from('App\DocumentManagement\Domain\Entity\Document', 'd')
+            ->where('d.fk_radicado = :id_radicado')
+            ->andWhere('d.ruta is null')
+            ->setParameter('id_radicado', $filed->getIdRadicado())
+            ->getQuery()
+            ->getArrayResult();
+
+        if (count($documents) > 0) return [$filed, $documents];
+
+        return $filed;
     }
 
     function getAllFiled($page, $paramsToSearch): ResponsePaginator

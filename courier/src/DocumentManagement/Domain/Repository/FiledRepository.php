@@ -11,7 +11,7 @@ interface FiledRepository
 {
     function create(Filed $filed, Identification $identification): Filed;
 
-    function getFiled(FiledNumberValueObject $filedNumberValueObject): Filed|null;
+    function getFiled(FiledNumberValueObject $filedNumberValueObject, bool $checkDocuments = false):  Filed|array|null;
 
     function getDocuments(string $time_start, string $time_end, string $difference_days) : array;
 
