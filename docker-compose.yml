@@ -26,8 +26,7 @@ services:
             - ./courier/public/error/:/var/www/symfony/public/error/
             - ./courier/public/planos/:/var/www/symfony/public/planos/
         networks:
-            courier:
-                ipv4_address: 172.16.0.10
+            - courier
         depends_on:
             - db
         entrypoint: >
