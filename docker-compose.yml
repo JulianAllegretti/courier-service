@@ -12,8 +12,7 @@ services:
         volumes:
             - ./db:/var/lib/mysql
         networks:
-            courier:
-                ipv4_address: 172.16.0.15
+            - courier
     php:
         build:
             context: .
@@ -39,8 +38,7 @@ services:
         ports:
             - 8080:80
         networks:
-            courier:
-                ipv4_address: 172.16.0.6
+            - courier
         depends_on:
             - php
 networks:
