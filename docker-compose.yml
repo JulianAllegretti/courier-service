@@ -47,8 +47,6 @@ services:
                 ipv4_address: 172.16.0.6
         depends_on:
             - php
-        deploy:
-          replicas: 5
 networks:
     courier:
         driver: bridge
