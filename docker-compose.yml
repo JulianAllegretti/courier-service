@@ -31,9 +31,6 @@ services:
             - db
         entrypoint: >
             sh -c "composer install && cron && php-fpm"
-        deploy:
-          mode: replicated
-          replicas: 5
     nginx:
         image: nginx
         volumes:
