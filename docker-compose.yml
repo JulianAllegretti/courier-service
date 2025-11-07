@@ -24,13 +24,32 @@ services:
             - ./courier/public/files/:/var/www/symfony/public/files/
             - ./courier/public/error/:/var/www/symfony/public/error/
             - ./courier/public/planos/:/var/www/symfony/public/planos/
-            - ./crontab:/etc/cron.d/check-cron
         networks:
             - courier
         depends_on:
             - db
         entrypoint: >
-            sh -c "composer install && cron && php-fpm"
+            sh -c "composer install && php-fpm"
+
+    cron:
+      build:
+        context: .
+        dockerfile: docker/php/Dockerfile
+        args:
+          - APP_ENV=$APP_ENV
+      volumes:
+        - ./courier/:/var/www/symfony/
+        - ./courier/public/files/:/var/www/symfony/public/files/
+        - ./courier/public/error/:/var/www/symfony/public/error/
+        - ./courier/public/planos/:/var/www/symfony/public/planos/
+        - ./crontab:/etc/cron.d/check-cron
+      networks:
+        - courier
+      depends_on:
+        - db
+      entrypoint: >
+        sh -c "composer install && cron -f"
+
     nginx:
         image: nginx
         volumes:
