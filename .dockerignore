@@ -1,0 +1,10 @@
+# Evitar enviar archivos pesados al build
+courier/public/files/
+courier/public/error/
+courier/public/planos/
+
+# Otras cosas que no son necesarias para la imagen
+.git
+node_modules
+vendor
+tmp
