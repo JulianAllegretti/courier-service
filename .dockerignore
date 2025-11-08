@@ -2,6 +2,7 @@
 courier/public/files/
 courier/public/error/
 courier/public/planos/
+courier/var/
 
 # Otras cosas que no son necesarias para la imagen
 .git
