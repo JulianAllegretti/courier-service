@@ -24,6 +24,8 @@ services:
             - ./courier/public/files/:/var/www/symfony/public/files/
             - ./courier/public/error/:/var/www/symfony/public/error/
             - ./courier/public/planos/:/var/www/symfony/public/planos/
+            - ./crontab:/etc/cron.d/check-cron
+            - ./courier/var/:/var/www/symfony/var/
         networks:
             - courier
         depends_on:
