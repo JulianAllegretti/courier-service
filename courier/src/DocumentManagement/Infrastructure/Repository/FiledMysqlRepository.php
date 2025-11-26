@@ -253,7 +253,7 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->getArrayResult();
     }
 
-    function getDocumentsByGuidesNumber(string $guides_number) : array
+    function getDocumentsByGuidesNumber(array $guides_number) : array
     {
         return $this->getEntityManager()
             ->createQueryBuilder()

@@ -22,9 +22,16 @@ class GenerateFileByGuidesNumberCommand extends Command
     {
         $delimiter = '|&';
         $guides_number = $input->getArgument('guides_number');
+        $guides_array = array_map(
+            fn($guide) => trim($guide, " '\""),
+            explode(',', $guides_number)
+        );
+
         try {
             $output->writeln('-- Inicio job para generar el plano con las guias recibidas --');
-            $filed = $this->repository->getDocumentsByGuidesNumber($guides_number);
+            $filed = $this->repository->getDocumentsByGuidesNumber($guides_array);
+            $output->writeln(count($filed));
+
             $headers = [
                 'NumRadicado', 'CodGuia', 'RutaArchivo', 'TipoDocumento', 'Documento', 'Celular', 'NumTramite',
                 'CodDane', 'Direccion', 'NombreCompleto', 'Telefono', 'Prioridad', 'Impreso', 'PortePago', 'TipoPortePago',
