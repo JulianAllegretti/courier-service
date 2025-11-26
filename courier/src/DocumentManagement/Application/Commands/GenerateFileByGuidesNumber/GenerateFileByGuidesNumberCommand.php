@@ -1,6 +1,9 @@
 <?php
 
+namespace App\DocumentManagement\Application\Commands\GenerateFileByGuidesNumber;
+
 use App\DocumentManagement\Domain\Repository\FiledRepository;
+use DateTime;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
