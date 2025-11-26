@@ -22,4 +22,6 @@ interface FiledRepository
     function getReportByHourAndDate(): array;
 
     function getReport(\DateTime $dateStart, \DateTime|null $dateEnd): array;
+
+    function getDocumentsByGuidesNumber(string $guides_number) : array;
 }

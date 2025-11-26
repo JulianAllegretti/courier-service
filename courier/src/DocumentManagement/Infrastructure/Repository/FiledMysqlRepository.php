@@ -252,4 +252,18 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->getQuery()
             ->getArrayResult();
     }
+
+    function getDocumentsByGuidesNumber(string $guides_number) : array
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('f', 'i', 'd')
+            ->from('App\DocumentManagement\Domain\Entity\Filed', 'f')
+            ->where('f.codigo_guia IN (:guides_number)')
+            ->setParameter('guides_number', $guides_number)
+            ->leftJoin('f.identification', 'i')
+            ->leftJoin('f.documents', 'd')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
