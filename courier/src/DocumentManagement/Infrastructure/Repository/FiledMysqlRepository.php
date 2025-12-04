@@ -266,4 +266,18 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->getQuery()
             ->getArrayResult();
     }
+
+    function getDocumentsWithoutRoute() : array
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('f', 'd')
+            ->from('App\DocumentManagement\Domain\Entity\Filed', 'f')
+            ->join('f.documents', 'd')
+            ->where('d.created_at >= :date_start')
+            ->andWhere('d.ruta IS NULL')
+            ->setParameter('date_start', new \DateTime('today'))
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

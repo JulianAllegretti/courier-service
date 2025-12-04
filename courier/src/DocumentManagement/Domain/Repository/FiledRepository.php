@@ -24,4 +24,6 @@ interface FiledRepository
     function getReport(\DateTime $dateStart, \DateTime|null $dateEnd): array;
 
     function getDocumentsByGuidesNumber(array $guides_number) : array;
+
+    function getDocumentsWithoutRoute() : array;
 }
