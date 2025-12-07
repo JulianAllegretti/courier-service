@@ -26,4 +26,8 @@ interface FiledRepository
     function getDocumentsByGuidesNumber(array $guides_number) : array;
 
     function getDocumentsWithoutRoute() : array;
+
+    function getDocumentsByDateAndInPlane(string $time_start, string $time_end, string $difference_days) : array;
+
+    function updateInPlane(int $id_documento): void;
 }

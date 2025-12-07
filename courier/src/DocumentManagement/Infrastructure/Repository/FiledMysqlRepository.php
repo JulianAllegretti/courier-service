@@ -280,4 +280,43 @@ class FiledMysqlRepository extends ServiceEntityRepository implements FiledRepos
             ->getQuery()
             ->getArrayResult();
     }
+
+    function getDocumentsByDateAndInPlane(string $time_start, string $time_end, string $difference_days) : array
+    {
+        $date = new DateTime();
+        $queryDateStart = $date->format('Y-m-d') . ' ' . $time_start;
+        if ($difference_days > 0) {
+            $date->modify('-' . $difference_days . ' days');
+            $queryDateStart = $date->format('Y-m-d') . ' ' . $time_start;
+        }
+
+        $dateEnd = new DateTime();
+        $queryDateEnd = $dateEnd->format('Y-m-d') . ' ' . $time_end;
+
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('f', 'i', 'd')
+            ->from('App\DocumentManagement\Domain\Entity\Filed', 'f')
+            ->where('(f.created_at >= :date_start AND f.created_at <= :date_end) OR d.in_plane = :in_plane')
+            ->setParameter('date_start', $queryDateStart)
+            ->setParameter('date_end', $queryDateEnd)
+            ->setParameter('in_plane', false)
+            ->leftJoin('f.identification', 'i')
+            ->leftJoin('f.documents', 'd')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    function updateInPlane(int $id_documento): void
+    {
+        $this->getEntityManager()
+            ->createQueryBuilder()
+            ->update('App\DocumentManagement\Domain\Entity\Document', 'd')
+            ->set('d.in_plane', ':in_plane')
+            ->where('d.id_documento = :id_documento')
+            ->setParameter('id_documento', $id_documento)
+            ->setParameter('in_plane', true)
+            ->getQuery()
+            ->execute();
+    }
 }

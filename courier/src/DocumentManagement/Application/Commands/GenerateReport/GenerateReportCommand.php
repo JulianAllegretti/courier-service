@@ -27,7 +27,7 @@ class GenerateReportCommand extends Command
             $this->difference_days = $input->getArgument('difference_days') !== null ? $input->getArgument('difference_days') : $this->difference_days;
 
             $output->writeln('-- Inicio job para generar el plano con las guias recibidas --');
-            $filed = $this->repository->getDocuments($this->time_start, $this->time_end, $this->difference_days);
+            $filed = $this->repository->getDocumentsByDateAndInPlane($this->time_start, $this->time_end, $this->difference_days);
             $headers = [
                 'NumRadicado', 'CodGuia', 'RutaArchivo', 'TipoDocumento', 'Documento', 'Celular', 'NumTramite',
                 'CodDane', 'Direccion', 'NombreCompleto', 'Telefono', 'Prioridad', 'Impreso', 'PortePago', 'TipoPortePago',
@@ -46,6 +46,7 @@ class GenerateReportCommand extends Command
                     if (!isset($document['ruta']) || $document['ruta'] == '') {
                         continue;
                     }
+                    $this->repository->updateInPlane($document['id_documento']);
                     $content .= $this->createTxtForFile($item, $delimiter, $document['id_gestor_documento'].'.pdf'.$delimiter);
                 }
             }
