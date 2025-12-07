@@ -20,7 +20,7 @@ final class Version20251207034046 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE documento ADD in_plane BOOLEAN DEFAULT FALSE');
+        $this->addSql('ALTER TABLE documento ADD in_plane BOOLEAN');
     }
 
     public function down(Schema $schema): void
