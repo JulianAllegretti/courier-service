@@ -39,6 +39,9 @@ class Document
     #[ORM\Column(length: 50)]
     private ?string $created_at;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $in_plane = false;
+
     /**
      * @param int|null $id_documento
      * @param int $fk_radicado
@@ -58,6 +61,7 @@ class Document
         $this->num_paginas = $num_paginas;
         $this->ruta = $ruta;
         $this->created_at = date('Y-m-d H:i:s');
+        $this->in_plane = false;
     }
 
     public function getIdDocumento(): ?int
@@ -114,5 +118,13 @@ class Document
     {
         $this->created_at = $created_at;
     }
+    public function getInPlane(): bool
+    {
+        return $this->in_plane;
+    }
 
+    public function setInPlane(bool $in_plane): void
+    {
+        $this->in_plane = $in_plane;
+    }
 }
