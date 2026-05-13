@@ -38,7 +38,7 @@ final class SaveInformationRestController extends ApiController
 
         try {
             $domainResponse = $this->insertFiled($comunicacionVo, ['body' => $request->getContent()]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return new JsonResponse(['ErrorCode' => $e->getCode(), 'ErrorMessage' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
