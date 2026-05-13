@@ -5,8 +5,6 @@ namespace App\DocumentManagement\Application\Controller;
 use App\DocumentManagement\Application\Services\GetFiledService;
 use App\Shared\Application\ApiController;
 use App\Shared\Domain\CommandBus;
-use App\Shared\Domain\Exceptions\NullException;
-use Doctrine\DBAL\Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,10 +34,10 @@ final class SaveInformationRestController extends ApiController
             return new JsonResponse(['ErrorCode' => 400, 'ErrorMessage' => 'El cuerpo de la petición es requerido.'], Response::HTTP_BAD_REQUEST);
         }
 
-        try {
-            $domainResponse = $this->insertFiled($comunicacionVo, ['body' => $request->getContent()]);
-        } catch (\Exception $e) {
-            return new JsonResponse(['ErrorCode' => $e->getCode(), 'ErrorMessage' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        $domainResponse = $this->insertFiled($comunicacionVo, ['body' => $request->getContent()]);
+
+        if ($domainResponse->getErrorCode() !== null) {
+            return new JsonResponse($domainResponse, Response::HTTP_BAD_REQUEST);
         }
 
         return new JsonResponse($domainResponse);
