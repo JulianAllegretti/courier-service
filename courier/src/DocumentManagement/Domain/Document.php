@@ -24,12 +24,18 @@ class Document
      */
     public $numPaginas;
 
-    public function __construct(?string $documentId, ?string $endPointFileNet, ?int $ordenImp, ?int $numPaginas)
+    /**
+     * @var string|null
+     */
+    public $nombreArchivo;
+
+    public function __construct(?string $documentId, ?string $endPointFileNet, ?int $ordenImp, ?int $numPaginas, ?string $nombreArchivo = null)
     {
         $this->idDocumento = $documentId;
         $this->endPointFileNet = $endPointFileNet;
         $this->ordenImp = $ordenImp;
         $this->numPaginas = $numPaginas;
+        $this->nombreArchivo = $nombreArchivo;
     }
 
     public function getIdDocumento(): ?string
@@ -50,6 +56,11 @@ class Document
     public function getNumPaginas(): ?int
     {
         return $this->numPaginas;
+    }
+
+    public function getNombreArchivo(): ?string
+    {
+        return $this->nombreArchivo;
     }
 
 

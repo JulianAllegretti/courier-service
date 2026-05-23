@@ -2,6 +2,7 @@
 
 namespace App\DocumentManagement\Application\Controller;
 
+use App\DocumentManagement\Application\Mapper\SaveInformationRestMapper;
 use App\DocumentManagement\Application\Services\GetFiledService;
 use App\Shared\Application\ApiController;
 use App\Shared\Domain\CommandBus;
@@ -37,6 +38,8 @@ final class SaveInformationRestController extends ApiController
         if (!isset($comunicacionVo->NumRadicado)) {
             return new JsonResponse(['ErrorCode' => 400, 'ErrorMessage' => 'La propiedad NumRadicado es requerida.'], Response::HTTP_BAD_REQUEST);
         }
+
+        $comunicacionVo = SaveInformationRestMapper::map($comunicacionVo);
 
         $domainResponse = $this->insertFiled($comunicacionVo, ['body' => $request->getContent()]);
 

@@ -23,6 +23,9 @@ class Document
     #[ORM\Column(length: 255)]
     private string $end_point_file_net;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nombre_archivo;
+
     #[ORM\Column]
     private int $orden_imp;
 
@@ -51,12 +54,13 @@ class Document
      * @param int $num_paginas
      * @param string|null $ruta
      */
-    public function __construct(?int $id_documento, int $fk_radicado, string $id_gestor_documento, string $end_point_file_net, int $orden_imp, int $num_paginas, ?string $ruta)
+    public function __construct(?int $id_documento, int $fk_radicado, string $id_gestor_documento, string $end_point_file_net, int $orden_imp, int $num_paginas, ?string $ruta, ?string $nombre_archivo = null)
     {
         $this->id_documento = $id_documento;
         $this->fk_radicado = $fk_radicado;
         $this->id_gestor_documento = $id_gestor_documento;
         $this->end_point_file_net = $end_point_file_net;
+        $this->nombre_archivo = $nombre_archivo;
         $this->orden_imp = $orden_imp;
         $this->num_paginas = $num_paginas;
         $this->ruta = $ruta;
@@ -97,6 +101,11 @@ class Document
     public function getRuta(): ?string
     {
         return $this->ruta;
+    }
+
+    public function getNombreArchivo(): ?string
+    {
+        return $this->nombre_archivo;
     }
 
     public function setRuta(?string $ruta): void
