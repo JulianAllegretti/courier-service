@@ -33,7 +33,9 @@ class CreateInformationCommand implements Command
         private ?Identification $identification = null,
         private ?string         $cellphone = '',
         private ?string         $applicant = '',
-        private ?string         $processNumber = ''
+        private ?string         $processNumber = '',
+        private ?string         $eventName = null,
+        private ?string         $idCase = null
     )
     {
         $this->alreadyExist = false;
@@ -145,6 +147,16 @@ class CreateInformationCommand implements Command
     public function setAlreadyExist(bool $alreadyExist): void
     {
         $this->alreadyExist = $alreadyExist;
+    }
+
+    public function getEventName(): ?string
+    {
+        return $this->eventName;
+    }
+
+    public function getIdCase(): ?string
+    {
+        return $this->idCase;
     }
 
 }

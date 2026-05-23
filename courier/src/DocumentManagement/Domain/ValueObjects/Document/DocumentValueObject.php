@@ -15,12 +15,15 @@ class DocumentValueObject
      * @param OrderImpValueObject $orderImp
      * @param NumPagesValueObject $numPages
      */
-    public function __construct(DocumentIdValueObject $documentId, EndPointFileNetValueObject $endPointFileNet, OrderImpValueObject $orderImp, NumPagesValueObject $numPages)
+    private ?string $fileName;
+
+    public function __construct(DocumentIdValueObject $documentId, EndPointFileNetValueObject $endPointFileNet, OrderImpValueObject $orderImp, NumPagesValueObject $numPages, ?string $fileName = null)
     {
         $this->documentId = $documentId;
         $this->endPointFileNet = $endPointFileNet;
         $this->orderImp = $orderImp;
         $this->numPages = $numPages;
+        $this->fileName = $fileName;
     }
 
     public function getDocumentId(): DocumentIdValueObject
@@ -41,6 +44,11 @@ class DocumentValueObject
     public function getNumPages(): NumPagesValueObject
     {
         return $this->numPages;
+    }
+
+    public function getFileName(): ?string
+    {
+        return $this->fileName;
     }
 
 

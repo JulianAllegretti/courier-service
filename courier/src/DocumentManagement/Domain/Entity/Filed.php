@@ -67,6 +67,12 @@ class Filed
     #[ORM\Column(length: 50)]
     private string $codigo_guia;
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $event_name;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $id_case;
+
     #[ORM\Column(length: 50)]
     private ?string $created_at;
 
@@ -97,7 +103,7 @@ class Filed
      * @param string|null $usuario_solicitante
      * @param string $codigo_guia
      */
-    public function __construct(?int $id_radicado, ?int $fk_identificacion, string $num_radicado, ?string $celular, ?string $num_tramite, string $cod_dane, string $direccion, string $guia_impresa, string $nombre_completo, ?string $telefono, string $prioridad, string $impreso, string $porte_pago, string $tipo_porte_pago, string $tipo_proceso, ?string $radicado_caso_padre, ?string $usuario_solicitante, string $codigo_guia)
+    public function __construct(?int $id_radicado, ?int $fk_identificacion, string $num_radicado, ?string $celular, ?string $num_tramite, string $cod_dane, string $direccion, string $guia_impresa, string $nombre_completo, ?string $telefono, string $prioridad, string $impreso, string $porte_pago, string $tipo_porte_pago, string $tipo_proceso, ?string $radicado_caso_padre, ?string $usuario_solicitante, string $codigo_guia, ?string $event_name = null, ?string $id_case = null)
     {
         $this->id_radicado = $id_radicado;
         $this->fk_identificacion = $fk_identificacion;
@@ -117,6 +123,8 @@ class Filed
         $this->usuario_solicitante = $usuario_solicitante;
         $this->codigo_guia = $codigo_guia;
         $this->num_tramite = $num_tramite;
+        $this->event_name = $event_name;
+        $this->id_case = $id_case;
         $this->created_at = date('Y-m-d H:i:s');
     }
 
@@ -230,4 +238,18 @@ class Filed
         $this->codigo_guia = $codigo_guia;
     }
 
+    public function getEventName(): ?string
+    {
+        return $this->event_name;
+    }
+
+    public function getIdCase(): ?string
+    {
+        return $this->id_case;
+    }
+
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
 }

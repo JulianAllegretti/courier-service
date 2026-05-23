@@ -62,7 +62,7 @@ class ApiController
                     throw new NullException("La propiedad documentos es requerida");
                 }
                 $documentArrayObj[] = new Document(
-                    $documentItem->IdDocumento, $documentItem->EndPointFilenet, $documentItem->OrdenImp, $documentItem->NumPaginas
+                    $documentItem->IdDocumento, $documentItem->EndPointFilenet, $documentItem->OrdenImp, $documentItem->NumPaginas, $documentItem->NombreArchivo ?? null
                 );
             }
 
@@ -73,7 +73,8 @@ class ApiController
                 TypePortPayment::fromName($comunicacionVo->TipoPortePago),
                 ProcessType::fromName($comunicacionVo->TipoProceso), PortPayment::fromName($comunicacionVo->PortePago),
                 $comunicacionVo->Telefono, $comunicacionVo->RadicadoCasoPadre,
-                $identificationObj, $comunicacionVo->Celular, $comunicacionVo->UsuarioSolicitante, $comunicacionVo->NumTramite
+                $identificationObj, $comunicacionVo->Celular, $comunicacionVo->UsuarioSolicitante, $comunicacionVo->NumTramite,
+                $comunicacionVo->EventName ?? null, $comunicacionVo->IdCase ?? null
             );
 
             $this->dispatch($command);

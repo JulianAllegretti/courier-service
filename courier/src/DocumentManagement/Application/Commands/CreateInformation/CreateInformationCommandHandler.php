@@ -80,7 +80,7 @@ class CreateInformationCommandHandler implements CommandHandler
             $documentNumPages = new NumPagesValueObject($document->getNumPaginas());
 
             $documents[] = new DocumentValueObject(
-                $documentId, $documentEndPoint, $documentOrderImp, $documentNumPages
+                $documentId, $documentEndPoint, $documentOrderImp, $documentNumPages, $document->getNombreArchivo()
             );
         }
 
@@ -88,7 +88,8 @@ class CreateInformationCommandHandler implements CommandHandler
             $commandFiledNumber, $commandCodDane, $commandAddress, $commandPrintedGuide, $documents,
             $commandFullName, $command->getPriority(), $command->getPrinted(), $command->getTypePortPayment(),
             $command->getProcessType(), $command->getPortPayment(), $commandPhone,
-            $commandFiledCaseFather, $commandIdentification, $commandCellphone, $commandApplicant, $commandProcessNumber
+            $commandFiledCaseFather, $commandIdentification, $commandCellphone, $commandApplicant, $commandProcessNumber,
+            $command->getEventName(), $command->getIdCase()
         );
 
         $command->setGuideNumber($guideNumber);

@@ -86,7 +86,9 @@ readonly class FiledCreator
         ?IdentificationValueObject  $identification,
         ?CellphoneValueObject       $cellphone,
         ?ApplicantValueObject       $applicant,
-        ?ProcessNumberValueObject   $processNumber
+        ?ProcessNumberValueObject   $processNumber,
+        ?string                     $eventName = null,
+        ?string                     $idCase = null
     ): string
     {
         $retries = 3000;
@@ -108,7 +110,7 @@ readonly class FiledCreator
                     $cellphone->getValue(), $processNumber->getValue(), $codDane->getValue(), $address->getValue(), $printedGuide->getValue(),
                     $fullName->getValue(), $phone->getValue(), $priority->value, $printed->value, $portPayment->value,
                     $typePortPayment->value, $processType->value, $filedCaseFather->getValue(), $applicant->getValue(),
-                    $guideNumber->getValue()
+                    $guideNumber->getValue(), $eventName, $idCase
                 );
 
                 $filed = $this->filedRepository->create($filed, $identificationDb);
@@ -117,7 +119,7 @@ readonly class FiledCreator
                     $documentDb = new Document(
                         null, $filed->getIdRadicado(), $document->getDocumentId()->getValue(),
                         $document->getEndPointFileNet()->getValue(), $document->getOrderImp()->getValue(),
-                        $document->getNumPages()->getValue(), null
+                        $document->getNumPages()->getValue(), null, $document->getFileName()
                     );
                     $this->documentRepository->create($documentDb, $filed);
                 }
