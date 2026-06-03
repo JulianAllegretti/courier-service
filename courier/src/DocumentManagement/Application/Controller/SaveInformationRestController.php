@@ -35,8 +35,8 @@ final class SaveInformationRestController extends ApiController
             return new JsonResponse(['ErrorCode' => 400, 'ErrorMessage' => 'El cuerpo de la petición es requerido.'], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!isset($comunicacionVo->NumRadicado)) {
-            return new JsonResponse(['ErrorCode' => 400, 'ErrorMessage' => 'La propiedad NumRadicado es requerida.'], Response::HTTP_BAD_REQUEST);
+        if (empty($comunicacionVo->numeroRadicado)) {
+            return new JsonResponse(['ErrorCode' => 400, 'ErrorMessage' => 'La propiedad numeroRadicado es requerida.'], Response::HTTP_BAD_REQUEST);
         }
 
         $comunicacionVo = SaveInformationRestMapper::map($comunicacionVo);
