@@ -42,8 +42,6 @@ readonly class GetDocumentFileCommandHandler implements CommandHandler
                     $this->repository->updatePathFile($command->getDocumentId(), $command->getGuideNumber());
                     break;
                 case 'staging':
-                    $this->downloadForQA($command);
-                    break;
                 case 'prod':
                     $this->downloadForProd($command);
                     break;
