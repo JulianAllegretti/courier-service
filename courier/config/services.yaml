@@ -54,6 +54,11 @@ services:
             - '%app_url%'
             - !tagged courier.server
 
+    App\DocumentManagement\Application\Controller\SaveInformationRestController:
+        arguments:
+            $appUser: '%app_user%'
+            $appPassword: '%app_password%'
+
     App\Shared\Infrastructure\SymfonyCommandBus:
         arguments: [ !tagged courier.command_handler ]
 
