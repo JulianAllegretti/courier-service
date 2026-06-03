@@ -55,6 +55,7 @@ services:
             - !tagged courier.server
 
     App\DocumentManagement\Application\Controller\SaveInformationRestController:
+        tags: ['controller.service_arguments']
         arguments:
             $appUser: '%app_user%'
             $appPassword: '%app_password%'
