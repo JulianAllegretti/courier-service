@@ -77,7 +77,7 @@ class GenerateReportCommand extends Command
 
         unset(
             $item['id_radicado'], $item['fk_identificacion'], $item['num_radicado'], $item['identification'],
-            $item['documents'], $item['codigo_guia'], $item['guia_impresa']
+            $item['documents'], $item['codigo_guia'], $item['guia_impresa'], $item['event_name'], $item['id_case']
         );
         $content .= implode($delimiter, $item).PHP_EOL;
 
