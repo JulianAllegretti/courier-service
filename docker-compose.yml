@@ -39,8 +39,7 @@ services:
         depends_on:
             db:
                 condition: service_healthy
-        entrypoint: >
-            sh -c "chown -R www-data:www-data /var/www/symfony/var /var/www/symfony/vendor /var/www/symfony/public && su -l -s /bin/sh -c 'cd /var/www/symfony && composer install --no-interaction' www-data && php-fpm"
+        entrypoint: php-fpm
 
     cron:
       build:
@@ -61,8 +60,7 @@ services:
       depends_on:
         db:
           condition: service_healthy
-      entrypoint: >
-        sh -c "chown -R www-data:www-data /var/www/symfony/var /var/www/symfony/vendor /var/www/symfony/public && su -l -s /bin/sh -c 'cd /var/www/symfony && composer install --no-interaction' www-data && cron -f"
+      entrypoint: cron -f
 
     nginx:
         image: nginx
