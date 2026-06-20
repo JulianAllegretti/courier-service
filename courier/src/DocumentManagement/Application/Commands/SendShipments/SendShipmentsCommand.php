@@ -23,14 +23,14 @@ class SendShipmentsCommand extends Command
             $this->time_start = $input->getArgument('time_start') ? $input->getArgument('time_start') : $this->time_start;
             $this->time_end = $input->getArgument('time_end') ? $input->getArgument('time_end') : $this->time_end;
             $this->difference_days = $input->getArgument('difference_days') !== null ? $input->getArgument('difference_days') : $this->difference_days;
-            $output->writeln('-- Inicio job para enviar la informacion a 472 --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Inicio job para enviar la informacion a 472 --');
             $response = $this->useCase->sendShipments($this->time_start, $this->time_end, $this->difference_days, $output);
             $output->writeln($response != "" ? $response : '-- No se envio ningun documento a 472 --');
-            $output->writeln('-- Fin job para generar el plano con las guias recibidas --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Fin job para generar el plano con las guias recibidas --');
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
-            $output->writeln('-- Fin con error del job para generar el plano con las guias recibidas --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Fin con error del job para generar el plano con las guias recibidas --');
             return Command::FAILURE;
         }
     }

@@ -28,7 +28,7 @@ class GenerateFileByGuidesNumberCommand extends Command
         );
 
         try {
-            $output->writeln('-- Inicio job para generar el plano con las guias recibidas --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Inicio job para generar el plano con las guias recibidas --');
             $filed = $this->repository->getDocumentsByGuidesNumber($guides_array);
             $output->writeln(count($filed));
 
@@ -57,11 +57,11 @@ class GenerateFileByGuidesNumberCommand extends Command
             $fp = fopen("public/planos/radicados-by-guides-number-".$date->format('Y-m-d').'.txt',"w");
             fwrite($fp,$content);
             fclose($fp);
-            $output->writeln('-- Fin job para generar el plano con las guias recibidas --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Fin job para generar el plano con las guias recibidas --');
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
-            $output->writeln('-- Fin con error del job para generar el plano con las guias recibidas --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Fin con error del job para generar el plano con las guias recibidas --');
             return Command::FAILURE;
         }
     }

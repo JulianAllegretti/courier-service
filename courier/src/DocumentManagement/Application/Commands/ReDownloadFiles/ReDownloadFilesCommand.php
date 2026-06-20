@@ -25,7 +25,7 @@ class ReDownloadFilesCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $output->writeln('-- Inicio job para re-descargar los archivos --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Inicio job para re-descargar los archivos --');
             $filed = $this->repository->getDocumentsWithoutRoute();
             $output->writeln(count($filed));
 
@@ -37,11 +37,11 @@ class ReDownloadFilesCommand extends Command {
                     $this->dispatch($command);
                 }
             }
-            $output->writeln('-- Fin job para re-descargar los archivos --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Fin job para re-descargar los archivos --');
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
-            $output->writeln('-- Fin con error del job para re-descargar los archivos --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Fin con error del job para re-descargar los archivos --');
             return Command::FAILURE;
         }
     }

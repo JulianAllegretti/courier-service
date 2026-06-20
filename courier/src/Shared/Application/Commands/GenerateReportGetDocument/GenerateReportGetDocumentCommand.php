@@ -26,7 +26,7 @@ class GenerateReportGetDocumentCommand extends Command
             $this->time_end = $input->getArgument('time_end') ? $input->getArgument('time_end') : $this->time_end;
             $this->difference_days = $input->getArgument('difference_days') !== null ? $input->getArgument('difference_days') : $this->difference_days;
 
-            $output->writeln('-- Inicio job para generar el plano con las guias que generaron error al descargar los pds --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Inicio job para generar el plano con las guias que generaron error al descargar los pds --');
             $logs = $this->repository->getLogs($this->time_start, $this->time_end, $this->difference_days);
             $headers = [
                 'NumRadicado', 'IdDocumento', 'Request', 'Error', 'FechaDeCreacion'
@@ -41,11 +41,11 @@ class GenerateReportGetDocumentCommand extends Command
             $fp = fopen("public/error/error-get-document-".$date->format('Y-m-d').'.txt',"w");
             fwrite($fp,$content);
             fclose($fp);
-            $output->writeln('-- Fin job para generar el plano con guias que generaron error al descargar los pds --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Fin job para generar el plano con guias que generaron error al descargar los pds --');
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());
-            $output->writeln('-- Fin con error del job para generar el plano con las guias que generaron error al descargar los pds  --');
+            $output->writeln('[' . date('Y-m-d H:i:s') . '] -- Fin con error del job para generar el plano con las guias que generaron error al descargar los pds  --');
             return Command::FAILURE;
         }
     }
