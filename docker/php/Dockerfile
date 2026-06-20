@@ -29,4 +29,5 @@ WORKDIR /var/www/symfony/
 COPY crontab /etc/cron.d/check-cron
 RUN chown root:root /etc/cron.d/check-cron && chmod 0644 /etc/cron.d/check-cron
 RUN touch /var/log/cron.log && chown www-data:www-data /var/log/cron.log
+RUN chown www-data:www-data /var/www
 RUN echo "APP_ENV=$APP_ENV" >> /etc/environment
