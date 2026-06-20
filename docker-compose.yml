@@ -1,6 +1,7 @@
 services:
     db:
         image: mysql
+        restart: unless-stopped
         environment:
             MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_USER: ${DB_USER}
@@ -13,12 +14,19 @@ services:
             - ./db:/var/lib/mysql
         networks:
             - courier
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USER}", "-p${DB_PASSWORD}"]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+            start_period: 30s
     php:
         build:
             context: .
             dockerfile: docker/php/Dockerfile
             args:
                 - APP_ENV=$APP_ENV
+        restart: unless-stopped
         volumes:
             - ./courier/:/var/www/symfony/
             - ./courier/public/files/:/var/www/symfony/public/files/
@@ -29,9 +37,10 @@ services:
         networks:
             - courier
         depends_on:
-            - db
+            db:
+                condition: service_healthy
         entrypoint: >
-            sh -c "composer install && php-fpm"
+            sh -c "chown -R www-data:www-data /var/www/symfony/var /var/www/symfony/vendor /var/www/symfony/public && su -s /bin/sh www-data -c 'composer install --no-interaction' && php-fpm"
 
     cron:
       build:
@@ -39,6 +48,7 @@ services:
         dockerfile: docker/php/Dockerfile
         args:
           - APP_ENV=$APP_ENV
+      restart: unless-stopped
       volumes:
         - ./courier/:/var/www/symfony/
         # - ./courier/public/files/:/var/www/symfony/public/files/
@@ -49,12 +59,14 @@ services:
       networks:
         - courier
       depends_on:
-        - db
+        db:
+          condition: service_healthy
       entrypoint: >
-        sh -c "composer install && cron -f"
+        sh -c "chown -R www-data:www-data /var/www/symfony/var /var/www/symfony/vendor /var/www/symfony/public && su -s /bin/sh www-data -c 'composer install --no-interaction' && cron -f"
 
     nginx:
         image: nginx
+        restart: unless-stopped
         volumes:
             - ./courier/:/var/www/symfony/
             - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf

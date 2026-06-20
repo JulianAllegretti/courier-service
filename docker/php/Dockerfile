@@ -27,6 +27,6 @@ COPY courier/ /var/www/symfony
 WORKDIR /var/www/symfony/
 
 COPY crontab /etc/cron.d/check-cron
-RUN crontab /etc/cron.d/check-cron
-RUN touch /var/log/cron.log
+RUN chown root:root /etc/cron.d/check-cron && chmod 0644 /etc/cron.d/check-cron
+RUN touch /var/log/cron.log && chown www-data:www-data /var/log/cron.log
 RUN env >> /etc/environment
