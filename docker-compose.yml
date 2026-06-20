@@ -40,7 +40,7 @@ services:
             db:
                 condition: service_healthy
         entrypoint: >
-            sh -c "chown -R www-data:www-data /var/www/symfony/var /var/www/symfony/vendor /var/www/symfony/public && su -s /bin/sh www-data -c 'composer install --no-interaction' && php-fpm"
+            sh -c "chown -R www-data:www-data /var/www/symfony/var /var/www/symfony/vendor /var/www/symfony/public && su -l -s /bin/sh -c 'composer install --no-interaction' www-data && php-fpm"
 
     cron:
       build:
@@ -62,7 +62,7 @@ services:
         db:
           condition: service_healthy
       entrypoint: >
-        sh -c "chown -R www-data:www-data /var/www/symfony/var /var/www/symfony/vendor /var/www/symfony/public && su -s /bin/sh www-data -c 'composer install --no-interaction' && cron -f"
+        sh -c "chown -R www-data:www-data /var/www/symfony/var /var/www/symfony/vendor /var/www/symfony/public && su -l -s /bin/sh -c 'composer install --no-interaction' www-data && cron -f"
 
     nginx:
         image: nginx
