@@ -13,6 +13,13 @@ git fetch origin "${BRANCH}"
 git checkout "${BRANCH}"
 git pull origin "${BRANCH}"
 
+# deploy.sh just rewrote itself via git pull. Re-exec so bash reads the
+# fresh copy from disk instead of continuing with whatever it had buffered.
+if [ -z "${DEPLOY_REEXECED:-}" ]; then
+  export DEPLOY_REEXECED=1
+  exec bash "$0" "${BRANCH}" "${PHP_REPLICAS}"
+fi
+
 echo "==> Building php and cron images"
 docker compose build php cron
 
