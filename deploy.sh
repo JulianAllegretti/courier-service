@@ -25,6 +25,7 @@ docker compose build php cron
 
 echo "==> Installing dependencies and warming up cache (single run, avoids races across replicas)"
 docker compose run --rm --entrypoint "" php sh -c "
+  mkdir -p /var/www/symfony/var/sessions/prod &&
   chown -R www-data:www-data /var/www/symfony/var /var/www/symfony/vendor /var/www/symfony/public &&
   su -l -s /bin/sh -c 'cd /var/www/symfony && composer install --no-interaction' www-data
 "

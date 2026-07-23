@@ -4,7 +4,14 @@ framework:
     #csrf_protection: true
 
     # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    # save_path is pinned inside var/ (shared bind mount across the scaled php
+    # replicas) so a session written by one replica is visible to the others.
+    # Without this, sessions fall back to PHP's local session.save_path (e.g.
+    # /tmp), which is per-container and breaks login when nginx round-robins
+    # a request to a different replica right after authentication.
+    session:
+        handler_id: null
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
 
     #esi: true
     #fragments: true
