@@ -9,7 +9,7 @@ parameters:
     app_url: "%env(APP_URL)%"
     app_env: "%env(APP_ENV)%"
     time_start: "%env(TIME_START_REPORT)%"
-    time_end: "%env(TIME_START_REPORT)%"
+    time_end: "%env(TIME_END_REPORT)%"
     difference_days: "%env(DIFFERENCE_DAYS)%"
     app_472_url: "%env(APP_472_URL)%"
 services:
