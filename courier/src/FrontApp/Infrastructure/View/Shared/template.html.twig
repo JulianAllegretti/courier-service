@@ -59,10 +59,7 @@
                             </li>
                         {% endif %}
                         <li>
-                            <a
-                                    class="{{ app.request.pathinfo == '/reports' ? 'active' : '' }}"
-                                    href="/reports"
-                            >
+                            <a href="{{ reports_url }}" target="_blank" rel="noopener">
                                 <img src="/images/bar-chart.svg" alt=""> <span>Reportes</span>
                             </a>
                         </li>

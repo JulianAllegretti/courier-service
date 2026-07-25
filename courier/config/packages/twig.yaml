@@ -2,6 +2,8 @@ twig:
     file_name_pattern: '*.twig'
     paths:
         '%kernel.project_dir%/src/FrontApp/Infrastructure/View': ~
+    globals:
+        reports_url: '%env(REPORTS_URL)%'
 
 when@test:
     twig:
